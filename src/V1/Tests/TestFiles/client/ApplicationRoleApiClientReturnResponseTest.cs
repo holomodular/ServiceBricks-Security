@@ -9,7 +9,7 @@ using ServiceBricks.Xunit;
 using ServiceBricks.Security;
 using ServiceBricks.Security.Client.Xunit;
 
-namespace ServiceBricks.Xunit.Integration.ReturnResponseTests
+namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
     public class ApplicationRoleApiClientReturnResponseTest : ApiClientReturnResponseTest<ApplicationRoleDto>
