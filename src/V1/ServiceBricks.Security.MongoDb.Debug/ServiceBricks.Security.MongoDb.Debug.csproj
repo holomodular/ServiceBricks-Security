@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.0.5</Version>
+		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
+		<AssemblyTitle>ServiceBricks.Security.MongoDb</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>service;bricks;security;mongo;mongodb</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>ServiceBricks.Security.MongoDb.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationIdentityRole.cs" Link="ApplicationIdentityRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationIdentityRoleClaim.cs" Link="ApplicationIdentityRoleClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationIdentityUser.cs" Link="ApplicationIdentityUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationIdentityUserClaim.cs" Link="ApplicationIdentityUserClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationRole.cs" Link="ApplicationRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationRoleClaim.cs" Link="ApplicationRoleClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUser.cs" Link="ApplicationUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserClaim.cs" Link="ApplicationUserClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserLogin.cs" Link="ApplicationUserLogin.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\AuditUser.cs" Link="AuditUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Interface\IAuditUserStorageRepository.cs" Link="IAuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserLoginMappingProfile.cs" Link="ApplicationUserLoginMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserMappingProfile.cs" Link="ApplicationUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserRoleMappingProfile.cs" Link="ApplicationUserRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserTokenMappingProfile.cs" Link="ApplicationUserTokenMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\AuditUserMappingProfile.cs" Link="AuditUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\SecurityMongoDbConstants.cs" Link="SecurityMongoDbConstants.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\SecurityMongoDbModule.cs" Link="SecurityMongoDbModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationRoleClaimApiService.cs" Link="ApplicationRoleClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserApiService.cs" Link="ApplicationUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserClaimApiService.cs" Link="ApplicationUserClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserLoginApiService.cs" Link="ApplicationUserLoginApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserRoleApiService.cs" Link="ApplicationUserRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\AuditUserApiService.cs" Link="AuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\UserManagerService.cs" Link="UserManagerService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.0.5" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
+	</ItemGroup>
+
+</Project>

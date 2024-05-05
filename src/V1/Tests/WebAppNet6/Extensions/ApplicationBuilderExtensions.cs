@@ -1,0 +1,91 @@
+﻿using Microsoft.AspNetCore.CookiePolicy;
+using ServiceBricks.Logging;
+using ServiceBricks.Security;
+
+namespace WebApp.Extensions
+{
+    public static class ApplicationBuilderExtensions
+    {
+        private static IApplicationBuilder RegisterMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<CustomLoggerMiddleware>();
+            app.UseMiddleware<WebRequestMessageMiddleware>();
+            app.UseMiddleware<ExceptionMiddleware>();
+            return app;
+        }
+
+        public static IApplicationBuilder StartCustomWebsite(this IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            var supportedCultures = new[] { "en-US", "es" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+            localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+            app.UseRequestLocalization(localizationOptions);
+
+            if (!env.IsDevelopment())
+                app.UseHsts();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // Register Middleware after UseAuth() so user context is available
+            app.RegisterMiddleware();
+
+            app.UseCookiePolicy();
+            app.UseMiddleware<CookiePolicyMiddleware>();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
+
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(x =>
+                {
+                    x.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+                    x.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
+                });
+            }
+
+            // Create a default test user account
+            app.CreateTestUserAccount();
+
+            return app;
+        }
+
+        private static IApplicationBuilder CreateTestUserAccount(this IApplicationBuilder builder)
+        {
+            using (var scope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<IUserManagerService>();
+                var respFind = userManager.FindByEmail("unittest@servicebricks.com");
+                if (respFind.Item == null)
+                {
+                    var testUser = new ApplicationUserDto()
+                    {
+                        Email = "unittest@servicebricks.com",
+                        UserName = "unittest@servicebricks.com",
+                        PhoneNumber = "1234567890",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                    };
+                    var respCreate = userManager.Create(testUser, "UnitTest123!@#");
+                    if (respCreate.Success && respCreate.Item != null)
+                        userManager.AddToRole(respCreate.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
+                }
+            }
+
+            return builder;
+        }
+    }
+}

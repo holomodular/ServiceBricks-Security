@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\TestFiles\client\ApplicationRoleApiClientReturnResponseTest.cs" Link="ApplicationRoleApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationRoleApiClientTest.cs" Link="ApplicationRoleApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationRoleClaimApiClientReturnResponseTest.cs" Link="ApplicationRoleClaimApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationRoleClaimApiClientTest.cs" Link="ApplicationRoleClaimApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserClaimApiClientReturnResponseTest.cs" Link="ApplicationUserClaimApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserClaimApiClientTest.cs" Link="ApplicationUserClaimApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserLoginApiClientReturnResponseTest.cs" Link="ApplicationUserLoginApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserLoginApiClientTest.cs" Link="ApplicationUserLoginApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserRoleApiClientReturnResponseTest.cs" Link="ApplicationUserRoleApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserRoleApiClientTest.cs" Link="ApplicationUserRoleApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserTokenApiClientReturnResponseTest.cs" Link="ApplicationUserTokenApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserTokenApiClientTest.cs" Link="ApplicationUserTokenApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\AuditUserApiClientReturnResponseTest.cs" Link="AuditUserApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\AuditUserApiClientTest.cs" Link="AuditUserApiClientTest.cs" />
+		<Compile Include="..\TestFiles\client\ClientStartup.cs" Link="ClientStartup.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserApiClientReturnResponseTest.cs" Link="ApplicationUserApiClientReturnResponseTest.cs" />
+		<Compile Include="..\TestFiles\client\ApplicationUserApiClientTest.cs" Link="ApplicationUserApiClientTest.cs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\TestFiles\client\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.15" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="xunit" Version="2.6.6" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet7\ServiceBricks.Security.XunitNet7.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.0.5</Version>
+		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
+		<AssemblyTitle>ServiceBricks.Security.SqlServer</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>service;bricks;security;sql;sqlserver</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>ServiceBricks.Security.SqlServer.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerConstants.cs" Link="SecuritySqlServerConstants.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerContext.cs" Link="SecuritySqlServerContext.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerModule.cs" Link="SecuritySqlServerModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore.Debug\ServiceBricks.Security.EntityFrameworkCore.Debug.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.16" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.16" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+	</ItemGroup>
+	
+</Project>

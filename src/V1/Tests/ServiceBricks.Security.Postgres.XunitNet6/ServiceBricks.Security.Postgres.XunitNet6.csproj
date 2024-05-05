@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\TestFiles\Postgres\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\MappingTest.cs" Link="MappingTest.cs" />
+		<Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />
+		<Compile Include="..\TestFiles\StartupPostgres.cs" Link="StartupPostgres.cs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\testfiles\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.26" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="xunit" Version="2.6.6" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ServiceBricks.Security.Postgres.Debug\ServiceBricks.Security.Postgres.Debug.csproj" />
+	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet6\ServiceBricks.Security.XunitNet6.csproj" />
+	</ItemGroup>
+
+</Project>

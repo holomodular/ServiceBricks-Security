@@ -1,0 +1,88 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.0.5</Version>
+		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
+		<AssemblyTitle>ServiceBricks.Security.EntityFrameworkCore</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>service;bricks;security;entityframeworkcore;efc</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>ServiceBricks.Security.EntityFrameworkCore.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationRole.cs" Link="ApplicationRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationRoleClaim.cs" Link="ApplicationRoleClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUser.cs" Link="ApplicationUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserClaim.cs" Link="ApplicationUserClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserLogin.cs" Link="ApplicationUserLogin.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\AuditUser.cs" Link="AuditUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ResponseExtensions.cs" Link="ResponseExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Interface\IAuditUserStorageRepository.cs" Link="IAuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserLoginMappingProfile.cs" Link="ApplicationUserLoginMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserMappingProfile.cs" Link="ApplicationUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserRoleMappingProfile.cs" Link="ApplicationUserRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserTokenMappingProfile.cs" Link="ApplicationUserTokenMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\AuditUserMappingProfile.cs" Link="AuditUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\SecurityEntityFrameworkCoreConstants.cs" Link="SecurityEntityFrameworkCoreConstants.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\SecurityEntityFrameworkCoreModule.cs" Link="SecurityEntityFrameworkCoreModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Rule\ApplicationUserLoginQueryRule.cs" Link="ApplicationUserLoginQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Rule\ApplicationUserRoleQueryRule.cs" Link="ApplicationUserRoleQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Rule\ApplicationUserTokenQueryRule.cs" Link="ApplicationUserTokenQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationRoleClaimApiService.cs" Link="ApplicationRoleClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserApiService.cs" Link="ApplicationUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserClaimApiService.cs" Link="ApplicationUserClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserLoginApiService.cs" Link="ApplicationUserLoginApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserRoleApiService.cs" Link="ApplicationUserRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\AuditUserApiService.cs" Link="AuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\UserManagerService.cs" Link="UserManagerService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.0.4" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+			<Version>6.0.20</Version>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+			<Version>7.0.9</Version>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+			<Version>8.0.2</Version>
+		</PackageReference>
+	</ItemGroup>
+	
+</Project>

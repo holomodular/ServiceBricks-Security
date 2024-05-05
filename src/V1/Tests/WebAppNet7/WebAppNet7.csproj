@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.13" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+	<ItemGroup>
+		<Content Include="..\TestFiles\webapp\appsettings.json" Link="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ServiceBricks.Security.AzureDataTables.Debug\ServiceBricks.Security.AzureDataTables.Debug.csproj" />
+    <ProjectReference Include="..\..\ServiceBricks.Security.Cosmos.Debug\ServiceBricks.Security.Cosmos.Debug.csproj" />
+    <ProjectReference Include="..\..\ServiceBricks.Security.InMemory.Debug\ServiceBricks.Security.InMemory.Debug.csproj" />
+    <ProjectReference Include="..\..\ServiceBricks.Security.MongoDb.Debug\ServiceBricks.Security.MongoDb.Debug.csproj" />
+    <ProjectReference Include="..\..\ServiceBricks.Security.Sqlite.Debug\ServiceBricks.Security.Sqlite.Debug.csproj" />
+    <ProjectReference Include="..\..\ServiceBricks.Security.SqlServer.Debug\ServiceBricks.Security.SqlServer.Debug.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Logging.InMemory" Version="1.0.5" />
+	</ItemGroup>
+	
+</Project>

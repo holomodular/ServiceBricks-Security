@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.0.5</Version>
+		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
+		<AssemblyTitle>ServiceBricks.Security.AzureDataTables</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>service;bricks;security;azure;azuredatatables</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>ServiceBricks.Security.AzureDataTables.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationRole.cs" Link="ApplicationRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationRoleClaim.cs" Link="ApplicationRoleClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUser.cs" Link="ApplicationUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserClaim.cs" Link="ApplicationUserClaim.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserLogin.cs" Link="ApplicationUserLogin.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\AuditUser.cs" Link="AuditUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Interface\IAuditUserStorageRepository.cs" Link="IAuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserLoginMappingProfile.cs" Link="ApplicationUserLoginMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserMappingProfile.cs" Link="ApplicationUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserRoleMappingProfile.cs" Link="ApplicationUserRoleMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserTokenMappingProfile.cs" Link="ApplicationUserTokenMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\AuditUserMappingProfile.cs" Link="AuditUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Model\SecurityAzureDataTablesConstants.cs" Link="SecurityAzureDataTablesConstants.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Model\SecurityAzureDataTablesModule.cs" Link="SecurityAzureDataTablesModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationRoleClaimCreateRule.cs" Link="ApplicationRoleClaimCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationRoleClaimQueryRule.cs" Link="ApplicationRoleClaimQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationRoleCreateRule.cs" Link="ApplicationRoleCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserClaimCreateRule.cs" Link="ApplicationUserClaimCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserClaimQueryRule.cs" Link="ApplicationUserClaimQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserCreateRule.cs" Link="ApplicationUserCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserLoginCreateRule.cs" Link="ApplicationUserLoginCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserLoginQueryRule.cs" Link="ApplicationUserLoginQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserRoleCreateRule.cs" Link="ApplicationUserRoleCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserRoleQueryRule.cs" Link="ApplicationUserRoleQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserTokenCreateRule.cs" Link="ApplicationUserTokenCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserTokenQueryRule.cs" Link="ApplicationUserTokenQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\AuditUserCreateRule.cs" Link="AuditUserCreateRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\AuditUserQueryRule.cs" Link="AuditUserQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationRoleClaimApiService.cs" Link="ApplicationRoleClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserApiService.cs" Link="ApplicationUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserClaimApiService.cs" Link="ApplicationUserClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserLoginApiService.cs" Link="ApplicationUserLoginApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserRoleApiService.cs" Link="ApplicationUserRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\AuditUserApiService.cs" Link="AuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\UserManagerService.cs" Link="UserManagerService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.0.5" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
+	</ItemGroup>
+
+</Project>

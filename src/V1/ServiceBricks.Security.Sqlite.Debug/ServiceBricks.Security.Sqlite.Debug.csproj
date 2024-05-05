@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.0.5</Version>
+		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
+		<AssemblyTitle>ServiceBricks.Security.Sqlite</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>service;bricks;security;sqlite</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>ServiceBricks.Security.Sqlite.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteConstants.cs" Link="SecuritySqliteConstants.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteContext.cs" Link="SecuritySqliteContext.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteModule.cs" Link="SecuritySqliteModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore.Debug\ServiceBricks.Security.EntityFrameworkCore.Debug.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.16" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.16" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+	</ItemGroup>
+	
+</Project>

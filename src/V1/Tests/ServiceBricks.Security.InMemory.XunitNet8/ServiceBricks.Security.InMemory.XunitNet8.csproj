@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\TestFiles\InMemory\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\MappingTest.cs" Link="MappingTest.cs" />
+		<Compile Include="..\TestFiles\StartupInMemory.cs" Link="StartupInMemory.cs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\TestFiles\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.msbuild" Version="6.0.2">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="xunit" Version="2.7.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ServiceBricks.Security.InMemory.Debug\ServiceBricks.Security.InMemory.Debug.csproj" />
+	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+	</ItemGroup>
+
+</Project>

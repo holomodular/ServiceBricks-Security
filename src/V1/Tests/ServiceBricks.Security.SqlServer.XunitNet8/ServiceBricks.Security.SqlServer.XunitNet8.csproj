@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\TestFiles\SqlServer\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SqlServer\MappingTest.cs" Link="MappingTest.cs" />
+		<Compile Include="..\TestFiles\StartupSqlServer.cs" Link="StartupSqlServer.cs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\testfiles\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="xunit" Version="2.7.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ServiceBricks.Security.SqlServer.Debug\ServiceBricks.Security.SqlServer.Debug.csproj" />
+	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+	</ItemGroup>
+
+</Project>
