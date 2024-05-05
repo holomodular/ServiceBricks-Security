@@ -35,7 +35,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\testfiles\appsettings.json" Link="appsettings.json">
+    <Content Include="..\TestFiles\appsettings.json" Link="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
