@@ -14,4 +14,3 @@ This repository contains a security microservice built using the ServiceBricks f
 
 ServiceBricks is the cornerstone for building a microservices foundation.
 Visit http://ServiceBricks.com to learn more.
-
