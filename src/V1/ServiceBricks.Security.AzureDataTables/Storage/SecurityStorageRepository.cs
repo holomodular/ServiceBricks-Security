@@ -18,7 +18,7 @@ namespace ServiceBricks.Security.AzureDataTables
             : base(logFactory)
         {
             ConnectionString = configuration.GetAzureDataTablesConnectionString(
-                            SecurityAzureDataTablesConstants.APPSETTINGS_CONNECTION_STRING);
+                            SecurityAzureDataTablesConstants.APPSETTING_CONNECTION_STRING);
             TableName = SecurityAzureDataTablesConstants.GetTableName(typeof(TDomain).Name);
         }
     }

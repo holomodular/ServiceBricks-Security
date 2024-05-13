@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
 		<AssemblyTitle>ServiceBricks.Security.AzureDataTables</AssemblyTitle>
 		<Authors>holomodular</Authors>
@@ -72,7 +72,7 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.0.5" />
+		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.0.6" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />

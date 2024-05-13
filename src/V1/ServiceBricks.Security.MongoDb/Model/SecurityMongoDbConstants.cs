@@ -5,8 +5,8 @@
     /// </summary>
     public static class SecurityMongoDbConstants
     {
-        public const string APPSETTINGS_CONNECTION_STRING = "ServiceBricks:Security:MongoDb:ConnectionString";
-        public const string APPSETTINGS_DATABASE_NAME = "ServiceBricks:Security:MongoDb:DatabaseName";
+        public const string APPSETTING_CONNECTION_STRING = "ServiceBricks:Security:Storage:MongoDb:ConnectionString";
+        public const string APPSETTING_DATABASE = "ServiceBricks:Security:Storage:MongoDb:Database";
 
         public const string COLLECTIONNAME_PREFIX = "Security";
 

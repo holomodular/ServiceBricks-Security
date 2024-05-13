@@ -11,7 +11,8 @@ namespace ServiceBricks.Security.Member
         public const string APPSETTING_SECURITY_TOKEN = "ServiceBricks:Security:Token";
 
         public const string ROLE_ADMIN_NAME = "ADMIN";
-
         public const string ROLE_USER_NAME = "USER";
+
+        public const string SERVICEBRICKS_AUTHENTICATION_SCHEME = "SERVICEBRICKS_AUTH";
     }
 }

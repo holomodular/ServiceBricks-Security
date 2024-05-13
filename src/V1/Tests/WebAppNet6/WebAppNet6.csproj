@@ -29,6 +29,6 @@
     <ProjectReference Include="..\..\ServiceBricks.Security.SqlServer.Debug\ServiceBricks.Security.SqlServer.Debug.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Logging.InMemory" Version="1.0.5" />
+		<PackageReference Include="ServiceBricks.Logging.InMemory" Version="1.0.6" />
 	</ItemGroup>
 </Project>

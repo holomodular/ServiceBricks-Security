@@ -11,7 +11,7 @@ namespace ServiceBricks.Security.Member
     {
         public static bool ModuleStarted = false;
 
-        public static IApplicationBuilder StartServiceBrickSecurityMember(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder StartServiceBricksSecurityMember(this IApplicationBuilder applicationBuilder)
         {
             ModuleStarted = true;
             return applicationBuilder;

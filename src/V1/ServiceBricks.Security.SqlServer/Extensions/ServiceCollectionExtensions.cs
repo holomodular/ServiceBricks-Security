@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.SqlServer
             //Register Database
             var builder = new DbContextOptionsBuilder<SecuritySqlServerContext>();
             string connectionString = configuration.GetSqlServerConnectionString(
-                SecuritySqlServerConstants.APPSETTING_DATABASE_CONNECTION);
+                SecuritySqlServerConstants.APPSETTING_CONNECTION_STRING);
             builder.UseSqlServer(connectionString, x =>
             {
                 x.MigrationsAssembly(typeof(ServiceCollectionExtensions).Assembly.GetName().Name);

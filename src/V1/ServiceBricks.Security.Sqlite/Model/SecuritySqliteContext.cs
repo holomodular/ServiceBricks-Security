@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Sqlite
 
             var builder = new DbContextOptionsBuilder<SecuritySqliteContext>();
             string connectionString = configuration.GetSqliteConnectionString(
-                SecuritySqliteConstants.APPSETTING_DATABASE_CONNECTION);
+                SecuritySqliteConstants.APPSETTING_CONNECTION_STRING);
             builder.UseSqlite(connectionString, x =>
             {
                 x.MigrationsAssembly(typeof(SecuritySqliteContext).Assembly.GetName().Name);

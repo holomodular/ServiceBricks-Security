@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.SqlServer
 
             var builder = new DbContextOptionsBuilder<SecuritySqlServerContext>();
             string connectionString = configuration.GetSqlServerConnectionString(
-                SecuritySqlServerConstants.APPSETTING_DATABASE_CONNECTION);
+                SecuritySqlServerConstants.APPSETTING_CONNECTION_STRING);
             builder.UseSqlServer(connectionString, x =>
             {
                 x.MigrationsAssembly(typeof(SecuritySqlServerContext).Assembly.GetName().Name);
@@ -63,7 +63,7 @@ namespace ServiceBricks.Security.SqlServer
             base.OnModelCreating(builder);
 
             //Set default schema
-            builder.HasDefaultSchema(SecurityEntityFrameworkCoreConstants.DATABASE_SCHEMA_NAME);
+            builder.HasDefaultSchema(SecuritySqlServerConstants.DATABASE_SCHEMA_NAME);
 
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });

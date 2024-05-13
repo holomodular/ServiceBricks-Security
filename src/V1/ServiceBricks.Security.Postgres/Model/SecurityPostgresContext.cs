@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Postgres
 
             var builder = new DbContextOptionsBuilder<SecurityPostgresContext>();
             string connectionString = configuration.GetPostgresConnectionString(
-                SecurityPostgresConstants.APPSETTING_DATABASE_CONNECTION);
+                SecurityPostgresConstants.APPSETTING_CONNECTION_STRING);
             builder.UseNpgsql(connectionString, x =>
             {
                 x.MigrationsAssembly(typeof(SecurityPostgresContext).Assembly.GetName().Name);
@@ -63,7 +63,7 @@ namespace ServiceBricks.Security.Postgres
             base.OnModelCreating(builder);
 
             //Set default schema
-            builder.HasDefaultSchema(SecurityEntityFrameworkCoreConstants.DATABASE_SCHEMA_NAME);
+            builder.HasDefaultSchema(SecurityPostgresConstants.DATABASE_SCHEMA_NAME);
 
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });

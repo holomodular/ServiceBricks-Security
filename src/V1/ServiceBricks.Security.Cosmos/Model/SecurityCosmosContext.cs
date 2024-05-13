@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Cosmos
 
             var builder = new DbContextOptionsBuilder<SecurityCosmosContext>();
             string connectionString = configuration.GetCosmosConnectionString(
-                SecurityCosmosConstants.APPSETTING_CONNECTION);
+                SecurityCosmosConstants.APPSETTING_CONNECTION_STRING);
             string database = configuration.GetCosmosDatabase(
                 SecurityCosmosConstants.APPSETTING_DATABASE);
             builder.UseCosmos(connectionString, database);
@@ -61,7 +61,7 @@ namespace ServiceBricks.Security.Cosmos
             base.OnModelCreating(builder);
 
             //Set default schema
-            builder.HasDefaultSchema(SecurityEntityFrameworkCoreConstants.DATABASE_SCHEMA_NAME);
+            builder.HasDefaultSchema(SecurityCosmosConstants.DATABASE_SCHEMA_NAME);
 
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });

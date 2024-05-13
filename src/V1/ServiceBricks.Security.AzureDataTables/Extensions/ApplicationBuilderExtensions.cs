@@ -21,7 +21,7 @@ namespace ServiceBricks.Security.AzureDataTables
                 var configuration = serviceScope.ServiceProvider.GetRequiredService<IConfiguration>();
 
                 var connectionString = configuration.GetAzureDataTablesConnectionString(
-                    SecurityAzureDataTablesConstants.APPSETTINGS_CONNECTION_STRING);
+                    SecurityAzureDataTablesConstants.APPSETTING_CONNECTION_STRING);
 
                 // Create each table if not exists
                 TableClient tableClient = new TableClient(

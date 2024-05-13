@@ -5,7 +5,7 @@
     /// </summary>
     public static class SecurityAzureDataTablesConstants
     {
-        public const string APPSETTINGS_CONNECTION_STRING = "ServiceBricks:Security:AzureDataTables:ConnectionString";
+        public const string APPSETTING_CONNECTION_STRING = "ServiceBricks:Security:Storage:AzureDataTables:ConnectionString";
 
         public const string TABLENAME_PREFIX = "Security";
 

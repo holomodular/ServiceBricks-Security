@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,13 +26,13 @@ namespace ServiceBricks.Security.Member
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityMemberModule), new SecurityMemberModule());
 
             // Add Authentication
-            services.Configure<SecurityTokenOptions>(configuration.GetSection(SecurityConstants.APPSETTING_SECURITY_TOKEN));
+            services.Configure<SecurityTokenOptions>(configuration.GetSection(SecurityMemberConstants.APPSETTING_SECURITY_TOKEN));
             var securityOptions = services.BuildServiceProvider().GetService<IOptions<SecurityTokenOptions>>().Value;
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "SERVICEBRICKS_AUTH";
-                options.DefaultScheme = "SERVICEBRICKS_AUTH";
-                options.DefaultChallengeScheme = "SERVICEBRICKS_AUTH";
+                options.DefaultAuthenticateScheme = SecurityMemberConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
+                options.DefaultScheme = SecurityMemberConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
+                options.DefaultChallengeScheme = SecurityMemberConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
             })
             .AddCookie(options =>
             {
@@ -53,7 +54,7 @@ namespace ServiceBricks.Security.Member
                 };
                 options.TokenValidationParameters = tokenValidationParams;
             })
-            .AddPolicyScheme("SERVICEBRICKS_AUTH", "SERVICEBRICKS_AUTH", options =>
+            .AddPolicyScheme(SecurityMemberConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, SecurityMemberConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, options =>
             {
                 // runs on each request
                 options.ForwardDefaultSelector = context =>
@@ -64,7 +65,7 @@ namespace ServiceBricks.Security.Member
                         return JwtBearerDefaults.AuthenticationScheme;
 
                     // otherwise always check for cookie auth
-                    return IdentityConstants.ApplicationScheme;
+                    return CookieAuthenticationDefaults.AuthenticationScheme;
                 };
             });
 
@@ -72,13 +73,17 @@ namespace ServiceBricks.Security.Member
             services.AddAuthorization(options =>
             {
                 //Add Built-in Security Policies
-                options.AddPolicy(ServiceBricksConstants.AdminSecurityPolicyName, policy =>
-                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireRole(SecurityConstants.ROLE_ADMIN_NAME));
+                options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_ADMIN, policy =>
+                    policy
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .RequireRole(SecurityMemberConstants.ROLE_ADMIN_NAME));
 
-                options.AddPolicy(ServiceBricksConstants.UserSecurityPolicyName, policy =>
-                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireRole(SecurityConstants.ROLE_USER_NAME));
+                options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_USER, policy =>
+                    policy
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .RequireRole(SecurityMemberConstants.ROLE_USER_NAME));
             });
 
             return services;

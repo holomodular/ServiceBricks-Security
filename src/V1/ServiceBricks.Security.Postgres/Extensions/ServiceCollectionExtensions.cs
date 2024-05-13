@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Postgres
             //Register Database
             var builder = new DbContextOptionsBuilder<SecurityPostgresContext>();
             string connectionString = configuration.GetPostgresConnectionString(
-                SecurityPostgresConstants.APPSETTING_DATABASE_CONNECTION);
+                SecurityPostgresConstants.APPSETTING_CONNECTION_STRING);
             builder.UseNpgsql(connectionString, x =>
             {
                 x.MigrationsAssembly(typeof(ServiceCollectionExtensions).Assembly.GetName().Name);

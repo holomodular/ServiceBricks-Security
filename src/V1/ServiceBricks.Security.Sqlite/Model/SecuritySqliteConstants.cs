@@ -5,7 +5,7 @@
     /// </summary>
     public static class SecuritySqliteConstants
     {
-        public const string APPSETTING_DATABASE_CONNECTION = "ServiceBricks:Security:Sqlite:ConnectionString";
+        public const string APPSETTING_CONNECTION_STRING = "ServiceBricks:Security:Storage:Sqlite:ConnectionString";
 
         public const string DATABASE_SCHEMA_NAME = "Security";
     }

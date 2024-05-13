@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -29,9 +30,9 @@ namespace ServiceBricks.Security
             var securityOptions = services.BuildServiceProvider().GetService<IOptions<SecurityTokenOptions>>().Value;
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "SERVICEBRICKS_AUTH";
-                options.DefaultScheme = "SERVICEBRICKS_AUTH";
-                options.DefaultChallengeScheme = "SERVICEBRICKS_AUTH";
+                options.DefaultAuthenticateScheme = SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
+                options.DefaultScheme = SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
+                options.DefaultChallengeScheme = SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME;
             })
             .AddCookie(options =>
             {
@@ -53,7 +54,7 @@ namespace ServiceBricks.Security
                 };
                 options.TokenValidationParameters = tokenValidationParams;
             })
-            .AddPolicyScheme("SERVICEBRICKS_AUTH", "SERVICEBRICKS_AUTH", options =>
+            .AddPolicyScheme(SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, options =>
             {
                 // runs on each request
                 options.ForwardDefaultSelector = context =>
@@ -63,7 +64,7 @@ namespace ServiceBricks.Security
                     if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ", StringComparison.InvariantCultureIgnoreCase))
                         return JwtBearerDefaults.AuthenticationScheme;
 
-                    // otherwise always check for cookie auth
+                    // otherwise always check for cookie auth (with identity)
                     return IdentityConstants.ApplicationScheme;
                 };
             });
@@ -72,12 +73,18 @@ namespace ServiceBricks.Security
             services.AddAuthorization(options =>
             {
                 //Add Built-in Security Policies
-                options.AddPolicy(ServiceBricksConstants.AdminSecurityPolicyName, policy =>
-                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_ADMIN, policy =>
+                    policy
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(IdentityConstants.ApplicationScheme)
                     .RequireRole(SecurityConstants.ROLE_ADMIN_NAME));
 
-                options.AddPolicy(ServiceBricksConstants.UserSecurityPolicyName, policy =>
-                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_USER, policy =>
+                    policy
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(IdentityConstants.ApplicationScheme)
                     .RequireRole(SecurityConstants.ROLE_USER_NAME));
             });
 
@@ -95,6 +102,7 @@ namespace ServiceBricks.Security
             services.AddScoped<IApplicationUserTokenApiController, ApplicationUserTokenApiController>();
             services.AddScoped<IAuthenticationApiController, AuthenticationApiController>();
 
+            // Business Rules
             UserConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserForgotPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
             SendResetPasswordEmailRule.RegisterRule(BusinessRuleRegistry.Instance);

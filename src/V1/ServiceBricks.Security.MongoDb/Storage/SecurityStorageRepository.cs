@@ -17,9 +17,9 @@ namespace ServiceBricks.Security.MongoDb
             : base(logFactory)
         {
             ConnectionString = configuration.GetMongoDbConnectionString(
-                SecurityMongoDbConstants.APPSETTINGS_CONNECTION_STRING);
-            DatabaseName = configuration.GetMongoDbDatabaseName(
-                SecurityMongoDbConstants.APPSETTINGS_DATABASE_NAME);
+                SecurityMongoDbConstants.APPSETTING_CONNECTION_STRING);
+            DatabaseName = configuration.GetMongoDbDatabase(
+                SecurityMongoDbConstants.APPSETTING_DATABASE);
             CollectionName = SecurityMongoDbConstants.GetCollectionName(typeof(TDomain).Name);
         }
     }
