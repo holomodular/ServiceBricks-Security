@@ -21,6 +21,10 @@ The NuGet package ServiceBricks.Security.Member that allows any ServiceBricks ho
 Install the NuGet package ServiceBricks.Security.Member to your web application and add the ServiceBricks:Security:Token application settings. 
 If the settings match the security microservices application settings, it will be joined as a member of the platform using JWT bearer token membership.
 
+Make sure to add the following line to startup.
+```csharp
+services.AddServiceBricksSecurityMember(Configuration);
+```
 
 ## Data Transfer Objects
 
