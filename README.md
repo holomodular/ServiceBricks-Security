@@ -10,12 +10,16 @@
 
 This repository contains a security microservice built using the ServiceBricks foundation.
 The security microservice is responsible for application security and user management built using the Microsoft ASP.NET Core Identity (v3) provider.
-It also stores an additional object used to store auditting events for users.
+It also stores auditing events for users.
 
 The NuGet package ServiceBricks.Security.Member that allows any ServiceBricks hosted microservice application to become a security member using JWT tokens.
 
 ## Supported Providers
 * Microsoft ASP.NET Core Identity (v3)
+
+### ServiceBricks.Security.Member
+Install the NuGet package ServiceBricks.Security.Member to your web application and add the ServiceBricks:Security:Token application settings. 
+If the settings match the security microservices application settings, it will be joined as a member of the platform using JWT bearer token membership.
 
 
 ## Data Transfer Objects
