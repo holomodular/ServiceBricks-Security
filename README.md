@@ -348,14 +348,290 @@ public class SendConfirmEmailProcess : DomainProcess
 
 ```
 
-To execute this process, use the following code:
+
+### SendResetPasswordEmailProcess
+This process is associated to the [SendResetPasswordEmailRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/SendResetPasswordEmailRule.cs) Business Rule.
+
+The business rule will first create an email and replace the callback url (with confirmation code) inside of the Reset Email text. It will then send a service bus broadcast message for CreateApplicationEmail. The notification microservice will store this message and it will be sent when it is processed on a background task using a timer.
+
 ```csharp
 
-var businessRuleService = services.GetRequiredService<IBusinessRuleService>();
-var process = new SendConfirmEmailProcess(user, confirmationUrlWithToken);
-var response = businessRuleService.ExecuteProcess(process);
+public class SendResetPasswordEmailProcess : DomainProcess
+{
+    public SendResetPasswordEmailProcess(ApplicationUserDto applicationUser, string callbackUrl)
+    {
+        ApplicationUser = applicationUser;
+        CallbackUrl = callbackUrl;
+    }
+
+    public ApplicationUserDto ApplicationUser { get; set; }
+    public string CallbackUrl { get; set; }
+}
 
 ```
+
+
+### UserConfirmEmailProcess
+This process is associated to the [UserConfirmEmailRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserConfirmEmailRule.cs) Business Rule.
+
+The business rule will validate a confirmation code with a user.
+
+```csharp
+
+ public class UserConfirmEmailProcess : DomainProcess
+{
+    public UserConfirmEmailProcess(string userStorageKey, string code)
+    {
+        UserStorageKey = userStorageKey;
+        Code = code;
+    }
+
+    public string UserStorageKey { get; set; }
+    public string Code { get; set; }
+}
+
+```
+
+### UserForgotPasswordProcess
+This process is associated to the [UserForgotPasswordRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserForgotPasswordRule.cs) Business Rule.
+
+The business rule will create a reset token for a user, replace the callback url (with reset code) inside of the Forgot Password email text. It will then send a service bus broadcast message for CreateApplicationEmail. The notification microservice will store this message and it will be sent when it is processed on a background task using a timer.
+
+```csharp
+
+public class UserForgotPasswordProcess : DomainProcess<string>
+{
+    public UserForgotPasswordProcess(string userStorageKey)
+    {
+        DomainObject = userStorageKey;
+    }
+}
+
+```
+
+
+### UserInvalidPasswordProcess
+This process is associated to the [UserInvalidPasswordRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserInvalidPasswordRule.cs) Business Rule.
+
+The business rule will create an audit message for the user denoting an invalid password login request.
+
+```csharp
+
+public class UserInvalidPasswordProcess : DomainProcess
+{
+    public UserInvalidPasswordProcess(string userStorageKey, string email)
+    {
+        UserStorageKey = userStorageKey;
+        Email = email;
+    }
+
+    public string Email { get; set; }
+    public string UserStorageKey { get; set; }
+}
+
+```
+
+
+### UserLoginProcess
+This process is associated to the [UserLoginRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserLoginRule.cs) Business Rule.
+
+The business rule will attempt to signin a user and create an audituser message.
+
+```csharp
+
+public class UserLoginProcess : DomainProcess
+{
+    public UserLoginProcess(
+        string email,
+        string password,
+        bool rememberMe)
+    {
+        Email = email;
+        Password = password;
+        RememberMe = rememberMe;
+    }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
+
+    public bool RememberMe { get; set; }
+
+    public ApplicationSigninResult ApplicationSigninResult { get; set; }
+}
+
+```
+
+### UserLogoutProcess
+This process is associated to the [UserLogoutRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserLogoutRule.cs) Business Rule.
+
+The business rule will logout a user and create an audituser message.
+
+```csharp
+
+public class UserLogoutProcess : DomainProcess
+{
+    public UserLogoutProcess(string userStorageKey)
+    {
+        UserStorageKey = userStorageKey;
+    }
+
+    public string UserStorageKey { get; set; }
+}
+
+```
+
+
+### UserMfaProcess
+This process is associated to the [UserMFARule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserMFARule.cs) Business Rule.
+
+The business rule will send the mult-factor authentication code to the user.
+
+```csharp
+
+public class UserMfaProcess : DomainProcess
+{
+    public UserMfaProcess(string selectedProvider)
+    {
+        SelectedProvider = selectedProvider;
+    }
+
+    public string SelectedProvider { get; set; }
+}
+
+```
+
+
+### UserPasswordChangeProcess
+This process is associated to the [UserPasswordChangeRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserPasswordChangeRule.cs) Business Rule.
+
+The business rule will send attempt to change a user's password.
+
+```csharp
+
+public class UserPasswordChangeProcess : DomainProcess
+{
+    public UserPasswordChangeProcess(string userStorageKey, string oldPassword, string newPassword)
+    {
+        UserStorageKey = userStorageKey;
+        OldPassword = oldPassword;
+        NewPassword = newPassword;
+    }
+
+    public string UserStorageKey { get; set; }
+    public string OldPassword { get; set; }
+    public string NewPassword { get; set; }
+}
+
+```
+
+### UserPasswordResetProcess
+This process is associated to the [UserPasswordResetRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserPasswordResetRule.cs) Business Rule.
+
+The business rule will attempt to reset a user's password with the reset token.
+
+```csharp
+
+public class UserPasswordResetProcess : DomainProcess
+{
+    public UserPasswordResetProcess(string email, string password, string code)
+    {
+        Email = email;
+        Password = password;
+        Code = code;
+    }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string Code { get; set; }
+}
+```
+
+
+### UserProfileChangeProcess
+This process is associated to the [UserProfileChangeRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserProfileChangeRule.cs) Business Rule.
+
+The business rule will attempt to update a user's profile.
+
+```csharp
+
+public class UserProfileChangeProcess : DomainProcess
+{
+    public UserProfileChangeProcess(string userStorageKey)
+    {
+        UserStorageKey = userStorageKey;
+    }
+
+    public string UserStorageKey { get; set; }
+}
+
+```
+
+### UserRegisterAdminProcess
+This process is associated to the [UserRegisterAdminRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserRegisterAdminRule.cs) Business Rule.
+
+The business rule will attempt to regiser a user as an admin user.
+
+```csharp
+
+public class UserRegisterAdminProcess : UserRegisterProcess
+{
+    public UserRegisterAdminProcess(
+        string email,
+        string password) : base(email, password)
+    {
+    }
+}
+
+```
+
+### UserRegisterProcess
+This process is associated to the [UserRegisterRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserRegisterRule.cs) Business Rule.
+
+The business rule will attempt to regiser a user.
+
+```csharp
+
+public class UserRegisterProcess : DomainProcess
+{
+    public UserRegisterProcess(
+        string email,
+        string password,
+        bool createEmail = true,
+        bool emailConfirmed = false)
+    {
+        Email = email;
+        Password = password;
+        CreateEmail = createEmail;
+        EmailConfirmed = emailConfirmed;
+    }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public bool CreateEmail { get; set; }
+    public bool EmailConfirmed { get; set; }
+}
+
+```
+
+### UserResendConfirmationProcess
+This process is associated to the [UserResendConfirmationProcessRule](https://github.com/holomodular/ServiceBricks-Security/blob/main/src/V1/ServiceBricks.Security/Rule/UserResendConfirmationProcessRule.cs) Business Rule.
+
+The business rule will send the user another email with a confirmation code.
+
+```csharp
+
+public class UserResendConfirmationProcess : DomainProcess
+{
+    public UserResendConfirmationProcess(string userStorageKey)
+    {
+        UserStorageKey = userStorageKey;
+    }
+
+    public string UserStorageKey { get; set; }
+}
+
+```
+
 
 ## Service Bus
 No Broadcast Messages
