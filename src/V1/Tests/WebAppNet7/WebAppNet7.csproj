@@ -8,8 +8,8 @@
 
   <ItemGroup>
 	  <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.13" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.19" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +20,16 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<ItemGroup>
+	  <None Include="Pages\Shared\_FooterPartial.cshtml" />
+	  <None Include="Pages\Shared\_HeaderPartial.cshtml" />
+	  <None Include="Pages\Shared\_Layout.cshtml" />
+	  <None Include="Pages\_ViewImports.cshtml" />
+	  <None Include="Pages\_ViewStart.cshtml" />
+	  <None Include="Views\Home\Error.cshtml" />
+	  <None Include="Views\Home\Index.cshtml" />
+	  <None Include="Views\_ViewStart.cshtml" />
+	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ServiceBricks.Security.AzureDataTables.Debug\ServiceBricks.Security.AzureDataTables.Debug.csproj" />
     <ProjectReference Include="..\..\ServiceBricks.Security.Cosmos.Debug\ServiceBricks.Security.Cosmos.Debug.csproj" />
@@ -29,7 +39,7 @@
     <ProjectReference Include="..\..\ServiceBricks.Security.SqlServer.Debug\ServiceBricks.Security.SqlServer.Debug.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Logging.InMemory" Version="1.0.6" />
+		<PackageReference Include="ServiceBricks.Logging.InMemory" Version="1.0.7" />
 	</ItemGroup>
 	
 </Project>

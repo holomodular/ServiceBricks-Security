@@ -6,6 +6,7 @@ using ServiceBricks;
 using System.Text.Json.Serialization;
 using WebApp.Model;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApp.Extensions
 {
@@ -16,73 +17,12 @@ namespace WebApp.Extensions
             // Add to module registry
             ModuleRegistry.Instance.RegisterItem(typeof(WebAppModule), new WebAppModule());
 
-            services.AddHttpContextAccessor();
-            services.AddControllers().ConfigureApiBehaviorOptions(setup =>
-            {
-                setup.InvalidModelStateResponseFactory = context =>
-                {
-                    if (context.HttpContext != null &&
-                    context.HttpContext.Request != null &&
-                    context.HttpContext.Request.Path.HasValue &&
-                    context.HttpContext.Request.Path.Value.StartsWith(@"/api/", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        var apiOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<ApiOptions>>().Value;
-
-                        if (apiOptions.ReturnResponseObject)
-                        {
-                            Response response = new Response();
-                            foreach (var key in context.ModelState.Keys)
-                            {
-                                foreach (var err in context.ModelState[key].Errors)
-                                {
-                                    if (!string.IsNullOrEmpty(key))
-                                        response.AddMessage(ResponseMessage.CreateError(err.ErrorMessage, key));
-                                    else
-                                        response.AddMessage(ResponseMessage.CreateError(err.ErrorMessage));
-                                }
-                            }
-
-                            var objectResult = new ObjectResult(response) { StatusCode = StatusCodes.Status400BadRequest };
-                            return objectResult;
-                        }
-                        else
-                        {
-                            var vpd = new ValidationProblemDetails(context.ModelState);
-                            var objectResult = new ObjectResult(vpd) { StatusCode = StatusCodes.Status400BadRequest };
-                            return objectResult;
-                        }
-                    }
-                    else
-                    {
-                        var vpd = new ValidationProblemDetails(context.ModelState);
-                        var objectResult = new ObjectResult(vpd) { StatusCode = StatusCodes.Status400BadRequest };
-                        return objectResult;
-                    }
-                };
-            });
+            services.AddControllers();
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            services.AddOptions();
             services.AddCors();
-            services.AddLocalization(options =>
-            {
-                options.ResourcesPath = "Resources";
-            });
 
-            services.AddMvc()
-                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization()
-                .AddJsonOptions(options =>
-                {
-                    // Added for ServiceQuery enums in swagger
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Strict;
-            });
+            services.AddMvc();
 
             services.AddCustomSwagger(Configuration);
 
@@ -106,6 +46,14 @@ namespace WebApp.Extensions
             });
             services.AddSwaggerGen(options =>
             {
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "JWT token must be provided",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                });
                 options.ResolveConflictingActions(descriptions =>
                 {
                     return descriptions.First();
@@ -114,6 +62,7 @@ namespace WebApp.Extensions
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "API v1", Version = "1.0" });
                 options.SwaggerDoc("v2", new OpenApiInfo { Title = "API v2", Version = "2.0" });
                 options.OperationFilter<SwaggerRemoveVersionOperationFilter>();
+                options.OperationFilter<SwaggerApplySecurityOperationFilter>();
                 options.DocumentFilter<SwaggerReplaceVersionDocumentFilter>();
                 options.DocInclusionPredicate((docName, apiDesc) =>
                 {

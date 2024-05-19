@@ -6,9 +6,6 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     {
         public SecurityEntityFrameworkCoreModule()
         {
-            AdminHtml = string.Empty;
-            Name = "Security EntityFrameworkCore Module";
-            Description = @"The Security EntityFrameworkCore Module implements the EntityFrameworkCore provider.";
             AutomapperAssemblies = new List<Assembly>()
             {
                 typeof(SecurityEntityFrameworkCoreModule).Assembly
@@ -19,9 +16,6 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             };
         }
 
-        public string Name { get; }
-        public string Description { get; }
-        public string AdminHtml { get; }
         public List<Assembly> AutomapperAssemblies { get; }
         public List<Assembly> ViewAssemblies { get; }
 

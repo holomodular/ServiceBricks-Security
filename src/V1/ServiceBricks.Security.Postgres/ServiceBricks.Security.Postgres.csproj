@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.0.6</Version>
+		<Version>1.0.7</Version>
 		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
 		<AssemblyTitle>ServiceBricks.Security.Postgres</AssemblyTitle>
 		<Authors>holomodular</Authors>
@@ -29,19 +29,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Security.EntityFrameworkCore" Version="1.0.6" />
+		<PackageReference Include="ServiceBricks.Security.EntityFrameworkCore" Version="1.0.7" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
 	</ItemGroup>
 	
 </Project>
