@@ -99,7 +99,7 @@ namespace ServiceBricks.Security
                     baseUrl = _options.Url;
 
                 string callbackUrl = string.Format(
-                        "{0}/Security/ResetPassword?code={1}&userId={2}",
+                        "{0}/ResetPassword?code={1}&userId={2}",
                         baseUrl, respCode.Item, e.DomainObject);
 
                 // Create Email Event

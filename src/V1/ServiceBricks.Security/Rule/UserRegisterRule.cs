@@ -145,7 +145,7 @@ namespace ServiceBricks.Security
                     if (string.IsNullOrEmpty(baseUrl))
                         baseUrl = _options.Url;
                     string callbackUrl = string.Format(
-                            "{0}/Security/ConfirmEmail?code={1}&userId={2}",
+                            "{0}/ConfirmEmail?code={1}&userId={2}",
                             baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
 
                     // Create Email Event
