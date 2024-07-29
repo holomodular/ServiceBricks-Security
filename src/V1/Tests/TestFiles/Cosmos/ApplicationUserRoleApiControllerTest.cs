@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationUserRoleApiControllerTest : ApiControllerTest<ApplicationUserRoleDto>
+    public class ApplicationUserRoleApiControllerTest : ApplicationUserRoleApiControllerTestBase
     {
         public ApplicationUserRoleApiControllerTest() : base()
         {
@@ -13,21 +14,14 @@ namespace ServiceBricks.Xunit.Integration
             CreateDependencies();
         }
 
-        protected virtual void CreateDependencies()
+        public override ApplicationRoleApiControllerTestBase GetAppRoleTest()
         {
-            var appUserTest = new ApplicationUserApiControllerTest();
-            var user = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationUser =
-                appUserTest.CreateBase(user);
+            return new ApplicationRoleApiControllerTest();
+        }
 
-            var appRoleTest = new ApplicationRoleApiControllerTest();
-            var role = appRoleTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationRole =
-                appRoleTest.CreateBase(role);
-
-            role = appRoleTest.TestManager.GetMaximumDataObject();
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationRole2 =
-                appRoleTest.CreateBase(role);
+        public override ApplicationUserApiControllerTestBase GetAppUserTest()
+        {
+            return new ApplicationUserApiControllerTest();
         }
     }
 }

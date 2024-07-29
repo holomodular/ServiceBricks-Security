@@ -4,7 +4,7 @@ using ServiceBricks.Security;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationUserClaimApiControllerTest : ApiControllerTest<ApplicationUserClaimDto>
+    public class ApplicationUserClaimApiControllerTest : ApplicationUserClaimApiControllerTestBase
     {
         public ApplicationUserClaimApiControllerTest() : base()
         {
@@ -13,13 +13,9 @@ namespace ServiceBricks.Xunit.Integration
             CreateDependencies();
         }
 
-        protected virtual void CreateDependencies()
+        public override ApplicationUserApiControllerTestBase GetAppUserTest()
         {
-            var appUserTest = new ApplicationUserApiControllerTest();
-            appUserTest.SystemManager = this.SystemManager;
-            var user = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserClaimTestManager)TestManager).ApplicationUser =
-                appUserTest.CreateBase(user);
+            return new ApplicationUserApiControllerTest();
         }
     }
 }

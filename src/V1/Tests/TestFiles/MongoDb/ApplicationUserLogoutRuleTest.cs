@@ -6,51 +6,11 @@ using ServiceQuery;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public partial class ApplicationUserLogoutRuleTest : ApplicationUserConfirmEmailRuleTest
+    public partial class ApplicationUserLogoutRuleTest : ApplicationUserLogoutRuleTestBase
     {
-        [Fact]
-        public override async Task TestRule()
+        public ApplicationUserLogoutRuleTest()
         {
-            await base.TestRule();
-
-            var ruleService = SystemManager.ServiceProvider.GetRequiredService<IBusinessRuleService>();
-
-            // Create httpcontext
-            var httpContextAccessor = SystemManager.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
-            httpContextAccessor.HttpContext = new DefaultHttpContext();
-            httpContextAccessor.HttpContext.RequestServices = SystemManager.ServiceProvider;
-
-            //Execute ApplicationUserLoginEvent
-            UserLoginProcess loginProcess = new UserLoginProcess(
-                Email,
-                Password,
-                true);
-            var respLogin = await ruleService.ExecuteProcessAsync(loginProcess);
-            Assert.True(respLogin.Success);
-
-            //Verify audituser created
-            var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
-            var queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.LOGIN);
-            queryBuilder.And();
-            queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey.ToString());
-            var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());
-            Assert.True(respAudit != null && respAudit.Item.List.Count > 0);
-
-            //Execute ApplicationUserLogoutProcess
-            UserLogoutProcess logoutProcess = new UserLogoutProcess(
-                UserStorageKey);
-            var respLogout = await ruleService.ExecuteProcessAsync(logoutProcess);
-            Assert.True(respLogout.Success);
-
-            //Verify audituser created
-            auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
-            queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.LOGOUT);
-            queryBuilder.And();
-            queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey.ToString());
-            respAudit = await auditUserService.QueryAsync(queryBuilder.Build());
-            Assert.True(respAudit != null && respAudit.Item.List.Count > 0);
+            SystemManager = ServiceBricksSystemManager.GetSystemManager(typeof(StartupMongoDb));
         }
     }
 }

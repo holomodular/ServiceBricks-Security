@@ -4,7 +4,7 @@ using ServiceBricks.Security;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationRoleClaimApiControllerTest : ApiControllerTest<ApplicationRoleClaimDto>
+    public class ApplicationRoleClaimApiControllerTest : ApplicationRoleClaimApiControllerTestBase
     {
         public ApplicationRoleClaimApiControllerTest() : base()
         {
@@ -13,13 +13,9 @@ namespace ServiceBricks.Xunit.Integration
             CreateDependencies();
         }
 
-        protected virtual void CreateDependencies()
+        public override ApplicationRoleApiControllerTestBase GetAppRoleTest()
         {
-            var appUserTest = new ApplicationRoleApiControllerTest();
-            appUserTest.SystemManager = this.SystemManager;
-            var role = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationRoleClaimTestManager)TestManager).ApplicationRole =
-                appUserTest.CreateBase(role);
+            return new ApplicationRoleApiControllerTest();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
+using ServiceBricks.Xunit.Integration;
 
 namespace ServiceBricks.Xunit
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationRoleApiControllerTest : ApiControllerTest<ApplicationRoleDto>
+    public class ApplicationRoleApiControllerTest : ApplicationRoleApiControllerTestBase
     {
         public ApplicationRoleApiControllerTest() : base()
         {

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
+using ServiceBricks.Xunit.Integration;
 
 namespace ServiceBricks.Xunit
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationUserRoleApiControllerTest : ApiControllerTest<ApplicationUserRoleDto>
+    public class ApplicationUserRoleApiControllerTest : Integration.ApplicationUserRoleApiControllerTestBase
     {
         public ApplicationUserRoleApiControllerTest() : base()
         {
@@ -14,23 +15,14 @@ namespace ServiceBricks.Xunit
             CreateDependencies();
         }
 
-        protected virtual void CreateDependencies()
+        public override ApplicationRoleApiControllerTestBase GetAppRoleTest()
         {
-            var appUserTest = new ApplicationUserApiControllerTest();
-            var user = appUserTest.TestManager.GetMinimumDataObject();
-            var usercontroller = appUserTest.TestManager.GetController(SystemManager.ServiceProvider);
-            var respCreateUser = usercontroller.Create(user);
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationUser = ((OkObjectResult)respCreateUser).Value as ApplicationUserDto;
+            return new ApplicationRoleApiControllerTest();
+        }
 
-            var appRoleTest = new ApplicationRoleApiControllerTest();
-            var role = appRoleTest.TestManager.GetMinimumDataObject();
-            var rolecontroller = appRoleTest.TestManager.GetController(SystemManager.ServiceProvider);
-            var respCreateRole = rolecontroller.Create(role);
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationRole = ((OkObjectResult)respCreateRole).Value as ApplicationRoleDto;
-
-            var role2 = appRoleTest.TestManager.GetMaximumDataObject();
-            var respCreateRole2 = rolecontroller.Create(role);
-            ((ApplicationUserRoleTestManager)TestManager).ApplicationRole2 = ((OkObjectResult)respCreateRole2).Value as ApplicationRoleDto;
+        public override ApplicationUserApiControllerTestBase GetAppUserTest()
+        {
+            return new ApplicationUserApiControllerTest();
         }
     }
 }

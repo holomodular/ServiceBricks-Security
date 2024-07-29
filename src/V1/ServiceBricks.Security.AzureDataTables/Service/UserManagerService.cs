@@ -475,9 +475,18 @@ namespace ServiceBricks.Security.AzureDataTables
                 return response;
             }
 
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
+                return response;
+            }
+
             var result = _userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
             if (result != PasswordVerificationResult.Success)
             {
+                if (user.LockoutEnabled)
+                    await _userManager.AccessFailedAsync(user);
+
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }

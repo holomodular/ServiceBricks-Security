@@ -4,7 +4,7 @@ using ServiceBricks.Security;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationRoleApiControllerTest : ApiControllerTest<ApplicationRoleDto>
+    public class ApplicationRoleApiControllerTest : ApplicationRoleApiControllerTestBase
     {
         public ApplicationRoleApiControllerTest() : base()
         {

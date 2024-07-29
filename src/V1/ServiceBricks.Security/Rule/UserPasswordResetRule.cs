@@ -78,6 +78,12 @@ namespace ServiceBricks.Security
                     response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
                     return response;
                 }
+
+                // Fix for spaces
+                string code = e.Code;
+                if (!string.IsNullOrEmpty(code))
+                    code = code.Replace(" ", "+");
+
                 var result = await _userManager.ResetPasswordAsync(respUser.Item.StorageKey, e.Code, e.Password);
                 response.CopyFrom(result);
                 if (response.Error)

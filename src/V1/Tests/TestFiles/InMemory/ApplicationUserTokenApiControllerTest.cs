@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
+using ServiceBricks.Xunit.Integration;
 
 namespace ServiceBricks.Xunit
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationUserTokenApiControllerTest : ApiControllerTest<ApplicationUserTokenDto>
+    public class ApplicationUserTokenApiControllerTest : Integration.ApplicationUserTokenApiControllerTestBase
     {
         public ApplicationUserTokenApiControllerTest() : base()
         {
@@ -13,13 +14,9 @@ namespace ServiceBricks.Xunit
             CreateDependencies();
         }
 
-        protected virtual void CreateDependencies()
+        public override ApplicationUserApiControllerTestBase GetAppUserTest()
         {
-            var appUserTest = new ApplicationUserApiControllerTest();
-            appUserTest.SystemManager = this.SystemManager;
-            var user = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserTokenTestManager)TestManager).ApplicationUser =
-                appUserTest.CreateBase(user);
+            return new ApplicationUserApiControllerTest();
         }
     }
 }

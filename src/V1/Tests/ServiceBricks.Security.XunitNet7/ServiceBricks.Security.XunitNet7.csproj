@@ -9,22 +9,43 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\TestFiles\ApplicationRoleClaimTestManager.cs" Link="ApplicationRoleClaimTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationRoleTestManager.cs" Link="ApplicationRoleTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationUserClaimTestManager.cs" Link="ApplicationUserClaimTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationUserLoginTestManager.cs" Link="ApplicationUserLoginTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationUserRoleTestManager.cs" Link="ApplicationUserRoleTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationUserTestManager.cs" Link="ApplicationUserTestManager.cs" />
-    <Compile Include="..\TestFiles\ApplicationUserTokenTestManager.cs" Link="ApplicationUserTokenTestManager.cs" />
-    <Compile Include="..\TestFiles\AuditUserTestManager.cs" Link="AuditUserTestManager.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\TestFiles\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationRoleClaimTestManager.cs" Link="ApplicationRoleClaimTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationRoleTestManager.cs" Link="ApplicationRoleTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserClaimTestManager.cs" Link="ApplicationUserClaimTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserLoginTestManager.cs" Link="ApplicationUserLoginTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserRoleTestManager.cs" Link="ApplicationUserRoleTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserTestManager.cs" Link="ApplicationUserTestManager.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\ApplicationUserTokenTestManager.cs" Link="ApplicationUserTokenTestManager.cs" />
+		<Compile Include="..\TestFiles\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\AuditUserTestManager.cs" Link="AuditUserTestManager.cs" />
+		<Compile Include="..\TestFiles\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />
+	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.19" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-		<PackageReference Include="xunit" Version="2.8.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.0">
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.20" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+		<PackageReference Include="xunit" Version="2.9.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -40,7 +61,7 @@
 
 	
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Xunit" Version="1.0.7" />
+		<PackageReference Include="ServiceBricks.Xunit" Version="1.0.11" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
