@@ -1,30 +1,41 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using ServiceBricks.Storage.EntityFrameworkCore;
 using ServiceBricks.Security.EntityFrameworkCore;
+using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Cosmos
 {
     /// <summary>
-    /// IServiceCollection extensions for the Security Brick.
+    /// Extensions for adding the ServiceBricks Security Cosmos module to the service collection.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add the ServiceBricks Security Cosmos module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityCosmos(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddServiceBricksSecurityCosmos(configuration, new Action<IdentityOptions>(options => new IdentityOptions()));
         }
 
+        /// <summary>
+        /// Add the ServiceBricks Security Cosmos module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <param name="identityOptions"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityCosmos(this IServiceCollection services, IConfiguration configuration, Action<IdentityOptions> identityOptions)
         {
-            // Add to module registry
+            // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityCosmosModule), new SecurityCosmosModule());
 
-            //Register Database
+            // AI: Register the database for the module
             var builder = new DbContextOptionsBuilder<SecurityCosmosContext>();
             string connectionString = configuration.GetCosmosConnectionString(
                 SecurityCosmosConstants.APPSETTING_CONNECTION_STRING);
@@ -43,10 +54,11 @@ namespace ServiceBricks.Security.Cosmos
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
-            // Add Core service
-            services.AddServiceBricksSecurity(configuration);
+            // AI: Add the parent module
+            // AI: If the primary keys of the Cosmos models do not match the EFC module, we can't use EFC rules, so skip EFC and call start on the core module instead.
+            services.AddServiceBricksSecurity(configuration); // Skip EFC
 
-            // Storage Services
+            // AI: Storage Services for the module for each domain object
             services.AddScoped<IStorageRepository<Cosmos.ApplicationRole>, SecurityStorageRepository<Cosmos.ApplicationRole>>();
             services.AddScoped<IStorageRepository<Cosmos.ApplicationRoleClaim>, SecurityStorageRepository<Cosmos.ApplicationRoleClaim>>();
             services.AddScoped<IStorageRepository<Cosmos.ApplicationUser>, SecurityStorageRepository<Cosmos.ApplicationUser>>();
@@ -57,7 +69,8 @@ namespace ServiceBricks.Security.Cosmos
             services.AddScoped<IAuditUserStorageRepository, AuditUserStorageRepository>();
             services.AddScoped<IStorageRepository<AuditUser>, AuditUserStorageRepository>();
 
-            // API Services
+            // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
+            // AI: If the primary keys of the Cosmos models match the EFC module, we can use the EFC rules
             services.AddScoped<IApiService<AuditUserDto>, AuditUserApiService>();
             services.AddScoped<IAuditUserApiService, AuditUserApiService>();
 
@@ -84,7 +97,8 @@ namespace ServiceBricks.Security.Cosmos
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
-            // Register Business rules
+            // AI: Register business rules for the module
+            // AI: If the primary keys of the Cosmos models match the EFC module, we can use the EFC rules
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 

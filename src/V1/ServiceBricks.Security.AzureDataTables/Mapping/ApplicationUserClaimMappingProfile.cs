@@ -7,8 +7,11 @@ namespace ServiceBricks.Security.AzureDataTables
     /// <summary>
     /// This is an automapper profile for the ApplicationUserClaim domain object.
     /// </summary>
-    public class ApplicationUserClaimMappingProfile : Profile
+    public partial class ApplicationUserClaimMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserClaimMappingProfile()
         {
             CreateMap<ApplicationUserClaimDto, ApplicationUserClaim>()

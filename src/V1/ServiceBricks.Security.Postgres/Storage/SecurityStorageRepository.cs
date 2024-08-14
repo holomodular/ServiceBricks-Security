@@ -7,9 +7,14 @@ namespace ServiceBricks.Security.Postgres
     /// This is a storage repository for the Security module.
     /// </summary>
     /// <typeparam name="TDomain"></typeparam>
-    public class SecurityStorageRepository<TDomain> : EntityFrameworkCoreStorageRepository<TDomain>
+    public partial class SecurityStorageRepository<TDomain> : EntityFrameworkCoreStorageRepository<TDomain>
         where TDomain : class, IEntityFrameworkCoreDomainObject<TDomain>, new()
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="logFactory"></param>
+        /// <param name="context"></param>
         public SecurityStorageRepository(ILoggerFactory logFactory, SecurityPostgresContext context)
             : base(logFactory)
         {

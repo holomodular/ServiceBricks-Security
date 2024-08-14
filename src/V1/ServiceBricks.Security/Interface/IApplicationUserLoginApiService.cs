@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is a API service for the ApplicationUserLogin domain object.
+    /// This is a REST API service for the ApplicationUserLogin domain object.
     /// </summary>
-    public interface IApplicationUserLoginApiService : IApiService<ApplicationUserLoginDto>
+    public partial interface IApplicationUserLoginApiService : IApiService<ApplicationUserLoginDto>
     {
     }
 }

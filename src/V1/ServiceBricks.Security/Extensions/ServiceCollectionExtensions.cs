@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,23 +7,28 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 
-using System;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// IServiceCollection extensions for the Security Brick.
+    /// Extension methods for IServiceCollection to add ServiceBricks Security services.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add ServiceBricks Security services to the application.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            // Add to module registry
+            // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityModule), new SecurityModule());
 
+            // AI: Add any custom requirements for the module
             services.AddRouting(); // For LinkGenerator
 
-            // Add Authentication
+            // AI: Add Authentication
             services.Configure<SecurityTokenOptions>(configuration.GetSection(SecurityConstants.APPSETTING_SECURITY_TOKEN));
             var securityOptions = services.BuildServiceProvider().GetService<IOptions<SecurityTokenOptions>>().Value;
             services.AddAuthentication(options =>
@@ -56,23 +59,23 @@ namespace ServiceBricks.Security
             })
             .AddPolicyScheme(SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, SecurityConstants.SERVICEBRICKS_AUTHENTICATION_SCHEME, options =>
             {
-                // runs on each request
+                // AI: Runs on each request
                 options.ForwardDefaultSelector = context =>
                 {
-                    // filter by auth type
+                    // AI: Filter by auth type
                     string authorization = context.Request.Headers[HeaderNames.Authorization];
                     if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ", StringComparison.InvariantCultureIgnoreCase))
                         return JwtBearerDefaults.AuthenticationScheme;
 
-                    // otherwise always check for cookie auth (with identity)
+                    // AI: Fallback check for cookie auth (with identity)
                     return IdentityConstants.ApplicationScheme;
                 };
             });
 
-            // Add Authorization
+            // AI: Add Authorization
             services.AddAuthorization(options =>
             {
-                //Add Built-in Security Policies
+                // AI: Add Built-in Security Policies
                 options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_ADMIN, policy =>
                     policy
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
@@ -88,10 +91,10 @@ namespace ServiceBricks.Security
                     .RequireRole(SecurityConstants.ROLE_USER_NAME));
             });
 
-            // Services
+            // AI: Add any miscellaneous services for the module
             services.AddScoped<IAuthenticationApiService, AuthenticationApiService>();
 
-            // API Controllers
+            // AI: Add API Controllers for each DTO in the module
             services.AddScoped<IAuditUserApiController, AuditUserApiController>();
             services.AddScoped<IApplicationUserApiController, ApplicationUserApiController>();
             services.AddScoped<IApplicationUserClaimApiController, ApplicationUserClaimApiController>();
@@ -102,7 +105,7 @@ namespace ServiceBricks.Security
             services.AddScoped<IApplicationUserTokenApiController, ApplicationUserTokenApiController>();
             services.AddScoped<IAuthenticationApiController, AuthenticationApiController>();
 
-            // Business Rules
+            // AI: Register business rules for the module
             UserConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserForgotPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
             SendResetPasswordEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
@@ -122,9 +125,15 @@ namespace ServiceBricks.Security
             return services;
         }
 
+        /// <summary>
+        /// Add ServiceBricks Security client services to the application.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityClient(this IServiceCollection services, IConfiguration configuration)
         {
-            // Clients
+            // AI: Add clients for the module for each DTO
             services.AddScoped<IApplicationUserApiClient, ApplicationUserApiClient>();
             services.AddScoped<IApplicationUserClaimApiClient, ApplicationUserClaimApiClient>();
             services.AddScoped<IApplicationUserRoleApiClient, ApplicationUserRoleApiClient>();

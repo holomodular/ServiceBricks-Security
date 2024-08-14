@@ -3,12 +3,12 @@ using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
-    public partial class ApplicationRoleClaimQueryRule : BusinessRule
+    /// <summary>
+    /// This is a business rule for the ApplicationRoleClaim object to change the StorageKey to RowKey before query.
+    /// </summary>
+    public sealed class ApplicationRoleClaimQueryRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
@@ -41,6 +41,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainQueryBeforeEvent<ApplicationRoleClaim> ei)
                 {
                     var item = ei.DomainObject;

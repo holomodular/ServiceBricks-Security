@@ -1,14 +1,8 @@
-﻿using Amazon.Runtime.Internal.Auth;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.Options;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using ServiceBricks;
-using System.Text.Json.Serialization;
 using WebApp.Model;
-using ServiceBricks.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApp.Extensions
 {

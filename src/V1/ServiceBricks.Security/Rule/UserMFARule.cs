@@ -2,15 +2,12 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This a business rule happens when MFA is needed.
     /// </summary>
-    public partial class UserMFARule : BusinessRule
+    public sealed class UserMFARule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -77,11 +74,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserMfaProcess;
                 if (e == null)
                     return response;
 
-                // Create token
+                // AI: Get the user
                 var respUser = await _userManagerService.GetTwoFactorAuthenticationUserAsync();
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -89,6 +87,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
+                // AI: Generate the token
                 var respCode = await _userManagerService.GenerateTwoFactorTokenAsync(respUser.Item.StorageKey, e.SelectedProvider);
                 if (respCode.Error || string.IsNullOrEmpty(respCode.Item))
                 {
@@ -96,34 +95,38 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Send token
+                // AI: Send token
                 switch (e.SelectedProvider.ToLower())
                 {
                     case "phone":
                     case "text":
                     case "sms":
 
+                        // AI: Send via sms
                         if (string.IsNullOrEmpty(respUser.Item.PhoneNumber))
                         {
                             _logger.LogError($"User missing phone number {respUser.Item.StorageKey}");
                             response.AddMessage(ResponseMessage.CreateError(""));
                             return response;
                         }
-
-                        // Create SMS Event
                         ApplicationSmsDto sms = new ApplicationSmsDto()
                         {
                             Message = "Multi-Factor Authentication. Your login code is: {0}",
                             PhoneNumber = respUser.Item.PhoneNumber
                         };
+
+                        // AI: Create SMS broadcast
                         var createSmsBroadcast = new CreateApplicationSmsBroadcast(sms);
+
+                        // AI: Send to servicebus
                         await _serviceBus.SendAsync(createSmsBroadcast);
+
                         break;
 
                     case "email":
                     default:
 
-                        // Create Email Event
+                        // AI: Send via email
                         var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", respCode.Item);
                         var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", respCode.Item);
                         ApplicationEmailDto email = new ApplicationEmailDto()
@@ -134,15 +137,20 @@ namespace ServiceBricks.Security
                             BodyHtml = emailHtml,
                             IsHtml = true
                         };
+
+                        // AI: Create email broadcast
                         var createEmailBroadcast = new CreateApplicationEmailBroadcast(email);
+
+                        // AI: Send to servicebus
                         await _serviceBus.SendAsync(createEmailBroadcast);
+
                         break;
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.MFA_START,
+                    AuditName = AuditType.MFA_START_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

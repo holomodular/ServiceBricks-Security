@@ -3,8 +3,14 @@ using System.Reflection;
 
 namespace ServiceBricks.Security.Sqlite
 {
-    public class SecuritySqliteModule : IModule
+    /// <summary>
+    /// THe module definition for the ServiceBricks Security Sqlite module.
+    /// </summary>
+    public partial class SecuritySqliteModule : IModule
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecuritySqliteModule()
         {
             AutomapperAssemblies = new List<Assembly>()
@@ -17,8 +23,19 @@ namespace ServiceBricks.Security.Sqlite
             };
         }
 
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
+        /// <summary>
+        /// THe list of dependent modules.
+        /// </summary>
         public List<IModule> DependentModules { get; }
+
+        /// <summary>
+        /// The list of automapper assemblies.
+        /// </summary>
+        public List<Assembly> AutomapperAssemblies { get; }
+
+        /// <summary>
+        /// The list of view assemblies.
+        /// </summary>
+        public List<Assembly> ViewAssemblies { get; }
     }
 }

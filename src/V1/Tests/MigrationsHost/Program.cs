@@ -1,5 +1,4 @@
-﻿using System;
-using ServiceBricks.Xunit;
+﻿using ServiceBricks.Xunit;
 
 namespace MigrationsHost
 {

@@ -2,15 +2,12 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This a business rule happens when MFA is needed.
     /// </summary>
-    public partial class UserMfaVerifyRule : BusinessRule
+    public sealed class UserMfaVerifyRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -77,10 +74,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var p = context.Object as UserMfaVerifyProcess;
                 if (p == null)
                     return response;
 
+                // AI: attempt 2FA sign in
                 var result = await _userManagerService.TwoFactorSignInAsync(
                     p.Provider,
                     p.Code,
@@ -93,7 +92,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Find the user
+                // AI: Find the user
                 var respUser = await _userManagerService.GetTwoFactorAuthenticationUserAsync();
                 if (respUser.Item == null)
                 {
@@ -101,10 +100,10 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.MFA_VERIFY,
+                    AuditName = AuditType.MFA_VERIFY_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

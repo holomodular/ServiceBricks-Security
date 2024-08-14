@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when the user logs out.
+    /// This is a process when the user logs out.
     /// </summary>
-    public class UserLogoutProcess : DomainProcess
+    public partial class UserLogoutProcess : DomainProcess
     {
         public UserLogoutProcess(string userStorageKey)
         {

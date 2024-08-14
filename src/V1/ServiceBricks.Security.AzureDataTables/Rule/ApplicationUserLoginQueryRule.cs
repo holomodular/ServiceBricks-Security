@@ -1,15 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using ServiceQuery;
 using ServiceBricks.Storage.AzureDataTables;
+using ServiceQuery;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
-    public partial class ApplicationUserLoginQueryRule : BusinessRule
+    public sealed class ApplicationUserLoginQueryRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
@@ -42,6 +39,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainQueryBeforeEvent<ApplicationUserLogin> ei)
                 {
                     var item = ei.DomainObject;
@@ -78,19 +76,6 @@ namespace ServiceBricks.Security.AzureDataTables
                                         i += q.Filters.Count;
                                     }
                                 }
-                            }
-                        }
-                    }
-
-                    foreach (var filter in ei.ServiceQueryRequest.Filters)
-                    {
-                        if (filter.Properties != null &&
-                            filter.Properties.Count > 0)
-                        {
-                            for (int i = 0; i < filter.Properties.Count; i++)
-                            {
-                                if (string.Compare(filter.Properties[i], "StorageKey", true) == 0)
-                                    filter.Properties[i] = "Id";
                             }
                         }
                     }

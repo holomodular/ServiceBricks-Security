@@ -1,26 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ServiceQuery;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an exposed REST API controller for the ApplicationUser domain object
-    /// requiring the admin security policy to invoke all methods.
+    /// This is an exposed REST API controller for the ApplicationUserDto domain object
     /// </summary>
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/ApplicationUser")]
     [Produces("application/json")]
-    public class ApplicationUserApiController : AdminPolicyApiController<ApplicationUserDto>, IApplicationUserApiController
+    public partial class ApplicationUserApiController : AdminPolicyApiController<ApplicationUserDto>, IApplicationUserApiController
     {
-        private readonly IApplicationUserApiService _applicationUserApiService;
+        protected readonly IApplicationUserApiService _applicationUserApiService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="apiOptions"></param>
         public ApplicationUserApiController(
             IApplicationUserApiService applicationUserApiService,
             IOptions<ApiOptions> apiOptions)

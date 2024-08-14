@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
-using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration
 {

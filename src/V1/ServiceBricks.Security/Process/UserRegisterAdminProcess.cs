@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user registers as an admin.
+    /// This is a process when a user registers as an admin.
     /// </summary>
-    public class UserRegisterAdminProcess : UserRegisterProcess
+    public partial class UserRegisterAdminProcess : UserRegisterProcess
     {
         public UserRegisterAdminProcess(
             string email,

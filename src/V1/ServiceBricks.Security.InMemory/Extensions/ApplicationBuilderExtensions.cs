@@ -1,22 +1,29 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.InMemory
 {
     /// <summary>
-    /// IApplicationBuilder extensions for the Security Brick.
+    /// Extensions for the IApplicationBuilder interface.
     /// </summary>
     public static partial class ApplicationBuilderExtensions
     {
-        public static bool BrickStarted = false;
+        /// <summary>
+        /// Flag to indicate if the brick has been started.
+        /// </summary>
+        public static bool ModuleStarted = false;
 
+        /// <summary>
+        /// Start the ServiceBricks Security InMemory brick.
+        /// </summary>
+        /// <param name="applicationBuilder"></param>
+        /// <returns></returns>
         public static IApplicationBuilder StartServiceBricksSecurityInMemory(this IApplicationBuilder applicationBuilder)
         {
-            BrickStarted = true;
+            // AI: Flag the module as started
+            ModuleStarted = true;
 
-            // Start Core Security
+            // AI: Start the parent module
             applicationBuilder.StartServiceBricksSecurityEntityFrameworkCore();
 
             return applicationBuilder;

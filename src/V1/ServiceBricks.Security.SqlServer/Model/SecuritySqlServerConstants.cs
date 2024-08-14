@@ -1,12 +1,18 @@
 ﻿namespace ServiceBricks.Security.SqlServer
 {
     /// <summary>
-    /// This is constants for the Security module.
+    /// These are constants for the ServiceBricks Security SqlServer module.
     /// </summary>
-    public static class SecuritySqlServerConstants
+    public static partial class SecuritySqlServerConstants
     {
+        /// <summary>
+        /// Appsetting key for the database name.
+        /// </summary>
         public const string APPSETTING_CONNECTION_STRING = "ServiceBricks:Security:Storage:SqlServer:ConnectionString";
 
+        /// <summary>
+        /// The name of the database schema.
+        /// </summary>
         public const string DATABASE_SCHEMA_NAME = "Security";
     }
 }

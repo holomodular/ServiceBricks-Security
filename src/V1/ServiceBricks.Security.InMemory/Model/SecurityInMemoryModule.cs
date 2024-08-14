@@ -1,10 +1,16 @@
-﻿using System.Reflection;
-using ServiceBricks.Security.EntityFrameworkCore;
+﻿using ServiceBricks.Security.EntityFrameworkCore;
+using System.Reflection;
 
 namespace ServiceBricks.Security.InMemory
 {
-    public class SecurityInMemoryModule : IModule
+    /// <summary>
+    /// The module definition for the ServiceBricks Security InMemory module.
+    /// </summary>
+    public partial class SecurityInMemoryModule : IModule
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecurityInMemoryModule()
         {
             AutomapperAssemblies = new List<Assembly>()
@@ -17,9 +23,19 @@ namespace ServiceBricks.Security.InMemory
             };
         }
 
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
-
+        /// <summary>
+        /// The list of dependent modules.
+        /// </summary>
         public List<IModule> DependentModules { get; }
+
+        /// <summary>
+        /// The list of assemblies that contain AutoMapper profiles.
+        /// </summary>
+        public List<Assembly> AutomapperAssemblies { get; }
+
+        /// <summary>
+        /// The list of assemblies that contain views.
+        /// </summary>
+        public List<Assembly> ViewAssemblies { get; }
     }
 }

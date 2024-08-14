@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace ServiceBricks
 {
@@ -8,13 +6,13 @@ namespace ServiceBricks
     /// This is a business rule for domain objects that have the UpdateDate property.
     /// It ensures that it is populated for create and updates.
     /// </summary>
-    public partial class UpdateConcurrencyByStringRule<TDomainObject> : BusinessRule where TDomainObject : IDomainObject<TDomainObject>
+    public sealed class UpdateConcurrencyByStringRule<TDomainObject> : BusinessRule where TDomainObject : IDomainObject<TDomainObject>
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
+        /// <summary>
+        /// Constant for the property name key.
+        /// </summary>
         public const string Key_PropertyName = "UpdateConcurrencyByStringRule_PropertyName";
 
         /// <summary>
@@ -59,6 +57,7 @@ namespace ServiceBricks
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainUpdateBeforeEvent<TDomainObject> eu)
                 {
                     //Get the property name from the custom context
@@ -72,6 +71,8 @@ namespace ServiceBricks
                     var newProp = eu.DomainObject.GetType().GetProperty(propertyName);
                     newProp.SetValue(eu.DomainObject, Guid.NewGuid().ToString());
                 }
+
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainCreateBeforeEvent<TDomainObject> ei)
                 {
                     //Get the property name from the custom context

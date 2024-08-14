@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ServiceBricks.Security.SqlServer
 {
-    public class SecuritySqlServerModule : IModule
+    public partial class SecuritySqlServerModule : IModule
     {
         public SecuritySqlServerModule()
         {

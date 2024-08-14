@@ -1,27 +1,30 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.EntityFrameworkCore
 {
     /// <summary>
-    /// IServiceCollection extensions for the Security Brick.
+    /// Add ServiceBricks Security EntityFrameworkCore services to the application.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add ServiceBricks Security EntityFrameworkCore services to the application.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityEntityFrameworkCore(this IServiceCollection services, IConfiguration configuration)
         {
-            // Add to module registry
+            // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityEntityFrameworkCoreModule), new SecurityEntityFrameworkCoreModule());
 
-            // Add Core
+            // AI: Add the parent module
             services.AddServiceBricksSecurity(configuration);
 
-            // API Services
+            // AI: Add any miscellaneous services for the module
+
+            // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
             services.AddScoped<IApiService<AuditUserDto>, AuditUserApiService>();
             services.AddScoped<IAuditUserApiService, AuditUserApiService>();
 
@@ -48,7 +51,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
-            // Register Business rules
+            // AI: Register business rules for the module
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 

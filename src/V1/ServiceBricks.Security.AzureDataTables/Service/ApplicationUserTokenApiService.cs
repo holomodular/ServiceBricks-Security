@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
 
-
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is a API service for the ApplicationUserToken domain object.
     /// </summary>
-    public class ApplicationUserTokenApiService : ApiService<ApplicationUserToken, ApplicationUserTokenDto>, IApplicationUserTokenApiService
+    public partial class ApplicationUserTokenApiService : ApiService<ApplicationUserToken, ApplicationUserTokenDto>, IApplicationUserTokenApiService
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="repository"></param>
         public ApplicationUserTokenApiService(
             IMapper mapper,
             IBusinessRuleService businessRuleService,

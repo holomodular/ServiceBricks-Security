@@ -6,24 +6,34 @@ using ServiceBricks.Security.EntityFrameworkCore;
 namespace ServiceBricks.Security.Postgres
 {
     /// <summary>
-    /// IApplicationBuilder extensions for the Security Brick.
+    /// Extensions to start the ServiceBricks Security Postgres module.
     /// </summary>
     public static partial class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// Flag to indicate if the module has started.
+        /// </summary>
         public static bool ModuleStarted = false;
 
+        /// <summary>
+        /// Start the ServiceBricks Security Postgres module.
+        /// </summary>
+        /// <param name="applicationBuilder"></param>
+        /// <returns></returns>
         public static IApplicationBuilder StartServiceBricksSecurityPostgres(this IApplicationBuilder applicationBuilder)
         {
+            // AI: Migrate the database
             using (var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                // Migrate
                 var context = serviceScope.ServiceProvider.GetService<SecurityPostgresContext>();
                 context.Database.Migrate();
                 context.SaveChanges();
             }
+
+            // AI: Flag the module as started
             ModuleStarted = true;
 
-            // Start Core Security
+            // AI: Start parent module
             applicationBuilder.StartServiceBricksSecurityEntityFrameworkCore();
 
             return applicationBuilder;

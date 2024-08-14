@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user logs in.
+    /// This is a process when a user logs in.
     /// </summary>
-    public class UserLoginProcess : DomainProcess
+    public partial class UserLoginProcess : DomainProcess
     {
         public UserLoginProcess(
             string email,

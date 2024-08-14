@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
-using System.Security.Claims;
 using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration

@@ -1,36 +1,48 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Security.Claims;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// IServiceCollection extensions for the Security Brick.
+    /// Extensions for the ServiceBricks.Security.AzureDataTables module.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add the ServiceBricks.Security.AzureDataTables module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityAzureDataTables(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddServiceBricksSecurityAzureDataTables(configuration, new Action<IdentityOptions>(options => new IdentityOptions()));
         }
 
+        /// <summary>
+        /// Add the ServiceBricks.Security.AzureDataTables module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <param name="identityOptions"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityAzureDataTables(this IServiceCollection services, IConfiguration configuration, Action<IdentityOptions> identityOptions)
         {
-            // Add to module registry
+            // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityAzureDataTablesModule), new SecurityAzureDataTablesModule());
 
-            // Register Identity
+            // AI: Register Identity
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(identityOptions)
                 .AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
-            // Add Core
+            // AI: Add parent module
             services.AddServiceBricksSecurity(configuration);
 
-            // Storage Services
+            // AI: Add storage services for the module. Each domain object should have its own storage repository
             services.AddScoped<IStorageRepository<ApplicationRole>, SecurityStorageRepository<ApplicationRole>>();
             services.AddScoped<IStorageRepository<ApplicationRoleClaim>, SecurityStorageRepository<ApplicationRoleClaim>>();
             services.AddScoped<IStorageRepository<ApplicationUser>, SecurityStorageRepository<ApplicationUser>>();
@@ -41,7 +53,7 @@ namespace ServiceBricks.Security.AzureDataTables
             services.AddScoped<IAuditUserStorageRepository, AuditUserStorageRepository>();
             services.AddScoped<IStorageRepository<AuditUser>, AuditUserStorageRepository>();
 
-            // API Services
+            // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
             services.AddScoped<IApiService<AuditUserDto>, AuditUserApiService>();
             services.AddScoped<IAuditUserApiService, AuditUserApiService>();
 
@@ -68,7 +80,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
-            // Add Business Rules
+            // AI: Register business rules for the module
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");

@@ -1,14 +1,25 @@
 ﻿namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is constants for the Security module.
+    /// These are constants for the ServiceBricks.Security.AzureDataTables namespace.
     /// </summary>
-    public static class SecurityAzureDataTablesConstants
+    public static partial class SecurityAzureDataTablesConstants
     {
+        /// <summary>
+        /// Application setting key for the Azure Data Tables connection string.
+        /// </summary>
         public const string APPSETTING_CONNECTION_STRING = "ServiceBricks:Security:Storage:AzureDataTables:ConnectionString";
 
+        /// <summary>
+        /// The default table name prefix.
+        /// </summary>
         public const string TABLENAME_PREFIX = "Security";
 
+        /// <summary>
+        /// Get the table name using the default prefix.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
         public static string GetTableName(string tableName)
         {
             return TABLENAME_PREFIX + tableName;

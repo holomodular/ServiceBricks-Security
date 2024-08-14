@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-
 using ServiceQuery;
 using System.Security.Claims;
 
@@ -9,7 +8,7 @@ namespace ServiceBricks.Security.AzureDataTables
     /// <summary>
     /// This is a API service for the ApplicationUser domain object.
     /// </summary>
-    public class UserManagerService : IUserManagerService
+    public partial class UserManagerService : IUserManagerService
     {
         protected readonly IMapper _mapper;
         protected readonly IApplicationUserApiService _applicationUserApiService;
@@ -22,6 +21,19 @@ namespace ServiceBricks.Security.AzureDataTables
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="applicationUserClaimApiService"></param>
+        /// <param name="applicationUserLoginApiService"></param>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="applicationUserTokenApiService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="applicationRoleClaimApiService"></param>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         public UserManagerService(
             IMapper mapper,
             IApplicationUserApiService applicationUserApiService,
@@ -46,6 +58,11 @@ namespace ServiceBricks.Security.AzureDataTables
             _signInManager = signInManager;
         }
 
+        /// <summary>
+        /// Find a user by email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public virtual IResponseItem<ApplicationUserDto> FindByEmail(string email)
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -62,6 +79,11 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Find a user by email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public virtual async Task<IResponseItem<ApplicationUserDto>> FindByEmailAsync(string email)
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -78,6 +100,11 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Find a user by user storage key.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public virtual IResponseItem<ApplicationUserDto> FindById(string userStorageKey)
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -94,6 +121,11 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Find a user by user storage key.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public virtual async Task<IResponseItem<ApplicationUserDto>> FindByIdAsync(string userStorageKey)
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -110,11 +142,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Confirm email.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public virtual IResponse ConfirmEmail(string userStorageKey, string code)
         {
             return ConfirmEmailAsync(userStorageKey, code).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Confirm email.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public virtual async Task<IResponse> ConfirmEmailAsync(string userStorageKey, string code)
         {
             var response = new Response();
@@ -129,11 +173,21 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Generate a password reset token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public IResponseItem<string> GeneratePasswordResetToken(string userStorageKey)
         {
             return GeneratePasswordResetTokenAsync(userStorageKey).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Generate a password reset token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<string>> GeneratePasswordResetTokenAsync(string userStorageKey)
         {
             var response = new ResponseItem<string>();
@@ -160,11 +214,25 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Reset password.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="code"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public virtual IResponse ResetPassword(string userStorageKey, string code, string password)
         {
             return ResetPasswordAsync(userStorageKey, code, password).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Reset password.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="code"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public virtual async Task<IResponse> ResetPasswordAsync(string userStorageKey, string code, string password)
         {
             var response = new Response();
@@ -186,11 +254,25 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Change password.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="currentPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
         public IResponse ChangePassword(string userStorageKey, string currentPassword, string newPassword)
         {
             return ChangePasswordAsync(userStorageKey, currentPassword, newPassword).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Change password.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="currentPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
         public async Task<IResponse> ChangePasswordAsync(string userStorageKey, string currentPassword, string newPassword)
         {
             var response = new Response();
@@ -206,11 +288,21 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Refresh sign in.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public IResponse RefreshSignIn(string userStorageKey)
         {
             return RefreshSignInAsync(userStorageKey).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Refresh sign in.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public async Task<IResponse> RefreshSignInAsync(string userStorageKey)
         {
             var response = new Response();
@@ -224,11 +316,19 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Get 2FA user.
+        /// </summary>
+        /// <returns></returns>
         public IResponseItem<ApplicationUserDto> GetTwoFactorAuthenticationUser()
         {
             return GetTwoFactorAuthenticationUserAsync().GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Get 2FA user.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IResponseItem<ApplicationUserDto>> GetTwoFactorAuthenticationUserAsync()
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -242,11 +342,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Generate 2FA token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public IResponseItem<string> GenerateTwoFactorToken(string userStorageKey, string provider)
         {
             return GenerateTwoFactorTokenAsync(userStorageKey, provider).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Generate 2FA token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<string>> GenerateTwoFactorTokenAsync(string userStorageKey, string provider)
         {
             var response = new ResponseItem<string>();
@@ -266,11 +378,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Add to role.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
         public IResponse AddToRole(string userStorageKey, string roleName)
         {
             return AddToRoleAsync(userStorageKey, roleName).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Add to role.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
         public async Task<IResponse> AddToRoleAsync(string userStorageKey, string roleName)
         {
             var response = new Response();
@@ -285,11 +409,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Create a user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public IResponseItem<ApplicationUserDto> Create(ApplicationUserDto user, string password)
         {
             return CreateAsync(user, password).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Create a user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<ApplicationUserDto>> CreateAsync(ApplicationUserDto user, string password)
         {
             var response = new ResponseItem<ApplicationUserDto>();
@@ -302,11 +438,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Add claim.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="claim"></param>
+        /// <returns></returns>
         public IResponse AddClaim(string userStorageKey, Claim claim)
         {
             return AddClaimAsync(userStorageKey, claim).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Add claim.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="claim"></param>
+        /// <returns></returns>
         public async Task<IResponse> AddClaimAsync(string userStorageKey, Claim claim)
         {
             var response = new Response();
@@ -322,11 +470,21 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Generate email confirmation token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public IResponseItem<string> GenerateEmailConfirmationToken(string userStorageKey)
         {
             return GenerateEmailConfirmationTokenAsync(userStorageKey).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Generate email confirmation token.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<string>> GenerateEmailConfirmationTokenAsync(string userStorageKey)
         {
             var response = new ResponseItem<string>();
@@ -347,22 +505,40 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Sign out
+        /// </summary>
+        /// <returns></returns>
         public IResponse SignOut()
         {
             return SignOutAsync().GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Sign out
+        /// </summary>
+        /// <returns></returns>
         public async Task<IResponse> SignOutAsync()
         {
             await _signInManager.SignOutAsync();
             return new Response();
         }
 
+        /// <summary>
+        /// Get users in role.
+        /// </summary>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
         public IResponseList<ApplicationUserDto> GetUsersInRole(string roleName)
         {
             return GetUsersInRoleAsync(roleName).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Get users in role.
+        /// </summary>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
         public async Task<IResponseList<ApplicationUserDto>> GetUsersInRoleAsync(string roleName)
         {
             var users = await _userManager.GetUsersInRoleAsync(roleName);
@@ -371,11 +547,25 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Signin
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="isPersistent"></param>
+        /// <param name="authenticationMethod"></param>
+        /// <returns></returns>
         public IResponse SignIn(string userStorageKey, bool isPersistent, string authenticationMethod = null)
         {
             return SignInAsync(userStorageKey, isPersistent, authenticationMethod).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Signin
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <param name="isPersistent"></param>
+        /// <param name="authenticationMethod"></param>
+        /// <returns></returns>
         public async Task<IResponse> SignInAsync(string userStorageKey, bool isPersistent, string authenticationMethod = null)
         {
             var response = new Response();
@@ -389,11 +579,25 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Password sign in.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="isPersistent"></param>
+        /// <returns></returns>
         public IResponseItem<ApplicationSigninResult> PasswordSignIn(string email, string password, bool isPersistent)
         {
             return PasswordSignInAsync(email, password, isPersistent).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Password sign in.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="isPersistent"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<ApplicationSigninResult>> PasswordSignInAsync(string email, string password, bool isPersistent)
         {
             var response = new ResponseItem<ApplicationSigninResult>();
@@ -416,11 +620,21 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Get valid 2FA providers.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public IResponseList<string> GetValidTwoFactorProviders(string userStorageKey)
         {
             return GetValidTwoFactorProvidersAsync(userStorageKey).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Get valid 2FA providers.
+        /// </summary>
+        /// <param name="userStorageKey"></param>
+        /// <returns></returns>
         public async Task<IResponseList<string>> GetValidTwoFactorProvidersAsync(string userStorageKey)
         {
             var response = new ResponseList<string>();
@@ -436,11 +650,27 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Get 2FA sign in code.
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="code"></param>
+        /// <param name="isPersistent"></param>
+        /// <param name="rememberBrowser"></param>
+        /// <returns></returns>
         public IResponseItem<SignInResult> TwoFactorSignIn(string provider, string code, bool isPersistent, bool rememberBrowser)
         {
             return TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// 2FA sign in
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="code"></param>
+        /// <param name="isPersistent"></param>
+        /// <param name="rememberBrowser"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<SignInResult>> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
         {
             var response = new ResponseItem<SignInResult>();
@@ -460,11 +690,23 @@ namespace ServiceBricks.Security.AzureDataTables
             return response;
         }
 
+        /// <summary>
+        /// Verify password.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public IResponseItem<ApplicationUserDto> VerifyPassword(string email, string password)
         {
             return VerifyPasswordAsync(email, password).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Verify password.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<IResponseItem<ApplicationUserDto>> VerifyPasswordAsync(string email, string password)
         {
             var response = new ResponseItem<ApplicationUserDto>();

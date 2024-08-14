@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule updates a user profile.
     /// </summary>
-    public partial class UserProfileChangeRule : BusinessRule
+    public sealed class UserProfileChangeRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -18,6 +15,15 @@ namespace ServiceBricks.Security
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="applicationUserApiService"></param>
         public UserProfileChangeRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -66,10 +72,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserProfileChangeProcess;
                 if (e == null)
                     return response;
 
+                // AI: Find the user
                 var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -77,8 +85,9 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Change anything here
+                // AI: Change user properties here
 
+                // AI: Update the user
                 var respUpdate = await _applicationUserApiService.UpdateAsync(respUser.Item);
                 if (respUpdate.Error)
                 {
@@ -86,16 +95,16 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.PROFILE_CHANGE,
+                    AuditName = AuditType.PROFILE_CHANGE_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });
 
-                // Tell the authentication manager to use this new identity
+                // AI: Tell the usermanager to use updated identity
                 if (_httpContextAccessor != null &&
                     _httpContextAccessor.HttpContext != null)
                 {

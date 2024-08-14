@@ -4,16 +4,20 @@ using Microsoft.Extensions.Options;
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an exposed REST-based API controller for the ApplicationUserRole domain object
-    /// requiring the admin security policy to invoke all methods.
+    /// This is an exposed REST-based API controller for the ApplicationUserRoleDto.
     /// </summary>
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/ApplicationUserRole")]
     [Produces("application/json")]
-    public class ApplicationUserRoleApiController : AdminPolicyApiController<ApplicationUserRoleDto>, IApplicationUserRoleApiController
+    public partial class ApplicationUserRoleApiController : AdminPolicyApiController<ApplicationUserRoleDto>, IApplicationUserRoleApiController
     {
-        private readonly IApplicationUserRoleApiService _applicationUserRoleApiService;
+        protected readonly IApplicationUserRoleApiService _applicationUserRoleApiService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="apiOptions"></param>
         public ApplicationUserRoleApiController(
             IApplicationUserRoleApiService applicationUserRoleApiService,
             IOptions<ApiOptions> apiOptions)

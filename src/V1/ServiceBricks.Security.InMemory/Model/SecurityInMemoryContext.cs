@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ServiceBricks.Storage.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ServiceBricks.Security.EntityFrameworkCore;
 
@@ -25,6 +24,7 @@ namespace ServiceBricks.Security.InMemory
 
             var builder = new DbContextOptionsBuilder<SecurityInMemoryContext>();
             builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+
             _options = builder.Options;
         }
 
@@ -37,13 +37,44 @@ namespace ServiceBricks.Security.InMemory
             _options = options;
         }
 
+        /// <summary>
+        /// The audit users.
+        /// </summary>
         public virtual DbSet<AuditUser> AuditUsers { get; set; }
+
+        /// <summary>
+        /// The application users.
+        /// </summary>
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+        /// <summary>
+        /// The application roles.
+        /// </summary>
         public virtual DbSet<ApplicationUserClaim> ApplicationUserClaims { get; set; }
+
+        /// <summary>
+        /// The application user roles.
+        /// </summary>
         public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+
+        /// <summary>
+        /// The application user tokens
+        /// </summary>
         public virtual DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
+
+        /// <summary>
+        /// The application user logins.
+        /// </summary>
         public virtual DbSet<ApplicationUserLogin> ApplicationUserLogins { get; set; }
+
+        /// <summary>
+        /// The application roles.
+        /// </summary>
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        /// <summary>
+        /// The application role claims.
+        /// </summary>
         public virtual DbSet<ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
 
         /// <summary>
@@ -54,9 +85,7 @@ namespace ServiceBricks.Security.InMemory
         {
             base.OnModelCreating(builder);
 
-            //Set default schema
-            //builder.HasDefaultSchema(SecurityEntityFrameworkCoreConstants.DATABASE_SCHEMA_NAME);
-
+            // AI: Create the model for each table
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
 

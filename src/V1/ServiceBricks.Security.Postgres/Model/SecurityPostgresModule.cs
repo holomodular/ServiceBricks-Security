@@ -3,8 +3,14 @@ using System.Reflection;
 
 namespace ServiceBricks.Security.Postgres
 {
-    public class SecurityPostgresModule : IModule
+    /// <summary>
+    /// The module definition for the ServiceBricks Security Postgres module.
+    /// </summary>
+    public partial class SecurityPostgresModule : IModule
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecurityPostgresModule()
         {
             DependentModules = new List<IModule>()
@@ -13,8 +19,19 @@ namespace ServiceBricks.Security.Postgres
             };
         }
 
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
+        /// <summary>
+        /// The list of dependent modules.
+        /// </summary>
         public List<IModule> DependentModules { get; }
+
+        /// <summary>
+        /// The list of automapper assemblies.
+        /// </summary>
+        public List<Assembly> AutomapperAssemblies { get; }
+
+        /// <summary>
+        /// The list of view assemblies.
+        /// </summary>
+        public List<Assembly> ViewAssemblies { get; }
     }
 }

@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 
-
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is an automapper profile for the ApplicationRole domain object.
     /// </summary>
-    public class ApplicationRoleMappingProfile : Profile
+    public partial class ApplicationRoleMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationRoleMappingProfile()
         {
             CreateMap<ApplicationRoleDto, ApplicationRole>()

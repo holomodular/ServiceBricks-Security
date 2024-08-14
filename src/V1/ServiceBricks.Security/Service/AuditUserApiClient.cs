@@ -1,15 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace ServiceBricks.Security
 {
-    public class AuditUserApiClient : ApiClient<AuditUserDto>, IAuditUserApiClient
+    /// <summary>
+    /// This is a REST API client for the AuditUser entity.
+    /// </summary>
+    public partial class AuditUserApiClient : ApiClient<AuditUserDto>, IAuditUserApiClient
     {
-        protected readonly IConfiguration _configuration;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="httpClientFactory"></param>
+        /// <param name="configuration"></param>
         public AuditUserApiClient(
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,

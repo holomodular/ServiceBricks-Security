@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using ServiceBricks.Storage.MongoDb;
-using System.Linq;
-using System.Linq.Expressions;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ServiceBricks.Security.MongoDb
 {
@@ -12,7 +7,14 @@ namespace ServiceBricks.Security.MongoDb
     /// </summary>
     public partial class ApplicationIdentityUser : IdentityUser<string>, IDpCreateDate, IDpUpdateDate
     {
+        /// <summary>
+        /// The create date of the user.
+        /// </summary>
         public virtual DateTimeOffset CreateDate { get; set; }
+
+        /// <summary>
+        /// The update date of the user.
+        /// </summary>
         public virtual DateTimeOffset UpdateDate { get; set; }
     }
 }

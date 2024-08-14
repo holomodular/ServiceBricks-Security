@@ -3,7 +3,7 @@
     /// <summary>
     /// This is a process when a user registers.
     /// </summary>
-    public class UserRegisterProcess : DomainProcess
+    public partial class UserRegisterProcess : DomainProcess
     {
         public UserRegisterProcess(
             string email,

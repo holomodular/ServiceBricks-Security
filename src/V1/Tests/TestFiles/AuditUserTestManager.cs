@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceQuery;
-using ServiceBricks.Security;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using static ServiceBricks.Xunit.MongoDbAuditUserTestManager;
+using ServiceBricks.Security;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit
 {

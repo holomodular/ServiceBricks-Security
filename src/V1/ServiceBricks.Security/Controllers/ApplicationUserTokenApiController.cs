@@ -5,16 +5,20 @@ using Microsoft.Extensions.Options;
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an exposed REST-based API controller for the ApplicationUserToken domain object
-    /// requiring the admin security policy to invoke all methods.
+    /// This is an exposed REST-based API controller for the ApplicationUserTokenDto.
     /// </summary>
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/ApplicationUserToken")]
     [Produces("application/json")]
-    public class ApplicationUserTokenApiController : AdminPolicyApiController<ApplicationUserTokenDto>, IApplicationUserTokenApiController
+    public partial class ApplicationUserTokenApiController : AdminPolicyApiController<ApplicationUserTokenDto>, IApplicationUserTokenApiController
     {
-        private readonly IApplicationUserTokenApiService _applicationUserTokenApiService;
+        protected readonly IApplicationUserTokenApiService _applicationUserTokenApiService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="applicationUserTokenApiService"></param>
+        /// <param name="apiOptions"></param>
         public ApplicationUserTokenApiController(
             IApplicationUserTokenApiService applicationUserTokenApiService,
             IOptions<ApiOptions> apiOptions)

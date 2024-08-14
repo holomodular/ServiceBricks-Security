@@ -10,6 +10,11 @@ namespace ServiceBricks.Security.Sqlite
     public class SecurityStorageRepository<TDomain> : EntityFrameworkCoreStorageRepository<TDomain>
         where TDomain : class, IEntityFrameworkCoreDomainObject<TDomain>, new()
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="logFactory"></param>
+        /// <param name="context"></param>
         public SecurityStorageRepository(ILoggerFactory logFactory, SecuritySqliteContext context)
             : base(logFactory)
         {

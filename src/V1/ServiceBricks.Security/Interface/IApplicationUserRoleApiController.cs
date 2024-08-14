@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is a REST-based API controller for the ApplicationUserRole domain object.
+    /// This is a REST API controller for the ApplicationUserRole domain object.
     /// </summary>
-    public interface IApplicationUserRoleApiController : IApiController<ApplicationUserRoleDto>
+    public partial interface IApplicationUserRoleApiController : IApiController<ApplicationUserRoleDto>
     {
     }
 }

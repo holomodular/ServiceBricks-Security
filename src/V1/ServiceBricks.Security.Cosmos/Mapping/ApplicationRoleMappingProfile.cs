@@ -5,8 +5,11 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// This is an automapper profile for the ApplicationRole domain object.
     /// </summary>
-    public class ApplicationRoleMappingProfile : Profile
+    public partial class ApplicationRoleMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationRoleMappingProfile()
         {
             CreateMap<ApplicationRoleDto, ApplicationRole>()
@@ -17,8 +20,19 @@ namespace ServiceBricks.Security.Cosmos
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
 
+        /// <summary>
+        /// Resolve the key from the storage key.
+        /// </summary>
         public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
         {
+            /// <summary>
+            /// Resolve the key from the storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.StorageKey))

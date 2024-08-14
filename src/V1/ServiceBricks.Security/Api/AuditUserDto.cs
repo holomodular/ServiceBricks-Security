@@ -1,15 +1,38 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is a user security data transfer object.
+    /// This allows auditing of user actions.
     /// </summary>
-    public class AuditUserDto : DataTransferObject
+    public partial class AuditUserDto : DataTransferObject
     {
-        public DateTimeOffset CreateDate { get; set; }
-        public string UserStorageKey { get; set; }
-        public string IPAddress { get; set; }
-        public string UserAgent { get; set; }
-        public string AuditName { get; set; }
-        public string Data { get; set; }
+        /// <summary>
+        /// The create date and time.
+        /// </summary>
+        public virtual DateTimeOffset CreateDate { get; set; }
+
+        /// <summary>
+        /// The user storage key.
+        /// </summary>
+        public virtual string UserStorageKey { get; set; }
+
+        /// <summary>
+        /// The IP address of the user.
+        /// </summary>
+        public virtual string IPAddress { get; set; }
+
+        /// <summary>
+        /// The user agent of the user.
+        /// </summary>
+        public virtual string UserAgent { get; set; }
+
+        /// <summary>
+        /// The audit name.
+        /// </summary>
+        public virtual string AuditName { get; set; }
+
+        /// <summary>
+        /// The data.
+        /// </summary>
+        public virtual string Data { get; set; }
     }
 }

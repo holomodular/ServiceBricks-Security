@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Hosting;
-using ServiceBricks;
-using ServiceBricks.Security;
-using ServiceBricks.Security.InMemory;
-using System.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ServiceBricks.Security;
+using ServiceBricks.Security.InMemory;
 
 namespace ServiceBricks.Xunit
 {

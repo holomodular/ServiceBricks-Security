@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceBricks.Xunit;
-using ServiceQuery;
 using ServiceBricks.Security;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration
 {
@@ -82,7 +81,7 @@ namespace ServiceBricks.Xunit.Integration
             // Verify audituser created
             var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
             var queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.INVALID_PASSWORD);
+            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.INVALID_PASSWORD_TEXT);
             queryBuilder.And();
             queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), user.StorageKey);
             var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());

@@ -1,27 +1,26 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 
-using ServiceQuery;
-
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is an API service for the AuditUser domain object.
     /// </summary>
-    public class AuditUserApiService : ApiService<AuditUser, AuditUserDto>, IAuditUserApiService
+    public partial class AuditUserApiService : ApiService<AuditUser, AuditUserDto>, IAuditUserApiService
     {
-        protected readonly IAuditUserStorageRepository _auditUserStorageRepository;
-        protected readonly IHttpContextAccessor _httpContextAccessor;
-
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="repository"></param>
+        /// <param name="auditUserStorageRepository"></param>
+        /// <param name="httpContextAccessor"></param>
         public AuditUserApiService(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IDomainRepository<AuditUser> repository,
-            IAuditUserStorageRepository auditUserStorageRepository,
-            IHttpContextAccessor httpContextAccessor) : base(mapper, businessRuleService, repository)
+            IDomainRepository<AuditUser> repository) : base(mapper, businessRuleService, repository)
         {
-            _auditUserStorageRepository = auditUserStorageRepository;
-            _httpContextAccessor = httpContextAccessor;
         }
     }
 }

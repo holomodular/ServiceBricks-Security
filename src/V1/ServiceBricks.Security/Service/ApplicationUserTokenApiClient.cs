@@ -1,13 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ServiceBricks.Security
 {
-    public class ApplicationUserTokenApiClient : ApiClient<ApplicationUserTokenDto>, IApplicationUserTokenApiClient
+    /// <summary>
+    /// This is a REST API client for the ApplicationUserToken entity.
+    /// </summary>
+    public partial class ApplicationUserTokenApiClient : ApiClient<ApplicationUserTokenDto>, IApplicationUserTokenApiClient
     {
-        protected readonly IConfiguration _configuration;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="httpClientFactory"></param>
+        /// <param name="configuration"></param>
         public ApplicationUserTokenApiClient(
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,

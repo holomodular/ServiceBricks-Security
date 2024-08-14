@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ServiceBricks.Storage.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ServiceBricks.Security.EntityFrameworkCore;
+using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Postgres
 {
@@ -33,6 +33,7 @@ namespace ServiceBricks.Security.Postgres
                 x.MigrationsAssembly(typeof(SecurityPostgresContext).Assembly.GetName().Name);
                 x.EnableRetryOnFailure();
             });
+
             _options = builder.Options;
         }
 
@@ -45,13 +46,44 @@ namespace ServiceBricks.Security.Postgres
             _options = options;
         }
 
+        /// <summary>
+        /// Audit users.
+        /// </summary>
         public virtual DbSet<AuditUser> AuditUsers { get; set; }
+
+        /// <summary>
+        /// Application users.
+        /// </summary>
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+        /// <summary>
+        /// Application user claims
+        /// </summary>
         public virtual DbSet<ApplicationUserClaim> ApplicationUserClaims { get; set; }
+
+        /// <summary>
+        /// Aoolication user roles.
+        /// </summary>
         public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+
+        /// <summary>
+        /// Application user tokens.
+        /// </summary>
         public virtual DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
+
+        /// <summary>
+        /// Application user logins.
+        /// </summary>
         public virtual DbSet<ApplicationUserLogin> ApplicationUserLogins { get; set; }
+
+        /// <summary>
+        /// Application roles.
+        /// </summary>
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        /// <summary>
+        /// Application role claims.
+        /// </summary>
         public virtual DbSet<ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
 
         /// <summary>
@@ -62,9 +94,10 @@ namespace ServiceBricks.Security.Postgres
         {
             base.OnModelCreating(builder);
 
-            //Set default schema
+            // AI: Set the default schema
             builder.HasDefaultSchema(SecurityPostgresConstants.DATABASE_SCHEMA_NAME);
 
+            // AI: Setup the entities to the model
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
 

@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule happens when a user logs in.
     /// </summary>
-    public partial class UserLoginRule : BusinessRule
+    public sealed class UserLoginRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -17,6 +14,14 @@ namespace ServiceBricks.Security
         private readonly IIpAddressService _iPAddressService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="httpContextAccessor"></param>
         public UserLoginRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -51,10 +56,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var p = context.Object as UserLoginProcess;
                 if (p == null)
                     return response;
 
+                // AI: Find the user
                 var respU = await _userManagerService.FindByEmailAsync(p.Email);
                 if (respU.Error || respU.Item == null)
                 {
@@ -67,7 +74,7 @@ namespace ServiceBricks.Security
                     User = user
                 };
 
-                // Email not confirmed
+                // AI: Determine if email confirmed
                 if (!user.EmailConfirmed)
                 {
                     p.ApplicationSigninResult.EmailNotConfirmed = true;
@@ -78,12 +85,13 @@ namespace ServiceBricks.Security
                 IResponseItem<ApplicationSigninResult> respSignin = null;
                 if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
                 {
-                    // This is not a web request, unit test
+                    // AI: This is not a web request, unit test
                     response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
                     return response;
                 }
                 else
                 {
+                    // AI: attempt to sign in
                     respSignin = await _userManagerService.PasswordSignInAsync(
                         p.Email,
                         p.Password,
@@ -96,10 +104,10 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Audit Login
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.LOGIN,
+                    AuditName = AuditType.LOGIN_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respU.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

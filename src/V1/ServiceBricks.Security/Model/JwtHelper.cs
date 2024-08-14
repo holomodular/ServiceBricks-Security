@@ -1,13 +1,14 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace ServiceBricks.Security
 {
-    public class JwtHelper
+    /// <summary>
+    /// Jwt Helper class for creating and managing Jwt Tokens
+    /// </summary>
+    public partial class JwtHelper
     {
         /// <summary>
         /// Returns a Jwt Token from basic input parameters

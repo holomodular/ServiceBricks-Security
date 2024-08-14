@@ -6,12 +6,9 @@ namespace ServiceBricks.Security.AzureDataTables
     /// This is a business rule for the ApplicationUserClaim object to set the
     /// partitionkey and rowkey of the object before create.
     /// </summary>
-    public partial class ApplicationUserClaimCreateRule : BusinessRule
+    public sealed class ApplicationUserClaimCreateRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
@@ -45,6 +42,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainCreateBeforeEvent<ApplicationUserClaim> ei)
                 {
                     var item = ei.DomainObject;

@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule changes a user password.
     /// </summary>
-    public partial class UserPasswordChangeRule : BusinessRule
+    public sealed class UserPasswordChangeRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -17,6 +14,14 @@ namespace ServiceBricks.Security
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="iPAddressService"></param>
         public UserPasswordChangeRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -63,11 +68,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserPasswordChangeProcess;
                 if (e == null)
                     return response;
 
-                // Logic
+                // AI: Get the user
                 var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -75,6 +81,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
+                // AI: Change the password
                 var result = await _userManagerService.ChangePasswordAsync(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
                 if (result.Error)
                 {
@@ -82,10 +89,10 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                //Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.PASSWORD_CHANGE,
+                    AuditName = AuditType.PASSWORD_CHANGE_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

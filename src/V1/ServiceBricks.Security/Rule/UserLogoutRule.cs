@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-
-using System;
 using System.Security.Principal;
-using System.Threading.Tasks;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule happens when a user logs out.
     /// </summary>
-    public partial class UserLogoutRule : BusinessRule
+    public sealed class UserLogoutRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -18,6 +15,14 @@ namespace ServiceBricks.Security
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="iPAddressService"></param>
         public UserLogoutRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -65,23 +70,24 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserLogoutProcess;
                 if (e == null)
                     return response;
 
-                // Logoff and replace with generic principal
+                // AI: If context not null, logoff and replace with generic principal
                 if (_httpContextAccessor != null && _httpContextAccessor.HttpContext != null)
                 {
                     await _userManagerService.SignOutAsync();
                     _httpContextAccessor.HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
                 }
 
-                // Audit
+                // AI: Audit user
                 if (!string.IsNullOrEmpty(e.UserStorageKey))
                 {
                     await _auditUserApiService.CreateAsync(new AuditUserDto()
                     {
-                        AuditName = AuditType.LOGOUT,
+                        AuditName = AuditType.LOGOUT_TEXT,
                         UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                         UserStorageKey = e.UserStorageKey,
                         IPAddress = _iPAddressService.GetIPAddress()

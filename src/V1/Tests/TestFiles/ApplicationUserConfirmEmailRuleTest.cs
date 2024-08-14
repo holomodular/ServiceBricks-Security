@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceQuery;
 using ServiceBricks.Security;
-using System.Web;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration
 {
@@ -92,7 +90,7 @@ namespace ServiceBricks.Xunit.Integration
             //Verify audituser created
             var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
             var queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.CONFIRM_EMAIL);
+            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.CONFIRM_EMAIL_TEXT);
             queryBuilder.And();
             queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey);
             var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());

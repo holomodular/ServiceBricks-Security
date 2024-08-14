@@ -1,10 +1,15 @@
-﻿using ServiceBricks.Security.EntityFrameworkCore;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ServiceBricks.Security.Cosmos
 {
-    public class SecurityCosmosModule : IModule
+    /// <summary>
+    /// The module definition for the Security Cosmos module.
+    /// </summary>
+    public partial class SecurityCosmosModule : IModule
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecurityCosmosModule()
         {
             AutomapperAssemblies = new List<Assembly>()
@@ -17,8 +22,19 @@ namespace ServiceBricks.Security.Cosmos
             };
         }
 
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
+        /// <summary>
+        /// The list of dependent modules.
+        /// </summary>
         public List<IModule> DependentModules { get; }
+
+        /// <summary>
+        /// The list of Automapper assemblies.
+        /// </summary>
+        public List<Assembly> AutomapperAssemblies { get; }
+
+        /// <summary>
+        /// The list of view assemblies.
+        /// </summary>
+        public List<Assembly> ViewAssemblies { get; }
     }
 }

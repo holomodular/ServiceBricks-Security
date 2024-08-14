@@ -5,7 +5,7 @@ namespace ServiceBricks.Security
     /// <summary>
     /// This is a REST API controller for authentication.
     /// </summary>
-    public interface IAuthenticationApiController
+    public partial interface IAuthenticationApiController
     {
         ActionResult AuthenticateUser([FromBody] AccessTokenRequest request);
 

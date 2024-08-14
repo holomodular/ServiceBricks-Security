@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using ServiceBricks.Storage.MongoDb;
-using System.Linq;
-using System.Linq.Expressions;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ServiceBricks.Storage.MongoDb;
+using System.Linq.Expressions;
 
 namespace ServiceBricks.Security.MongoDb
 {
@@ -12,6 +10,9 @@ namespace ServiceBricks.Security.MongoDb
     /// </summary>
     public partial class ApplicationRoleClaim : IMongoDbDomainObject<ApplicationRoleClaim>
     {
+        /// <summary>
+        /// Internal primary key.
+        /// </summary>
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public virtual string Key { get; set; }
@@ -31,6 +32,11 @@ namespace ServiceBricks.Security.MongoDb
         //     Gets or sets the claim value for this claim.
         public virtual string ClaimValue { get; set; }
 
+        /// <summary>
+        /// Provide an expression that will filter an object based on its primary key.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public virtual Expression<Func<ApplicationRoleClaim, bool>> DomainGetItemFilter(ApplicationRoleClaim obj)
         {
             return x => x.Key == obj.Key;

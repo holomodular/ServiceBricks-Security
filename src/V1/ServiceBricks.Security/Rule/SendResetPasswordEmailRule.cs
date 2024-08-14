@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule sends an email to a user to reset their password.
     /// </summary>
-    public partial class SendResetPasswordEmailRule : BusinessRule
+    public sealed class SendResetPasswordEmailRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IServiceBus _serviceBus;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="serviceBus"></param>
         public SendResetPasswordEmailRule(
             ILoggerFactory loggerFactory,
             IServiceBus serviceBus)
@@ -45,11 +45,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var obj = context.Object as SendResetPasswordEmailProcess;
                 if (obj == null)
                     return response;
 
-                // Create Email Event
+                // AI: Create Email
                 var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
                 var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);
                 ApplicationEmailDto email = new ApplicationEmailDto()
@@ -60,7 +61,11 @@ namespace ServiceBricks.Security
                     BodyHtml = emailHtml,
                     IsHtml = true
                 };
+
+                // AI: Create Email Broadcast
                 var createEmailBroadcast = new CreateApplicationEmailBroadcast(email);
+
+                // AI: Send to servicebus
                 _serviceBus.Send(createEmailBroadcast);
             }
             catch (Exception ex)
@@ -82,11 +87,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var obj = context.Object as SendResetPasswordEmailProcess;
                 if (obj == null)
                     return response;
 
-                // Create Email Event
+                // AI: Create Email
                 var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
                 var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);
                 ApplicationEmailDto email = new ApplicationEmailDto()
@@ -97,7 +103,11 @@ namespace ServiceBricks.Security
                     BodyHtml = emailHtml,
                     IsHtml = true
                 };
+
+                // AI: Create Email Broadcast
                 var createEmailBroadcast = new CreateApplicationEmailBroadcast(email);
+
+                // AI: Send to servicebus
                 await _serviceBus.SendAsync(createEmailBroadcast);
             }
             catch (Exception ex)

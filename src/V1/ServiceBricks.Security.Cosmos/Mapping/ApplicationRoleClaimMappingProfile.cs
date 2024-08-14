@@ -5,8 +5,11 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// This is an automapper profile for the ApplicationRoleClaim domain object.
     /// </summary>
-    public class ApplicationRoleClaimMappingProfile : Profile
+    public partial class ApplicationRoleClaimMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationRoleClaimMappingProfile()
         {
             CreateMap<ApplicationRoleClaimDto, ApplicationRoleClaim>()
@@ -19,8 +22,19 @@ namespace ServiceBricks.Security.Cosmos
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
         }
 
+        /// <summary>
+        /// Resolve the key from the storage key.
+        /// </summary>
         public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
         {
+            /// <summary>
+            /// Resolve the key from the storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.StorageKey))
@@ -33,8 +47,19 @@ namespace ServiceBricks.Security.Cosmos
             }
         }
 
+        /// <summary>
+        /// Resolve the role id from the role storage key.
+        /// </summary>
         public class RoleIdResolver : IValueResolver<ApplicationRoleClaimDto, object, Guid>
         {
+            /// <summary>
+            /// Resolve the role id from the role storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(ApplicationRoleClaimDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.RoleStorageKey))

@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceBricks.Security;
-using ServiceBricks.Xunit.Integration;
-using ServiceQuery;
+﻿using ServiceBricks.Xunit.Integration;
 
 namespace ServiceBricks.Xunit.Rules
 {

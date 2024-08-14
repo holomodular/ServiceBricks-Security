@@ -10,6 +10,11 @@ namespace ServiceBricks.Security.InMemory
     public class SecurityStorageRepository<TDomain> : EntityFrameworkCoreStorageRepository<TDomain>
         where TDomain : class, IEntityFrameworkCoreDomainObject<TDomain>, new()
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="logFactory"></param>
+        /// <param name="context"></param>
         public SecurityStorageRepository(ILoggerFactory logFactory, SecurityInMemoryContext context)
             : base(logFactory)
         {

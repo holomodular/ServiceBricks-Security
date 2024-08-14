@@ -1,13 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
-    public class ApplicationRoleClaimApiClient : ApiClient<ApplicationRoleClaimDto>, IApplicationRoleClaimApiClient
+    /// <summary>
+    /// This is a REST API client for the ApplicationRoleClaim entity.
+    /// </summary>
+    public partial class ApplicationRoleClaimApiClient : ApiClient<ApplicationRoleClaimDto>, IApplicationRoleClaimApiClient
     {
-        protected readonly IConfiguration _configuration;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="httpClientFactory"></param>
+        /// <param name="configuration"></param>
         public ApplicationRoleClaimApiClient(
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,

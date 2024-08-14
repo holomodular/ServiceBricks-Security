@@ -5,8 +5,11 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// This is an automapper profile for the AuditUser domain object.
     /// </summary>
-    public class AuditUserMappingProfile : Profile
+    public partial class AuditUserMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public AuditUserMappingProfile()
         {
             CreateMap<AuditUserDto, AuditUser>()
@@ -19,8 +22,19 @@ namespace ServiceBricks.Security.Cosmos
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }
 
+        /// <summary>
+        /// Resolves the key from the storage key.
+        /// </summary>
         public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
         {
+            /// <summary>
+            /// Resolves the key from the storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.StorageKey))

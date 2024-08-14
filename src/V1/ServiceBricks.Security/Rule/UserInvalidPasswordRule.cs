@@ -1,21 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule happens when an invalid password event is raised.
     /// </summary>
-    public partial class UserInvalidPasswordRule : BusinessRule
+    public sealed class UserInvalidPasswordRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
-
+        private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
@@ -59,16 +52,18 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserInvalidPasswordProcess;
                 if (e == null)
                     return response;
 
+                // AI: Determine if user was found
                 if (!string.IsNullOrEmpty(e.UserStorageKey))
                 {
-                    // Audit
+                    // AI: Audit user
                     _auditUserApiService.Create(new AuditUserDto()
                     {
-                        AuditName = AuditType.INVALID_PASSWORD,
+                        AuditName = AuditType.INVALID_PASSWORD_TEXT,
                         UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                         UserStorageKey = e.UserStorageKey,
                         IPAddress = _iPAddressService.GetIPAddress(),

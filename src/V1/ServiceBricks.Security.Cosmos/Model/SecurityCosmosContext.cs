@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ServiceBricks.Storage.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ServiceBricks.Security.EntityFrameworkCore;
+using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Cosmos
 {
-    // dotnet ef migrations add SecurityV1 --context SecurityCosmosContext --startup-project ../Tests/WebApp
-
     /// <summary>
     /// This is the database context for the Security module.
     /// </summary>
@@ -31,6 +28,7 @@ namespace ServiceBricks.Security.Cosmos
             string database = configuration.GetCosmosDatabase(
                 SecurityCosmosConstants.APPSETTING_DATABASE);
             builder.UseCosmos(connectionString, database);
+
             _options = builder.Options;
         }
 
@@ -43,13 +41,44 @@ namespace ServiceBricks.Security.Cosmos
             _options = options;
         }
 
+        /// <summary>
+        /// Audit users.
+        /// </summary>
         public virtual DbSet<Cosmos.AuditUser> AuditUsers { get; set; }
+
+        /// <summary>
+        /// Application users.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationUser> ApplicationUsers { get; set; }
+
+        /// <summary>
+        /// Application user claims.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationUserClaim> ApplicationUserClaims { get; set; }
+
+        /// <summary>
+        /// Application user roles.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationUserRole> ApplicationUserRoles { get; set; }
+
+        /// <summary>
+        /// Application user tokens.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationUserToken> ApplicationUserTokens { get; set; }
+
+        /// <summary>
+        /// Application user logins.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationUserLogin> ApplicationUserLogins { get; set; }
+
+        /// <summary>
+        /// Application roles.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationRole> ApplicationRoles { get; set; }
+
+        /// <summary>
+        /// Application role claims.
+        /// </summary>
         public virtual DbSet<Cosmos.ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
 
         /// <summary>
@@ -60,9 +89,10 @@ namespace ServiceBricks.Security.Cosmos
         {
             base.OnModelCreating(builder);
 
-            //Set default schema
-            builder.HasDefaultSchema(SecurityCosmosConstants.DATABASE_SCHEMA_NAME);
+            // AI: Set the default container name
+            builder.Model.SetDefaultContainer(SecurityCosmosConstants.DATABASE_SCHEMA_NAME);
 
+            // AI: Create the model for each table
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
 

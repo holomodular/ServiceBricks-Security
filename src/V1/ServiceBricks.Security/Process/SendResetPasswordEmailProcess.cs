@@ -3,12 +3,8 @@
     /// <summary>
     /// This is a process that sends an email.
     /// </summary>
-    public class SendResetPasswordEmailProcess : DomainProcess
+    public partial class SendResetPasswordEmailProcess : DomainProcess
     {
-        public SendResetPasswordEmailProcess()
-        {
-        }
-
         public SendResetPasswordEmailProcess(ApplicationUserDto applicationUser, string callbackUrl)
         {
             ApplicationUser = applicationUser;

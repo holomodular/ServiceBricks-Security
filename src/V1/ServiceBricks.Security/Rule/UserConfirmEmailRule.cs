@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule confirms a user email by using a code.
     /// </summary>
-    public partial class UserConfirmEmailRule : BusinessRule
+    public sealed class UserConfirmEmailRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -17,6 +14,14 @@ namespace ServiceBricks.Security
         private readonly IIpAddressService _iPAddressService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerService"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="httpContextAccessor"></param>
         public UserConfirmEmailRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -64,11 +69,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserConfirmEmailProcess;
                 if (e == null)
                     return response;
 
-                // Logic
+                // AI: Find the user
                 var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey);
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -77,6 +83,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
+                // AI: Confirm email with code
                 var result = await _userManagerService.ConfirmEmailAsync(respUser.Item.StorageKey, e.Code);
                 if (result.Error)
                 {
@@ -85,10 +92,10 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.CONFIRM_EMAIL,
+                    AuditName = AuditType.CONFIRM_EMAIL_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

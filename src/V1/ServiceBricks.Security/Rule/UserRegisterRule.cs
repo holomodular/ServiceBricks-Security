@@ -4,10 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace ServiceBricks.Security
@@ -15,7 +11,7 @@ namespace ServiceBricks.Security
     /// <summary>
     /// This business rule happens when a user registers.
     /// </summary>
-    public partial class UserRegisterRule : BusinessRule
+    public sealed class UserRegisterRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -29,6 +25,20 @@ namespace ServiceBricks.Security
         private readonly IServiceBus _serviceBus;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="linkGenerator"></param>
+        /// <param name="mapper"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="options"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="serviceBus"></param>
+        /// <param name="configuration"></param>
         public UserRegisterRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -87,11 +97,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserRegisterProcess;
                 if (e == null)
                     return response;
 
-                //Logic
+                // AI: create user object
                 var nowDate = DateTimeOffset.UtcNow;
                 ApplicationUserDto user = new ApplicationUserDto()
                 {
@@ -107,7 +118,7 @@ namespace ServiceBricks.Security
                     NormalizedUserName = e.Email.ToUpper(),
                 };
 
-                //Create user
+                // AI: Call usermanager to create user
                 var respUser = await _userManagerService.CreateAsync(
                     user,
                     e.Password);
@@ -117,7 +128,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Add to user role
+                // AI: Add user to user role
                 var respAddRole = await _userManagerService.AddToRoleAsync(
                     respUser.Item.StorageKey,
                     SecurityConstants.ROLE_USER_NAME);
@@ -130,9 +141,10 @@ namespace ServiceBricks.Security
                 //    respUser.Item.StorageKey,
                 //    new Claim(TimezoneService.CLAIM_TIMEZONE, e.TimezoneName));
 
-                // Create confirmation code
+                // AI: Determine if we need to send an email
                 if (e.CreateEmail)
                 {
+                    // AI: Generate email confirmation code
                     var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(respUser.Item.StorageKey);
                     if (respCode.Error)
                     {
@@ -140,6 +152,7 @@ namespace ServiceBricks.Security
                         return response;
                     }
 
+                    // AI: Create the callback URL
                     string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                     string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
                     if (string.IsNullOrEmpty(baseUrl))
@@ -148,16 +161,16 @@ namespace ServiceBricks.Security
                             "{0}/ConfirmEmail?code={1}&userId={2}",
                             baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
 
-                    // Create Email Event
+                    // AI: Send the confirm email process
                     SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
                         respUser.Item, callbackUrl);
                     var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.REGISTER,
+                    AuditName = AuditType.REGISTER_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

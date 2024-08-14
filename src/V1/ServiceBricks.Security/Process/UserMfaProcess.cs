@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user needs MFA.
+    /// This is a process when a user needs MFA.
     /// </summary>
-    public class UserMfaProcess : DomainProcess
+    public partial class UserMfaProcess : DomainProcess
     {
         public UserMfaProcess(string selectedProvider)
         {

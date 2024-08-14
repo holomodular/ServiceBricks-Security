@@ -4,26 +4,19 @@ using ServiceBricks.Storage.AzureDataTables;
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is a business rule for the AuditUser object to set the
-    /// partitionkey and rowkey of the object before create.
+    /// This is a business rule for the AuditUser object to set the partitionkey and rowkey of the object before create.
     /// </summary>
-    public partial class AuditUserCreateRule : BusinessRule
+    public sealed class AuditUserCreateRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
-
-        private readonly ITimezoneService _timezoneService;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="loggerFactory"></param>
-        public AuditUserCreateRule(ILoggerFactory loggerFactory, ITimezoneService timezoneService)
+        public AuditUserCreateRule(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<AuditUserCreateRule>();
-            _timezoneService = timezoneService;
             Priority = PRIORITY_LOW;
         }
 
@@ -48,6 +41,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainCreateBeforeEvent<AuditUser> ei)
                 {
                     var item = ei.DomainObject;

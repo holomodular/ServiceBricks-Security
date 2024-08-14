@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when an invalid password is entered.
+    /// This is a a process when an invalid password is entered.
     /// </summary>
-    public class UserInvalidPasswordProcess : DomainProcess
+    public partial class UserInvalidPasswordProcess : DomainProcess
     {
         public UserInvalidPasswordProcess(string userStorageKey, string email)
         {

@@ -3,12 +3,9 @@ using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
-    public partial class AuditUserQueryRule : BusinessRule
+    public sealed class AuditUserQueryRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
@@ -41,6 +38,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainQueryBeforeEvent<AuditUser> ei)
                 {
                     var item = ei.DomainObject;

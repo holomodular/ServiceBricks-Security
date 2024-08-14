@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using ServiceQuery;
 using System.Security.Claims;
-using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Cosmos
 {
@@ -17,20 +15,38 @@ namespace ServiceBricks.Security.Cosmos
         protected readonly IBusinessRuleService _businessRuleService;
         protected readonly IApplicationRoleApiService _applicationRoleApiService;
         protected readonly IApplicationRoleClaimApiService _applicationRoleClaimApiService;
+        protected readonly SecurityCosmosContext _context;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="applicationRoleClaimApiService"></param>
+        /// <param name="context"></param>
+        /// <param name="describer"></param>
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
             IApplicationRoleApiService applicationRoleApiService,
             IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            SecurityCosmosContext context,
             IdentityErrorDescriber describer = null) : base(describer)
         {
             _mapper = mapper;
             _businessRuleService = businessRuleService;
             _applicationRoleApiService = applicationRoleApiService;
             _applicationRoleClaimApiService = applicationRoleClaimApiService;
+            _context = context;
         }
 
+        /// <summary>
+        /// Create a role.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> CreateAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (role.Id == Guid.Empty)
@@ -40,6 +56,12 @@ namespace ServiceBricks.Security.Cosmos
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Delete a role.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             var roleDto = _mapper.Map<ApplicationRoleDto>(role);
@@ -47,6 +69,12 @@ namespace ServiceBricks.Security.Cosmos
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Update a role
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
             var roleDto = _mapper.Map<ApplicationRoleDto>(role);
@@ -54,6 +82,13 @@ namespace ServiceBricks.Security.Cosmos
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Add a claim
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="claim"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task AddClaimAsync(ApplicationRole role, Claim claim, CancellationToken cancellationToken = default)
         {
             var item = new ApplicationRoleClaimDto()
@@ -65,6 +100,12 @@ namespace ServiceBricks.Security.Cosmos
             await _applicationRoleClaimApiService.CreateAsync(item);
         }
 
+        /// <summary>
+        /// Create a role claim.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="claim"></param>
+        /// <returns></returns>
         protected override ApplicationRoleClaim CreateRoleClaim(ApplicationRole role, Claim claim)
         {
             var item = new ApplicationRoleClaimDto()
@@ -77,6 +118,12 @@ namespace ServiceBricks.Security.Cosmos
             return _mapper.Map<ApplicationRoleClaim>(item);
         }
 
+        /// <summary>
+        /// Find a role by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ApplicationRole> FindByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var respRole = await _applicationRoleApiService.GetAsync(id);
@@ -85,20 +132,32 @@ namespace ServiceBricks.Security.Cosmos
             return null;
         }
 
+        /// <summary>
+        /// Find a role by name.
+        /// </summary>
+        /// <param name="normalizedName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ApplicationRole> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRole.NormalizedName), normalizedName);
+            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationRole>(respQuery.Item.List[0]);
             return null;
         }
 
+        /// <summary>
+        /// Get claims for a role.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<Claim>> GetClaimsAsync(ApplicationRole role, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaim.RoleId), role.Id.ToString());
+            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.RoleStorageKey), role.Id.ToString());
             var respQuery = await _applicationRoleClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
@@ -108,24 +167,32 @@ namespace ServiceBricks.Security.Cosmos
             return new List<Claim>();
         }
 
+        /// <summary>
+        /// Remove a claim.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="claim"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task RemoveClaimAsync(ApplicationRole role, Claim claim, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaim.RoleId), role.Id.ToString());
+            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.RoleStorageKey), role.Id.ToString());
             queryBuilder.And();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaim.ClaimType), claim.Type);
+            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.ClaimType), claim.Type);
             var respQuery = await _applicationRoleClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 await _applicationRoleClaimApiService.DeleteAsync(respQuery.Item.List[0].StorageKey);
         }
 
+        /// <summary>
+        /// Query the roles
+        /// </summary>
         public override IQueryable<ApplicationRole> Roles
         {
             get
             {
-                var respRoles = _applicationRoleApiService.Query(new ServiceQueryRequest());
-                var roles = _mapper.Map<List<ApplicationRole>>(respRoles.Item.List);
-                return roles.AsQueryable();
+                return _context.ApplicationRoles.AsQueryable();
             }
         }
     }

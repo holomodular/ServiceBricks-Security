@@ -5,8 +5,14 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// This is a API service for the ApplicationRoleClaim domain object.
     /// </summary>
-    public class ApplicationRoleClaimApiService : ApiService<ApplicationRoleClaim, ApplicationRoleClaimDto>, IApplicationRoleClaimApiService
+    public partial class ApplicationRoleClaimApiService : ApiService<ApplicationRoleClaim, ApplicationRoleClaimDto>, IApplicationRoleClaimApiService
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="repository"></param>
         public ApplicationRoleClaimApiService(
             IMapper mapper,
             IBusinessRuleService businessRuleService,

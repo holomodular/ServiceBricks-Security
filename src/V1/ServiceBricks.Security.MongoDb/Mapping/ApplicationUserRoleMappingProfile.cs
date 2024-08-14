@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 
-using ServiceBricks.Storage.MongoDb;
-
 namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
     /// This is an automapper profile for the ApplicationUserRole domain object.
     /// </summary>
-    public class ApplicationUserRoleMappingProfile : Profile
+    public partial class ApplicationUserRoleMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserRoleMappingProfile()
         {
             CreateMap<ApplicationUserRoleDto, ApplicationUserRole>()

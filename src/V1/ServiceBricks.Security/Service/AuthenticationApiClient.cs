@@ -1,14 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ServiceBricks.Security
 {
-    public class AuthenticationApiClient : ServiceClient, IAuthenticationApiClient
+    /// <summary>
+    /// This is a REST API client for the Authentication entity.
+    /// </summary>
+    public partial class AuthenticationApiClient : ServiceClient, IAuthenticationApiClient
     {
-        protected readonly IConfiguration _configuration;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="httpClientFactory"></param>
+        /// <param name="configuration"></param>
+        /// <exception cref="Exception"></exception>
         public AuthenticationApiClient(
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,
@@ -21,8 +28,16 @@ namespace ServiceBricks.Security
             ApiResource = config.BaseServiceUrl + @"Security/Authentication";
         }
 
+        /// <summary>
+        /// The APIResournce
+        /// </summary>
         public virtual string ApiResource { get; set; }
 
+        /// <summary>
+        /// Authenticate the user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual IResponseItem<AccessTokenResponse> AuthenticateUser(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource);
@@ -31,6 +46,11 @@ namespace ServiceBricks.Security
             return GetAccessTokenAsync(result).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Authenticate the user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual async Task<IResponseItem<AccessTokenResponse>> AuthenticateUserAsync(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + "Async");
@@ -39,6 +59,11 @@ namespace ServiceBricks.Security
             return await GetAccessTokenAsync(result);
         }
 
+        /// <summary>
+        /// Get the access token
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         protected virtual async Task<ResponseItem<AccessTokenResponse>> GetAccessTokenAsync(HttpResponseMessage result)
         {
             ResponseItem<AccessTokenResponse> resp = new ResponseItem<AccessTokenResponse>();

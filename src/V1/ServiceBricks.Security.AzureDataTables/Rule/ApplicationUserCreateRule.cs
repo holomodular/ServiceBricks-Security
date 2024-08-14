@@ -6,23 +6,17 @@ namespace ServiceBricks.Security.AzureDataTables
     /// This is a business rule for the ApplicationUser object to set the
     /// partitionkey and rowkey of the object before create.
     /// </summary>
-    public partial class ApplicationUserCreateRule : BusinessRule
+    public sealed class ApplicationUserCreateRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
-
-        private readonly ITimezoneService _timezoneService;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="loggerFactory"></param>
-        public ApplicationUserCreateRule(ILoggerFactory loggerFactory, ITimezoneService timezoneService)
+        public ApplicationUserCreateRule(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<ApplicationUserCreateRule>();
-            _timezoneService = timezoneService;
             Priority = PRIORITY_LOW;
         }
 
@@ -47,12 +41,13 @@ namespace ServiceBricks.Security.AzureDataTables
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainCreateBeforeEvent<ApplicationUser> ei)
                 {
                     var item = ei.DomainObject;
                     item.Id = Guid.NewGuid();
                     item.PartitionKey = item.Id.ToString();
-                    item.RowKey = "";
+                    item.RowKey = string.Empty;
                 }
             }
             catch (Exception ex)

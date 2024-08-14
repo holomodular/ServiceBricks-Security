@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using ServiceQuery;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Postgres
@@ -13,6 +10,17 @@ namespace ServiceBricks.Security.Postgres
     /// </summary>
     public partial class ApplicationRoleStore : GenericApplicationRoleStore<SecurityPostgresContext>
     {
+        protected readonly SecurityPostgresContext _context;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="applicationRoleClaimApiService"></param>
+        /// <param name="SecurityPostgresContext"></param>
+        /// <param name="describer"></param>
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
@@ -27,6 +35,18 @@ namespace ServiceBricks.Security.Postgres
                 SecurityPostgresContext,
                 describer)
         {
+            _context = SecurityPostgresContext;
+        }
+
+        /// <summary>
+        /// Query the roles.
+        /// </summary>
+        public override IQueryable<ApplicationRole> Roles
+        {
+            get
+            {
+                return _context.ApplicationRoles.AsQueryable();
+            }
         }
     }
 }

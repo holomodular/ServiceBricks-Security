@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ServiceBricks.Storage.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using ServiceBricks.Security.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Sqlite
 {
     // dotnet ef migrations add SecurityV1 --context SecuritySqliteContext --startup-project ../Test/MigrationsHost
+
     /// <summary>
     /// This is the database context for the Security module.
     /// </summary>
@@ -32,6 +33,7 @@ namespace ServiceBricks.Security.Sqlite
             {
                 x.MigrationsAssembly(typeof(SecuritySqliteContext).Assembly.GetName().Name);
             });
+
             _options = builder.Options;
         }
 
@@ -44,13 +46,44 @@ namespace ServiceBricks.Security.Sqlite
             _options = options;
         }
 
+        /// <summary>
+        /// Audit users.
+        /// </summary>
         public virtual DbSet<AuditUser> AuditUsers { get; set; }
+
+        /// <summary>
+        /// Application users.
+        /// </summary>
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+        /// <summary>
+        /// Application user claims
+        /// </summary>
         public virtual DbSet<ApplicationUserClaim> ApplicationUserClaims { get; set; }
+
+        /// <summary>
+        /// Application user roles
+        /// </summary>
         public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+
+        /// <summary>
+        /// Application user tokens
+        /// </summary>
         public virtual DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
+
+        /// <summary>
+        /// Application user logins
+        /// </summary>
         public virtual DbSet<ApplicationUserLogin> ApplicationUserLogins { get; set; }
+
+        /// <summary>
+        /// Application roles
+        /// </summary>
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
+
+        /// <summary>
+        /// Application role claims
+        /// </summary>
         public virtual DbSet<ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
 
         /// <summary>
@@ -61,9 +94,10 @@ namespace ServiceBricks.Security.Sqlite
         {
             base.OnModelCreating(builder);
 
-            //Set default schema
-            //builder.HasDefaultSchema(SecurityEntityFrameworkCoreConstants.DATABASE_SCHEMA_NAME);
+            // AI: Set the default schema
+            builder.HasDefaultSchema(SecuritySqliteConstants.DATABASE_SCHEMA_NAME);
 
+            // AI: Setup the entities to the model
             builder.Entity<AuditUser>().HasKey(key => key.Key);
             builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
 
@@ -125,8 +159,12 @@ namespace ServiceBricks.Security.Sqlite
         /// <param name="configurationBuilder"></param>
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
-            configurationBuilder.Properties<DateTimeOffset>()
-            .HaveConversion<DateTimeOffsetToBytesConverter>();
+            configurationBuilder
+                .Properties<DateTimeOffset>()
+                .HaveConversion<DateTimeOffsetToBytesConverter>();
+            configurationBuilder
+                .Properties<DateTimeOffset?>()
+                .HaveConversion<DateTimeOffsetToBytesConverter>();
         }
 
         /// <summary>

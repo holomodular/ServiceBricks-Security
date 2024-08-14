@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-
-using ServiceBricks.Storage.MongoDb;
+using MongoDB.Driver;
 using ServiceQuery;
 using System.Security.Claims;
 
@@ -20,7 +19,20 @@ namespace ServiceBricks.Security.MongoDb
         protected readonly IApplicationUserLoginApiService _applicationUserLoginApiService;
         protected readonly IApplicationUserTokenApiService _applicationUserTokenApiService;
         protected readonly IApplicationRoleApiService _applicationRoleApiService;
+        protected readonly SecurityStorageRepository<ApplicationUser> _securityStorageRepositoryApplicationUser;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="applicationUserClaimApiService"></param>
+        /// <param name="applicationUserLoginApiService"></param>
+        /// <param name="applicationUserTokenApiService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="describer"></param>
         public ApplicationUserStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
@@ -30,6 +42,7 @@ namespace ServiceBricks.Security.MongoDb
             IApplicationUserLoginApiService applicationUserLoginApiService,
             IApplicationUserTokenApiService applicationUserTokenApiService,
             IApplicationRoleApiService applicationRoleApiService,
+            SecurityStorageRepository<ApplicationUser> securityStorageRepositoryApplicationUser,
             IdentityErrorDescriber describer = null) : base(describer)
         {
             _mapper = mapper;
@@ -40,8 +53,15 @@ namespace ServiceBricks.Security.MongoDb
             _applicationUserLoginApiService = applicationUserLoginApiService;
             _applicationUserTokenApiService = applicationUserTokenApiService;
             _applicationRoleApiService = applicationRoleApiService;
+            _securityStorageRepositoryApplicationUser = securityStorageRepositoryApplicationUser;
         }
 
+        /// <summary>
+        /// Create a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> CreateAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -51,6 +71,12 @@ namespace ServiceBricks.Security.MongoDb
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -58,6 +84,12 @@ namespace ServiceBricks.Security.MongoDb
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Delete a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -65,6 +97,13 @@ namespace ServiceBricks.Security.MongoDb
             return resp.GetIdentityResult();
         }
 
+        /// <summary>
+        /// Add a claim to a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="claims"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task AddClaimsAsync(ApplicationIdentityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default)
         {
             foreach (var claim in claims)
@@ -77,6 +116,12 @@ namespace ServiceBricks.Security.MongoDb
             }
         }
 
+        /// <summary>
+        /// Create a claim
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="claim"></param>
+        /// <returns></returns>
         protected override ApplicationIdentityUserClaim CreateUserClaim(ApplicationIdentityUser user, Claim claim)
         {
             var uc = new ApplicationUserClaimDto();
@@ -89,6 +134,12 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Get claims for a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<Claim>> GetClaimsAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default)
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -103,6 +154,13 @@ namespace ServiceBricks.Security.MongoDb
             return new List<Claim>();
         }
 
+        /// <summary>
+        /// Add a user to a role
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="normalizedRoleName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task AddToRoleAsync(ApplicationIdentityUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -120,6 +178,12 @@ namespace ServiceBricks.Security.MongoDb
             }
         }
 
+        /// <summary>
+        /// Find a user by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ApplicationIdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
         {
             var respUser = await _applicationUserApiService.GetAsync(userId);
@@ -128,6 +192,12 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Find a user by email
+        /// </summary>
+        /// <param name="normalizedEmail"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ApplicationIdentityUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -138,6 +208,13 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Remove claims from a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="claims"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task RemoveClaimsAsync(ApplicationIdentityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken = default)
         {
             if (claims != null && claims.Count() > 0)
@@ -159,18 +236,34 @@ namespace ServiceBricks.Security.MongoDb
             }
         }
 
+        /// <summary>
+        /// Get users for a claim
+        /// </summary>
+        /// <param name="claim"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<ApplicationIdentityUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.ClaimType), claim.Type);
+            queryBuilder.Select(nameof(ApplicationUserClaimDto.UserStorageKey));
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
 
             queryBuilder = new ServiceQueryRequestBuilder();
+            queryBuilder.IsInSet(nameof(ApplicationUserDto.StorageKey), respUserClaims.Item.List.Select(x => x.UserStorageKey).ToArray());
             var respUsers = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             var users = _mapper.Map<List<ApplicationIdentityUser>>(respUsers.Item.List);
             return users;
         }
 
+        /// <summary>
+        /// Replace a claim
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="claim"></param>
+        /// <param name="newClaim"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task ReplaceClaimAsync(ApplicationIdentityUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default)
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -188,6 +281,12 @@ namespace ServiceBricks.Security.MongoDb
             }
         }
 
+        /// <summary>
+        /// Create a role
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         protected override ApplicationUserRole CreateUserRole(ApplicationIdentityUser user, ApplicationIdentityRole role)
         {
             var item = new ApplicationUserRoleDto()
@@ -199,6 +298,12 @@ namespace ServiceBricks.Security.MongoDb
             return _mapper.Map<ApplicationUserRole>(item);
         }
 
+        /// <summary>
+        /// Fund a role by id
+        /// </summary>
+        /// <param name="normalizedRoleName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationIdentityRole> FindRoleAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -209,18 +314,31 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Find a role by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationUserRole> FindUserRoleAsync(string userId, string roleId, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userId.ToString() + StorageMongoDbConstants.STORAGEKEY_DELIMITER);
+            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userId);
             queryBuilder.And();
-            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), roleId.ToString() + StorageMongoDbConstants.STORAGEKEY_DELIMITER);
+            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), roleId);
             var respQuery = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
-            if (respQuery.Success && respQuery.Item.Count > 0)
+            if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUserRole>(respQuery.Item.List[0]);
             return null;
         }
 
+        /// <summary>
+        /// Get roles for a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<string>> GetRolesAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default)
         {
             var userDto = _mapper.Map<ApplicationUserDto>(user);
@@ -239,6 +357,12 @@ namespace ServiceBricks.Security.MongoDb
             return new List<string>();
         }
 
+        /// <summary>
+        /// Get users in a role
+        /// </summary>
+        /// <param name="normalizedRoleName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<ApplicationIdentityUser>> GetUsersInRoleAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -263,6 +387,13 @@ namespace ServiceBricks.Security.MongoDb
             return new List<ApplicationIdentityUser>();
         }
 
+        /// <summary>
+        /// Determine if a user is in a role
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="normalizedRoleName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<bool> IsInRoleAsync(ApplicationIdentityUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -283,6 +414,13 @@ namespace ServiceBricks.Security.MongoDb
             return false;
         }
 
+        /// <summary>
+        /// Remove a user from a role
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="normalizedRoleName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task RemoveFromRoleAsync(ApplicationIdentityUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -302,6 +440,12 @@ namespace ServiceBricks.Security.MongoDb
             }
         }
 
+        /// <summary>
+        /// Find a user by name
+        /// </summary>
+        /// <param name="normalizedUserName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<ApplicationIdentityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -312,12 +456,24 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Find a user by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationIdentityUser> FindUserAsync(string userId, CancellationToken cancellationToken)
         {
-            var respUser = await _applicationUserApiService.GetAsync(userId.ToString());
+            var respUser = await _applicationUserApiService.GetAsync(userId);
             return _mapper.Map<ApplicationIdentityUser>(respUser.Item);
         }
 
+        /// <summary>
+        /// Create a user login
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="login"></param>
+        /// <returns></returns>
         protected override ApplicationUserLogin CreateUserLogin(ApplicationIdentityUser user, UserLoginInfo login)
         {
             var ul = new ApplicationUserLoginDto()
@@ -325,7 +481,7 @@ namespace ServiceBricks.Security.MongoDb
                 LoginProvider = login.LoginProvider,
                 ProviderDisplayName = login.ProviderDisplayName,
                 ProviderKey = login.ProviderKey,
-                UserStorageKey = user.Id.ToString(),
+                UserStorageKey = user.Id,
             };
             var resp = _applicationUserLoginApiService.Create(ul);
             if (resp.Success)
@@ -333,13 +489,21 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Create a user token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="loginProvider"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected override ApplicationUserToken CreateUserToken(ApplicationIdentityUser user, string loginProvider, string name, string value)
         {
             var ut = new ApplicationUserTokenDto()
             {
                 LoginProvider = loginProvider,
                 Name = name,
-                UserStorageKey = user.Id.ToString(),
+                UserStorageKey = user.Id,
                 Value = value,
             };
             var resp = _applicationUserTokenApiService.Create(ut);
@@ -348,11 +512,19 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Find a user login
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="loginProvider"></param>
+        /// <param name="providerKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationUserLogin> FindUserLoginAsync(string userId, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), userId.ToString())
+                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), userId)
                 .And()
                 .IsEqual(nameof(ApplicationUserLoginDto.LoginProvider), loginProvider)
                 .And()
@@ -363,6 +535,13 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Find a user login
+        /// </summary>
+        /// <param name="loginProvider"></param>
+        /// <param name="providerKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationUserLogin> FindUserLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
@@ -376,6 +555,13 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Add a login
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="login"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task AddLoginAsync(ApplicationIdentityUser user, UserLoginInfo login, CancellationToken cancellationToken = default)
         {
             ApplicationUserLoginDto obj = new ApplicationUserLoginDto();
@@ -386,11 +572,19 @@ namespace ServiceBricks.Security.MongoDb
             await _applicationUserLoginApiService.CreateAsync(obj);
         }
 
+        /// <summary>
+        /// Remove a login
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="loginProvider"></param>
+        /// <param name="providerKey"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task RemoveLoginAsync(ApplicationIdentityUser user, string loginProvider, string providerKey, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id.ToString())
+                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id)
                 .And()
                 .IsEqual(nameof(ApplicationUserLoginDto.LoginProvider), loginProvider)
                 .And()
@@ -400,11 +594,17 @@ namespace ServiceBricks.Security.MongoDb
                 await _applicationUserLoginApiService.DeleteAsync(respQuery.Item.List[0].StorageKey);
         }
 
+        /// <summary>
+        /// Get logins
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<UserLoginInfo>> GetLoginsAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id.ToString());
+                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
@@ -416,11 +616,19 @@ namespace ServiceBricks.Security.MongoDb
             return new List<UserLoginInfo>();
         }
 
+        /// <summary>
+        /// Find a token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="loginProvider"></param>
+        /// <param name="name"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<ApplicationUserToken> FindTokenAsync(ApplicationIdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserTokenDto.UserStorageKey), user.Id.ToString())
+                .IsEqual(nameof(ApplicationUserTokenDto.UserStorageKey), user.Id)
                 .And()
                 .IsEqual(nameof(ApplicationUserTokenDto.LoginProvider), loginProvider)
                 .And()
@@ -431,25 +639,39 @@ namespace ServiceBricks.Security.MongoDb
             return null;
         }
 
+        /// <summary>
+        /// Add user token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         protected override async Task AddUserTokenAsync(ApplicationUserToken token)
         {
             var dto = _mapper.Map<ApplicationUserTokenDto>(token);
             await _applicationUserTokenApiService.CreateAsync(dto);
         }
 
+        /// <summary>
+        /// Remove user token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         protected override async Task RemoveUserTokenAsync(ApplicationUserToken token)
         {
             var dto = _mapper.Map<ApplicationUserTokenDto>(token);
             await _applicationUserTokenApiService.DeleteAsync(dto.StorageKey);
         }
 
+        /// <summary>
+        /// Query users
+        /// </summary>
         public override IQueryable<ApplicationIdentityUser> Users
         {
             get
             {
-                var respUsers = _applicationUserApiService.Query(new ServiceQueryRequest());
-                var users = _mapper.Map<List<ApplicationIdentityUser>>(respUsers.Item.List);
-                return users.AsQueryable();
+                MongoClient client = new MongoClient(_securityStorageRepositoryApplicationUser.ConnectionString);
+                var db = client.GetDatabase(_securityStorageRepositoryApplicationUser.DatabaseName);
+                var collection = db.GetCollection<ApplicationIdentityUser>(_securityStorageRepositoryApplicationUser.CollectionName);
+                return collection.AsQueryable();
             }
         }
     }

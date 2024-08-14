@@ -8,9 +8,14 @@ namespace ServiceBricks.Security.MongoDb
     /// This is a storage repository for the Security module.
     /// </summary>
     /// <typeparam name="TDomain"></typeparam>
-    public class SecurityStorageRepository<TDomain> : MongoDbStorageRepository<TDomain>
+    public partial class SecurityStorageRepository<TDomain> : MongoDbStorageRepository<TDomain>
         where TDomain : class, IMongoDbDomainObject<TDomain>, new()
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="logFactory"></param>
+        /// <param name="configuration"></param>
         public SecurityStorageRepository(
             ILoggerFactory logFactory,
             IConfiguration configuration)

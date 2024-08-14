@@ -1,36 +1,48 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Win32;
 
 namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// IServiceCollection extensions for the Security Brick.
+    /// Extensions to add the security module to the service collection.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add the ServiceBricks Security MongoDb module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityMongoDb(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddServiceBricksSecurityMongoDb(configuration, new Action<IdentityOptions>(options => new IdentityOptions()));
         }
 
+        /// <summary>
+        /// Add the ServiceBricks Security MongoDb module to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <param name="identityOptions"></param>
+        /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityMongoDb(this IServiceCollection services, IConfiguration configuration, Action<IdentityOptions> identityOptions)
         {
-            // Add to module registry
+            // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityMongoDbModule), new SecurityMongoDbModule());
 
-            // Register Identity
+            // AI: Register requirements
             services
                 .AddIdentity<ApplicationIdentityUser, ApplicationIdentityRole>(identityOptions)
                 .AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
-            // Add core
+            // AI: Add the parent module
             services.AddServiceBricksSecurity(configuration);
 
-            // Storage Services
+            // AI: Add the storage services for the module for each domain object
             services.AddScoped<IStorageRepository<ApplicationRole>, SecurityStorageRepository<ApplicationRole>>();
             services.AddScoped<IStorageRepository<ApplicationRoleClaim>, SecurityStorageRepository<ApplicationRoleClaim>>();
             services.AddScoped<IStorageRepository<ApplicationUser>, SecurityStorageRepository<ApplicationUser>>();
@@ -41,7 +53,7 @@ namespace ServiceBricks.Security.MongoDb
             services.AddScoped<IAuditUserStorageRepository, AuditUserStorageRepository>();
             services.AddScoped<IStorageRepository<AuditUser>, AuditUserStorageRepository>();
 
-            // API Services
+            // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
             services.AddScoped<IApiService<AuditUserDto>, AuditUserApiService>();
             services.AddScoped<IAuditUserApiService, AuditUserApiService>();
 
@@ -68,7 +80,7 @@ namespace ServiceBricks.Security.MongoDb
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
-            // Add business rules
+            // AI: Add business rules for the module
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 

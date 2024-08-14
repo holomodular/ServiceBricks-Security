@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using System;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace ServiceBricks.Security
@@ -13,7 +9,7 @@ namespace ServiceBricks.Security
     /// <summary>
     /// This business rule happens when a user requests another confirmation code.
     /// </summary>
-    public partial class UserResendConfirmationProcessRule : BusinessRule
+    public sealed class UserResendConfirmationProcessRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -24,6 +20,17 @@ namespace ServiceBricks.Security
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="options"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="configuration"></param>
         public UserResendConfirmationProcessRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -76,10 +83,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserResendConfirmationProcess;
                 if (e == null)
                     return response;
 
+                // AI: Find the user
                 var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey);
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -87,7 +96,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Create confirmation code
+                // AI: Create confirmation code
                 var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(e.UserStorageKey);
                 if (respCode.Error)
                 {
@@ -95,6 +104,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
+                // AI: Create callback URL
                 string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
                 if (string.IsNullOrEmpty(baseUrl))
@@ -103,15 +113,15 @@ namespace ServiceBricks.Security
                         "{0}/ConfirmEmail?code={1}&userId={2}",
                         baseUrl, encodedConfirmCode, e.UserStorageKey);
 
-                // Create Email Event
+                // AI: Send confirm email process
                 SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
                     respUser.Item, callbackUrl);
                 var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.RESEND_CONFIRMATION,
+                    AuditName = AuditType.RESEND_CONFIRMATION_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

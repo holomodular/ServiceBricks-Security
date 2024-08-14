@@ -7,8 +7,11 @@ namespace ServiceBricks.Security.AzureDataTables
     /// <summary>
     /// This is an automapper profile for the ApplicationUserToken domain object.
     /// </summary>
-    public class ApplicationUserTokenMappingProfile : Profile
+    public partial class ApplicationUserTokenMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserTokenMappingProfile()
         {
             CreateMap<ApplicationUserTokenDto, ApplicationUserToken>()

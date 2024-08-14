@@ -1,25 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-
 using ServiceQuery;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Principal;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ServiceBricks.Security
 {
-    public class AuthenticationApiService : IAuthenticationApiService
+    /// <summary>
+    /// This is a REST API service for the Authentication entity.
+    /// </summary>
+    public partial class AuthenticationApiService : IAuthenticationApiService
     {
         protected readonly IConfiguration _configuration;
         protected readonly SecurityTokenOptions _securityOptions;
@@ -30,6 +24,17 @@ namespace ServiceBricks.Security
         protected readonly IApplicationRoleApiService _applicationRoleApiService;
         protected readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="securityOptions"></param>
+        /// <param name="configuration"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="applicationUserClaimApiService"></param>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="applicationRoleClaimApiService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="httpContextAccessor"></param>
         public AuthenticationApiService(
             IOptions<SecurityTokenOptions> securityOptions,
             IConfiguration configuration,
@@ -50,11 +55,21 @@ namespace ServiceBricks.Security
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Authenticate user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual IResponseItem<AccessTokenResponse> AuthenticateUser(AccessTokenRequest request)
         {
             return AuthenticateUserAsync(request).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Authenticate user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual async Task<IResponseItem<AccessTokenResponse>> AuthenticateUserAsync(AccessTokenRequest request)
         {
             var response = new ResponseItem<AccessTokenResponse>();

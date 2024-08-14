@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule creates a code and invokes the SendResetPasswordEmailProcess.
     /// </summary>
-    public partial class UserForgotPasswordRule : BusinessRule
+    public sealed class UserForgotPasswordRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -23,6 +19,17 @@ namespace ServiceBricks.Security
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="options"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="configuration"></param>
         public UserForgotPasswordRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -75,10 +82,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserForgotPasswordProcess;
                 if (e == null)
                     return response;
 
+                // AI: Find the user
                 var respUser = await _userManagerService.FindByIdAsync(e.DomainObject.ToString());
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -86,7 +95,7 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Create token
+                // AI: Generate the password reset token
                 var user = e.DomainObject;
                 var respCode = await _userManagerService.GeneratePasswordResetTokenAsync(respUser.Item.StorageKey);
                 if (respCode.Error)
@@ -94,23 +103,24 @@ namespace ServiceBricks.Security
                     response.CopyFrom(respCode);
                     return response;
                 }
+
+                // AI: Create the callback URL
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
                 if (string.IsNullOrEmpty(baseUrl))
                     baseUrl = _options.Url;
-
                 string callbackUrl = string.Format(
                         "{0}/ResetPassword?code={1}&userId={2}",
                         baseUrl, respCode.Item, e.DomainObject);
 
-                // Create Email Event
+                // AI: Send the reset email process
                 SendResetPasswordEmailProcess sendProcess = new SendResetPasswordEmailProcess(
                     respUser.Item, callbackUrl);
                 var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.FORGOT_PASSWORD,
+                    AuditName = AuditType.FORGOT_PASSWORD_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()

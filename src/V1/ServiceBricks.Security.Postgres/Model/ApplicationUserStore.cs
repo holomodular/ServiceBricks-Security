@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using ServiceQuery;
-using System.Security.Claims;
 using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Postgres
@@ -13,6 +9,21 @@ namespace ServiceBricks.Security.Postgres
     /// </summary>
     public partial class ApplicationUserStore : GenericApplicationUserStore<SecurityPostgresContext>
     {
+        protected readonly SecurityPostgresContext _context;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="applicationUserClaimApiService"></param>
+        /// <param name="applicationUserLoginApiService"></param>
+        /// <param name="applicationUserTokenApiService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="SecurityPostgresContext"></param>
+        /// <param name="describer"></param>
         public ApplicationUserStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
@@ -35,6 +46,18 @@ namespace ServiceBricks.Security.Postgres
                 SecurityPostgresContext,
                 describer)
         {
+            _context = SecurityPostgresContext;
+        }
+
+        /// <summary>
+        /// Query users.
+        /// </summary>
+        public override IQueryable<ApplicationUser> Users
+        {
+            get
+            {
+                return _context.ApplicationUsers.AsQueryable();
+            }
         }
     }
 }

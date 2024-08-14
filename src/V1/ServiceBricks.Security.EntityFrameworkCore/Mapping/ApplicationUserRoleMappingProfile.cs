@@ -7,8 +7,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     /// <summary>
     /// This is an automapper profile for the ApplicationUserRole domain object.
     /// </summary>
-    public class ApplicationUserRoleMappingProfile : Profile
+    public partial class ApplicationUserRoleMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserRoleMappingProfile()
         {
             CreateMap<ApplicationUserRoleDto, ApplicationUserRole>()
@@ -24,8 +27,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
         }
 
+        /// <summary>
+        /// Resolve the user id.
+        /// </summary>
         public class UserIdResolver : IValueResolver<ApplicationUserRoleDto, object, Guid>
         {
+            /// <summary>
+            /// Resolve the user id.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(ApplicationUserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.UserStorageKey))
@@ -48,8 +62,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             }
         }
 
+        /// <summary>
+        /// Resolve the role id.
+        /// </summary>
         public class RoleIdResolver : IValueResolver<ApplicationUserRoleDto, object, Guid>
         {
+            /// <summary>
+            /// Resolve the role id.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(ApplicationUserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.RoleStorageKey))

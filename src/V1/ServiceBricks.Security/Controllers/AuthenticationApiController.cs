@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-
-using ServiceQuery;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ServiceBricks.Security
 {
+    /// <summary>
+    /// This is an exposed REST-based API controller to authenticate users.
+    /// </summary>
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/Authentication")]
     [Produces("application/json")]
-    public class AuthenticationApiController : ControllerBase, IAuthenticationApiController
+    public partial class AuthenticationApiController : ControllerBase, IAuthenticationApiController
     {
-        private readonly IAuthenticationApiService _authenticationApiService;
+        protected readonly IAuthenticationApiService _authenticationApiService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="authenticationApiService"></param>
         public AuthenticationApiController(
             IAuthenticationApiService authenticationApiService)
         {

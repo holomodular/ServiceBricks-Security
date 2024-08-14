@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using ServiceBricks.Storage.MongoDb;
-using System.Linq;
-using System.Linq.Expressions;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ServiceBricks.Security.MongoDb
 {
@@ -12,6 +7,9 @@ namespace ServiceBricks.Security.MongoDb
     /// </summary>
     public partial class ApplicationIdentityUserClaim : IdentityUserClaim<string>
     {
+        /// <summary>
+        /// Internal primary key.
+        /// </summary>
         public virtual string Key { get; set; }
     }
 }

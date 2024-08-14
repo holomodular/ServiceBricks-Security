@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user resets their password with a code.
+    /// This is a process when a user resets their password with a code.
     /// </summary>
-    public class UserPasswordResetProcess : DomainProcess
+    public partial class UserPasswordResetProcess : DomainProcess
     {
         public UserPasswordResetProcess(string email, string password, string code)
         {

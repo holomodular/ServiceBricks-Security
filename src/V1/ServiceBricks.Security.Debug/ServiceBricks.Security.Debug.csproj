@@ -75,7 +75,6 @@
 	  <Compile Include="..\ServiceBricks.Security\Model\ApplicationSigninResult.cs" Link="ApplicationSigninResult.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Model\AuditType.cs" Link="AuditType.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Model\JwtHelper.cs" Link="JwtHelper.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Model\SecurityApiModule.cs" Link="SecurityApiModule.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Model\SecurityConstants.cs" Link="SecurityConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Model\SecurityModule.cs" Link="SecurityModule.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Model\SecurityTokenOptions.cs" Link="SecurityTokenOptions.cs" />

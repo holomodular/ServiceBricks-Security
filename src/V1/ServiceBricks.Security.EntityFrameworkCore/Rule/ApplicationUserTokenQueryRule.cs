@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
-using ServiceQuery;
-
 using ServiceBricks.Storage.EntityFrameworkCore;
+using ServiceQuery;
 
 namespace ServiceBricks.Security.EntityFrameworkCore
 {
-    public partial class ApplicationUserTokenQueryRule : BusinessRule
+    /// <summary>
+    /// This is a business rule that is executed before a query is executed for an ApplicationUserToken.
+    /// </summary>
+    public sealed class ApplicationUserTokenQueryRule : BusinessRule
     {
-        /// <summary>
-        /// Internal.
-        /// </summary>
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor.
@@ -43,6 +42,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 if (context.Object is DomainQueryBeforeEvent<ApplicationUserToken> ei)
                 {
                     var item = ei.DomainObject;
@@ -74,19 +74,6 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                                         i += q.Filters.Count;
                                     }
                                 }
-                            }
-                        }
-                    }
-
-                    foreach (var filter in ei.ServiceQueryRequest.Filters)
-                    {
-                        if (filter.Properties != null &&
-                            filter.Properties.Count > 0)
-                        {
-                            for (int i = 0; i < filter.Properties.Count; i++)
-                            {
-                                if (string.Compare(filter.Properties[i], "StorageKey", true) == 0)
-                                    filter.Properties[i] = "Id";
                             }
                         }
                     }

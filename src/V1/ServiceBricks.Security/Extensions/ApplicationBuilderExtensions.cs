@@ -4,25 +4,36 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// IApplicationBuilder extensions for the Security Brick.
+    /// Extension methods to start the ServiceBricks.Security module.
     /// </summary>
     public static partial class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// Flag to indicate if the module has been started.
+        /// </summary>
         public static bool ModuleStarted = false;
 
+        /// <summary>
+        /// Start the ServiceBricks.Security module.
+        /// </summary>
+        /// <param name="applicationBuilder"></param>
+        /// <returns></returns>
         public static IApplicationBuilder StartServiceBricksSecurity(this IApplicationBuilder applicationBuilder)
         {
+            // AI: Initialize Data. Ensure admin and user roles are created
             using (var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                //Initialize Data
+                // AI: Get the role service
                 var roleService = serviceScope.ServiceProvider.GetService<IApplicationRoleApiService>();
 
-                // Either roleservice is not registered because running unittest without provider (ok) or this module added out of order (bad)
+                // AI: Either roleservice is not registered because running unittest without provider (ok) or this module added out of order (bad)
                 if (roleService == null)
                     return applicationBuilder;
+
+                // AI: Query all roles
                 var respRoles = roleService.Query(new ServiceQuery.ServiceQueryRequest());
 
-                // Create roles
+                // AI: Create required role for admin
                 if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_ADMIN_NAME.ToUpper()))
                 {
                     _ = roleService.Create(new ApplicationRoleDto()
@@ -31,6 +42,8 @@ namespace ServiceBricks.Security
                         NormalizedName = SecurityConstants.ROLE_ADMIN_NAME.ToUpper()
                     });
                 }
+
+                // AI: Create required roles for user
                 if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_USER_NAME.ToUpper()))
                 {
                     _ = roleService.Create(new ApplicationRoleDto()
@@ -41,7 +54,9 @@ namespace ServiceBricks.Security
                 }
             }
 
+            // AI: Set the module started flag
             ModuleStarted = true;
+
             return applicationBuilder;
         }
     }

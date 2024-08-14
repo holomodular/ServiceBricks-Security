@@ -43,7 +43,7 @@ namespace ServiceBricks.Xunit.Integration
             //Verify audituser created
             var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
             var queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.LOGIN);
+            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.LOGIN_TEXT);
             queryBuilder.And();
             queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey.ToString());
             var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());
@@ -61,7 +61,7 @@ namespace ServiceBricks.Xunit.Integration
             //Verify audituser created
             auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
             queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.PASSWORD_CHANGE);
+            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.PASSWORD_CHANGE_TEXT);
             queryBuilder.And();
             queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey.ToString());
             respAudit = await auditUserService.QueryAsync(queryBuilder.Build());

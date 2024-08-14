@@ -3,9 +3,9 @@
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user verifies an MFA code.
+    /// This is a process when a user verifies an MFA code.
     /// </summary>
-    public class UserMfaVerifyProcess : DomainProcess
+    public partial class UserMfaVerifyProcess : DomainProcess
     {
         public UserMfaVerifyProcess(
             string provider,

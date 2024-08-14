@@ -7,8 +7,11 @@ namespace ServiceBricks.Security.AzureDataTables
     /// <summary>
     /// This is an automapper profile for the AuditUser domain object.
     /// </summary>
-    public class AuditUserMappingProfile : Profile
+    public partial class AuditUserMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public AuditUserMappingProfile()
         {
             CreateMap<AuditUserDto, AuditUser>()

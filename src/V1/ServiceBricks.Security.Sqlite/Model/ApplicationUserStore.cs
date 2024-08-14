@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using ServiceQuery;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Sqlite
@@ -13,6 +10,21 @@ namespace ServiceBricks.Security.Sqlite
     /// </summary>
     public partial class ApplicationUserStore : GenericApplicationUserStore<SecuritySqliteContext>
     {
+        protected readonly SecuritySqliteContext _context;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="businessRuleService"></param>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="applicationUserRoleApiService"></param>
+        /// <param name="applicationUserClaimApiService"></param>
+        /// <param name="applicationUserLoginApiService"></param>
+        /// <param name="applicationUserTokenApiService"></param>
+        /// <param name="applicationRoleApiService"></param>
+        /// <param name="SecuritySqliteContext"></param>
+        /// <param name="describer"></param>
         public ApplicationUserStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
@@ -35,6 +47,18 @@ namespace ServiceBricks.Security.Sqlite
                 SecuritySqliteContext,
                 describer)
         {
+            _context = SecuritySqliteContext;
+        }
+
+        /// <summary>
+        /// Query users.
+        /// </summary>
+        public override IQueryable<ApplicationUser> Users
+        {
+            get
+            {
+                return _context.ApplicationUsers.AsQueryable();
+            }
         }
     }
 }

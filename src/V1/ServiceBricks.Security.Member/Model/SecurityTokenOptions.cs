@@ -1,13 +1,28 @@
 ﻿namespace ServiceBricks.Security.Member
 {
+    /// <summary>
+    /// Options for security token
+    /// </summary>
     public class SecurityTokenOptions
     {
-        public bool ValidateIssuer { get; set; }
+        /// <summary>
+        /// Valid issuer
+        /// </summary>
         public string ValidIssuer { get; set; }
-        public bool ValidateAudience { get; set; }
+
+        /// <summary>
+        /// Valid audience
+        /// </summary>
         public string ValidAudience { get; set; }
-        public bool ValidateIssuerSigningKey { get; set; }
+
+        /// <summary>
+        /// The secret key
+        /// </summary>
         public string SecretKey { get; set; }
+
+        /// <summary>
+        /// Expire minutes
+        /// </summary>
         public int ExpireMinutes { get; set; }
     }
 }

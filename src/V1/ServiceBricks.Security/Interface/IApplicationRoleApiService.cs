@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is a API service for the ApplicationRole domain object.
+    /// This is a REST API service for the ApplicationRole domain object.
     /// </summary>
-    public interface IApplicationRoleApiService : IApiService<ApplicationRoleDto>
+    public partial interface IApplicationRoleApiService : IApiService<ApplicationRoleDto>
     {
     }
 }

@@ -84,7 +84,7 @@ namespace ServiceBricks.Xunit.Integration
             // Verify audituser created
             var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IAuditUserApiService>();
             var queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.FORGOT_PASSWORD);
+            queryBuilder.IsEqual(nameof(AuditUserDto.AuditName), AuditType.FORGOT_PASSWORD_TEXT);
             queryBuilder.And();
             queryBuilder.IsEqual(nameof(AuditUserDto.UserStorageKey), UserStorageKey.ToString());
             var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());

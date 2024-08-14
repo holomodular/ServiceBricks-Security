@@ -7,8 +7,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     /// <summary>
     /// This is an automapper profile for the ApplicationUserLogin domain object.
     /// </summary>
-    public class ApplicationUserLoginMappingProfile : Profile
+    public partial class ApplicationUserLoginMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserLoginMappingProfile()
         {
             CreateMap<ApplicationUserLoginDto, ApplicationUserLogin>()
@@ -24,8 +27,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }
 
+        /// <summary>
+        /// Resolve the login provider.
+        /// </summary>
         public class LoginProviderResolver : IValueResolver<ApplicationUserLoginDto, object, string>
         {
+            /// <summary>
+            /// Resolve the login provider.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public string Resolve(ApplicationUserLoginDto source, object destination, string sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.LoginProvider))
@@ -40,8 +54,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             }
         }
 
+        /// <summary>
+        /// Resolve the provider key.
+        /// </summary>
         public class ProviderKeyResolver : IValueResolver<ApplicationUserLoginDto, object, string>
         {
+            /// <summary>
+            /// Resolve the provider key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public string Resolve(ApplicationUserLoginDto source, object destination, string sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.ProviderKey))
@@ -56,8 +81,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             }
         }
 
+        /// <summary>
+        /// Resolve the user id.
+        /// </summary>
         public class UserIdResolver : IValueResolver<ApplicationUserLoginDto, object, Guid>
         {
+            /// <summary>
+            /// Resolve the user id.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(ApplicationUserLoginDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.UserStorageKey))

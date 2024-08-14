@@ -2,8 +2,14 @@
 
 namespace ServiceBricks.Security.AzureDataTables
 {
-    public class SecurityAzureDataTablesModule : IModule
+    /// <summary>
+    /// The module definition for the ServiceBricks.Security.AzureDataTables namespace.
+    /// </summary>
+    public partial class SecurityAzureDataTablesModule : IModule
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecurityAzureDataTablesModule()
         {
             AutomapperAssemblies = new List<Assembly>()
@@ -16,8 +22,19 @@ namespace ServiceBricks.Security.AzureDataTables
             };
         }
 
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
+        /// <summary>
+        /// The list of dependent modules.
+        /// </summary>
         public List<IModule> DependentModules { get; }
+
+        /// <summary>
+        /// The list of automapper assemblies.
+        /// </summary>
+        public List<Assembly> AutomapperAssemblies { get; }
+
+        /// <summary>
+        /// The list of view assemblies.
+        /// </summary>
+        public List<Assembly> ViewAssemblies { get; }
     }
 }

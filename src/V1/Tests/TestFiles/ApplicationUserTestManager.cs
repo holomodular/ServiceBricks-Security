@@ -1,12 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceQuery;
-using ServiceBricks.Security;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System.Text;
+using ServiceBricks.Security;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit
 {

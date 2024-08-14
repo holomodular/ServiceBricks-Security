@@ -5,8 +5,11 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// This is an automapper profile for the ApplicationUserLogin domain object.
     /// </summary>
-    public class ApplicationUserLoginMappingProfile : Profile
+    public partial class ApplicationUserLoginMappingProfile : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ApplicationUserLoginMappingProfile()
         {
             CreateMap<ApplicationUserLoginDto, ApplicationUserLogin>()
@@ -18,8 +21,19 @@ namespace ServiceBricks.Security.Cosmos
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }
 
+        /// <summary>
+        /// Resolve the key from the storage key.
+        /// </summary>
         public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
         {
+            /// <summary>
+            /// Resolve the key from the storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.StorageKey))
@@ -32,8 +46,19 @@ namespace ServiceBricks.Security.Cosmos
             }
         }
 
+        /// <summary>
+        /// Resolve the user id from the user storage key.
+        /// </summary>
         public class UserIdResolver : IValueResolver<ApplicationUserLoginDto, object, Guid>
         {
+            /// <summary>
+            /// Resolve the user id from the user storage key.
+            /// </summary>
+            /// <param name="source"></param>
+            /// <param name="destination"></param>
+            /// <param name="sourceMember"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Guid Resolve(ApplicationUserLoginDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.UserStorageKey))

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using ServiceBricks.Storage.MongoDb;
-using System.Linq;
-using System.Linq.Expressions;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ServiceBricks.Storage.MongoDb;
+using System.Linq.Expressions;
 
 namespace ServiceBricks.Security.MongoDb
 {
@@ -12,25 +10,33 @@ namespace ServiceBricks.Security.MongoDb
     /// </summary>
     public partial class ApplicationRole : MongoDbDomainObject<ApplicationRole>
     {
+        /// <summary>
+        /// Internal primary key.
+        /// </summary>
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public virtual string Id { get; set; }
 
-        //
-        // Summary:
-        //     Gets or sets the name for this role.
+        /// <summary>
+        /// THe name of the role.
+        /// </summary>
         public virtual string Name { get; set; }
 
-        //
-        // Summary:
-        //     Gets or sets the normalized name for this role.
+        /// <summary>
+        /// The normalized name of the role.
+        /// </summary>
         public virtual string NormalizedName { get; set; }
 
-        //
-        // Summary:
-        //     A random value that should change whenever a role is persisted to the store
+        /// <summary>
+        /// A random value that should change whenever a role is persisted to the store
+        /// </summary>
         public virtual string ConcurrencyStamp { get; set; }
 
+        /// <summary>
+        /// Provide an expression that will filter an object based on its primary key.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override Expression<Func<ApplicationRole, bool>> DomainGetItemFilter(ApplicationRole obj)
         {
             return x => x.Id == obj.Id;

@@ -1,9 +1,9 @@
 ﻿namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is an event when a user changes their password.
+    /// This is a process when a user changes their password.
     /// </summary>
-    public class UserPasswordChangeProcess : DomainProcess
+    public partial class UserPasswordChangeProcess : DomainProcess
     {
         public UserPasswordChangeProcess(string userStorageKey, string oldPassword, string newPassword)
         {

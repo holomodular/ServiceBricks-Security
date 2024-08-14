@@ -1,20 +1,24 @@
 ﻿using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule happens when a user registers as an admin.
     /// </summary>
-    public partial class UserRegisterAdminRule : BusinessRule
+    public sealed class UserRegisterAdminRule : BusinessRule
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private readonly IUserManagerService _userManagerService;
         private readonly IApplicationUserApiService _applicationUserApiService;
         private readonly IBusinessRuleService _businessRuleService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="applicationUserApiService"></param>
+        /// <param name="userManagerApiService"></param>
+        /// <param name="businessRuleService"></param>
         public UserRegisterAdminRule(
             ILoggerFactory loggerFactory,
             IApplicationUserApiService applicationUserApiService,
@@ -59,11 +63,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserRegisterAdminProcess;
                 if (e == null || response.Error)
                     return response;
 
-                // Register Process
+                // AI: Call user register Process (no confirmation email)
                 UserRegisterProcess registerProcess = new UserRegisterProcess(
                     e.Email, e.Password, false, true);
                 var respRegisterUser = await _businessRuleService.ExecuteProcessAsync(registerProcess);
@@ -73,10 +78,11 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
+                // AI: Find the user by email
                 var respUser = await _userManagerService.FindByEmailAsync(e.Email);
                 if (respUser.Item != null)
                 {
-                    // Add admin role
+                    // AI: Add the admin role
                     var respAdminRole = await _userManagerService.AddToRoleAsync(respUser.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
                 }
             }

@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.Threading.Tasks;
-
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule resets a user password with a code from
     /// ApplicationUserForgotPasswordRule.
     /// </summary>
-    public partial class UserPasswordResetRule : BusinessRule
+    public sealed class UserPasswordResetRule : BusinessRule
     {
         private readonly ILogger _logger;
         private readonly IAuditUserApiService _auditUserApiService;
@@ -19,6 +16,15 @@ namespace ServiceBricks.Security
         private readonly IIpAddressService _iPAddressService;
         private readonly IApplicationUserApiService _applicationUserApiService;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="userManager"></param>
+        /// <param name="iPAddressService"></param>
+        /// <param name="applicationUserApiService"></param>
         public UserPasswordResetRule(
             ILoggerFactory loggerFactory,
             IAuditUserApiService auditUserApiService,
@@ -67,11 +73,12 @@ namespace ServiceBricks.Security
 
             try
             {
+                // AI: Make sure the context object is the correct type
                 var e = context.Object as UserPasswordResetProcess;
                 if (e == null)
                     return response;
 
-                // Logic
+                // AI: Find user by email
                 var respUser = await _userManager.FindByEmailAsync(e.Email);
                 if (respUser.Error || respUser.Item == null)
                 {
@@ -79,31 +86,33 @@ namespace ServiceBricks.Security
                     return response;
                 }
 
-                // Fix for spaces
+                // AI: Fix the code for spaces (encoding issue)
                 string code = e.Code;
                 if (!string.IsNullOrEmpty(code))
                     code = code.Replace(" ", "+");
 
+                // AI: Reset the password
                 var result = await _userManager.ResetPasswordAsync(respUser.Item.StorageKey, e.Code, e.Password);
                 response.CopyFrom(result);
                 if (response.Error)
                     return response;
 
-                // Code was available via email
+                // AI: Reset email confirmed (since they received the email)
                 if (!respUser.Item.EmailConfirmed)
                 {
                     var respU = await _applicationUserApiService.GetAsync(respUser.Item.StorageKey);
                     if (respU.Item != null)
                     {
+                        // AI: Update the user email confirmed
                         respU.Item.EmailConfirmed = true;
                         await _applicationUserApiService.UpdateAsync(respU.Item);
                     }
                 }
 
-                // Audit
+                // AI: Audit user
                 await _auditUserApiService.CreateAsync(new AuditUserDto()
                 {
-                    AuditName = AuditType.PASSWORD_RESET,
+                    AuditName = AuditType.PASSWORD_RESET_TEXT,
                     UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
