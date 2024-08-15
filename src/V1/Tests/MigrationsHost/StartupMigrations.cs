@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceBricks.Security.Postgres;
+//using ServiceBricks.Security.Postgres;
 
 namespace ServiceBricks.Xunit
 {
@@ -20,7 +20,7 @@ namespace ServiceBricks.Xunit
             //**************************
             //UNCOMMENT THE ONE YOU NEED
             //**************************
-            services.AddServiceBricksSecurityPostgres(Configuration);
+            //services.AddServiceBricksSecurityPostgres(Configuration);
             //services.AddServiceBricksSecuritySqlServer(Configuration);
             //services.AddServiceBricksSecuritySqlite(Configuration);
 
@@ -37,7 +37,7 @@ namespace ServiceBricks.Xunit
             //**************************
             //UNCOMMENT THE ONE YOU NEED
             //**************************
-            app.StartServiceBricksSecurityPostgres();
+            //app.StartServiceBricksSecurityPostgres();
             //app.StartServiceBricksSecuritySqlServer();
             //app.StartServiceBricksSecuritySqlite();
         }
