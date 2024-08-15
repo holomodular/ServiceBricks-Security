@@ -12,11 +12,11 @@ namespace ServiceBricks.Security.MongoDb
         /// </summary>
         public ApplicationUserTokenMappingProfile()
         {
-            CreateMap<ApplicationUserTokenDto, ApplicationUserToken>()
+            CreateMap<UserTokenDto, ApplicationUserToken>()
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey));
 
-            CreateMap<ApplicationUserToken, ApplicationUserTokenDto>()
+            CreateMap<ApplicationUserToken, UserTokenDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }

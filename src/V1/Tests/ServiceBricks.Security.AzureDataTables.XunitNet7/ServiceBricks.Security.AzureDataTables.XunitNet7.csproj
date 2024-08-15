@@ -10,25 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
-    <Compile Include="..\TestFiles\AzureDataTables\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+    <Compile Include="..\TestFiles\AzureDataTables\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
     <Compile Include="..\TestFiles\AzureDataTables\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
     <Compile Include="..\TestFiles\AzureDataTables\MappingTest.cs" Link="MappingTest.cs" />
     <Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />

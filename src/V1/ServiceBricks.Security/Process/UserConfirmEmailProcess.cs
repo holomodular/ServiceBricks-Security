@@ -11,7 +11,7 @@
             Code = code;
         }
 
-        public string UserStorageKey { get; set; }
-        public string Code { get; set; }
+        public virtual string UserStorageKey { get; set; }
+        public virtual string Code { get; set; }
     }
 }

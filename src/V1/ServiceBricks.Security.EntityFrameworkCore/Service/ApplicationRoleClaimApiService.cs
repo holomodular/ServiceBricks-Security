@@ -5,7 +5,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     /// <summary>
     /// This is a API service for the ApplicationRoleClaim domain object.
     /// </summary>
-    public partial class ApplicationRoleClaimApiService : ApiService<ApplicationRoleClaim, ApplicationRoleClaimDto>, IApplicationRoleClaimApiService
+    public partial class ApplicationRoleClaimApiService : ApiService<ApplicationRoleClaim, RoleClaimDto>, IRoleClaimApiService
     {
         /// <summary>
         /// Constructor.

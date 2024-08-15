@@ -14,15 +14,12 @@ namespace ServiceBricks.Security
     public sealed class UserRegisterRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManagerService;
-        private readonly LinkGenerator _linkGenerator;
-        private readonly IMapper _mapper;
         private readonly IIpAddressService _iPAddressService;
         private readonly ApplicationOptions _options;
         private readonly IBusinessRuleService _businessRuleService;
-        private readonly IServiceBus _serviceBus;
         private readonly IConfiguration _configuration;
 
         /// <summary>
@@ -32,7 +29,6 @@ namespace ServiceBricks.Security
         /// <param name="auditUserApiService"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="userManagerApiService"></param>
-        /// <param name="linkGenerator"></param>
         /// <param name="mapper"></param>
         /// <param name="iPAddressService"></param>
         /// <param name="options"></param>
@@ -41,27 +37,21 @@ namespace ServiceBricks.Security
         /// <param name="configuration"></param>
         public UserRegisterRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManagerApiService,
-            LinkGenerator linkGenerator,
-            IMapper mapper,
             IIpAddressService iPAddressService,
             IOptions<ApplicationOptions> options,
             IBusinessRuleService businessRuleService,
-            IServiceBus serviceBus,
             IConfiguration configuration)
         {
             _logger = loggerFactory.CreateLogger<UserRegisterRule>();
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _userManagerService = userManagerApiService;
-            _linkGenerator = linkGenerator;
-            _mapper = mapper;
             _iPAddressService = iPAddressService;
             _options = options.Value;
             _businessRuleService = businessRuleService;
-            _serviceBus = serviceBus;
             _configuration = configuration;
             Priority = PRIORITY_NORMAL;
         }
@@ -104,7 +94,7 @@ namespace ServiceBricks.Security
 
                 // AI: create user object
                 var nowDate = DateTimeOffset.UtcNow;
-                ApplicationUserDto user = new ApplicationUserDto()
+                UserDto user = new UserDto()
                 {
                     Email = e.Email,
                     UserName = e.Email,
@@ -168,10 +158,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.REGISTER_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.REGISTER_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

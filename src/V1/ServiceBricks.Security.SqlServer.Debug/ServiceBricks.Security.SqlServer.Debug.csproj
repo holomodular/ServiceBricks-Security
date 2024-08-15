@@ -14,7 +14,7 @@
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerConstants.cs" Link="SecuritySqlServerConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerContext.cs" Link="SecuritySqlServerContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerModule.cs" Link="SecuritySqlServerModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 

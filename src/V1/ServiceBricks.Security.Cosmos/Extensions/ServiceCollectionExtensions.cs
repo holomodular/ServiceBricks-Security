@@ -66,34 +66,34 @@ namespace ServiceBricks.Security.Cosmos
             services.AddScoped<IStorageRepository<Cosmos.ApplicationUserLogin>, SecurityStorageRepository<Cosmos.ApplicationUserLogin>>();
             services.AddScoped<IStorageRepository<Cosmos.ApplicationUserRole>, SecurityStorageRepository<Cosmos.ApplicationUserRole>>();
             services.AddScoped<IStorageRepository<Cosmos.ApplicationUserToken>, SecurityStorageRepository<Cosmos.ApplicationUserToken>>();
-            services.AddScoped<IAuditUserStorageRepository, AuditUserStorageRepository>();
-            services.AddScoped<IStorageRepository<AuditUser>, AuditUserStorageRepository>();
+            services.AddScoped<IUserAuditStorageRepository, UserAuditStorageRepository>();
+            services.AddScoped<IStorageRepository<UserAudit>, UserAuditStorageRepository>();
 
             // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
             // AI: If the primary keys of the Cosmos models match the EFC module, we can use the EFC rules
-            services.AddScoped<IApiService<AuditUserDto>, AuditUserApiService>();
-            services.AddScoped<IAuditUserApiService, AuditUserApiService>();
+            services.AddScoped<IApiService<UserAuditDto>, UserAuditApiService>();
+            services.AddScoped<IUserAuditApiService, UserAuditApiService>();
 
-            services.AddScoped<IApiService<ApplicationUserDto>, ApplicationUserApiService>();
-            services.AddScoped<IApplicationUserApiService, ApplicationUserApiService>();
+            services.AddScoped<IApiService<UserDto>, ApplicationUserApiService>();
+            services.AddScoped<IUserApiService, ApplicationUserApiService>();
 
-            services.AddScoped<IApiService<ApplicationUserClaimDto>, ApplicationUserClaimApiService>();
-            services.AddScoped<IApplicationUserClaimApiService, ApplicationUserClaimApiService>();
+            services.AddScoped<IApiService<UserClaimDto>, ApplicationUserClaimApiService>();
+            services.AddScoped<IUserClaimApiService, ApplicationUserClaimApiService>();
 
-            services.AddScoped<IApiService<ApplicationUserRoleDto>, ApplicationUserRoleApiService>();
-            services.AddScoped<IApplicationUserRoleApiService, ApplicationUserRoleApiService>();
+            services.AddScoped<IApiService<UserRoleDto>, ApplicationUserRoleApiService>();
+            services.AddScoped<IUserRoleApiService, ApplicationUserRoleApiService>();
 
-            services.AddScoped<IApiService<ApplicationRoleDto>, ApplicationRoleApiService>();
-            services.AddScoped<IApplicationRoleApiService, ApplicationRoleApiService>();
+            services.AddScoped<IApiService<RoleDto>, ApplicationRoleApiService>();
+            services.AddScoped<IRoleApiService, ApplicationRoleApiService>();
 
-            services.AddScoped<IApiService<ApplicationUserLoginDto>, ApplicationUserLoginApiService>();
-            services.AddScoped<IApplicationUserLoginApiService, ApplicationUserLoginApiService>();
+            services.AddScoped<IApiService<UserLoginDto>, ApplicationUserLoginApiService>();
+            services.AddScoped<IUserLoginApiService, ApplicationUserLoginApiService>();
 
-            services.AddScoped<IApiService<ApplicationRoleClaimDto>, ApplicationRoleClaimApiService>();
-            services.AddScoped<IApplicationRoleClaimApiService, ApplicationRoleClaimApiService>();
+            services.AddScoped<IApiService<RoleClaimDto>, ApplicationRoleClaimApiService>();
+            services.AddScoped<IRoleClaimApiService, ApplicationRoleClaimApiService>();
 
-            services.AddScoped<IApiService<ApplicationUserTokenDto>, ApplicationUserTokenApiService>();
-            services.AddScoped<IApplicationUserTokenApiService, ApplicationUserTokenApiService>();
+            services.AddScoped<IApiService<UserTokenDto>, ApplicationUserTokenApiService>();
+            services.AddScoped<IUserTokenApiService, ApplicationUserTokenApiService>();
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
@@ -102,8 +102,8 @@ namespace ServiceBricks.Security.Cosmos
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 
-            DomainCreateDateRule<AuditUser>.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<AuditUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Key");
+            DomainCreateDateRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Key");
 
             DomainQueryPropertyRenameRule<ApplicationUserClaim>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
             DomainQueryPropertyRenameRule<ApplicationUserClaim>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
@@ -125,8 +125,8 @@ namespace ServiceBricks.Security.Cosmos
             DomainQueryPropertyRenameRule<ApplicationRoleClaim>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
             DomainQueryPropertyRenameRule<ApplicationRoleClaim>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Key");
 
-            DomainQueryPropertyRenameRule<AuditUser>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<AuditUser>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
+            DomainQueryPropertyRenameRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
+            DomainQueryPropertyRenameRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
 
             DomainQueryPropertyRenameRule<ApplicationRole>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 

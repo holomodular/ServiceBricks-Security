@@ -23,8 +23,8 @@ namespace ServiceBricks.Security.Sqlite
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             SecuritySqliteContext SecuritySqliteContext,
             IdentityErrorDescriber describer = null) : base(
                 mapper,

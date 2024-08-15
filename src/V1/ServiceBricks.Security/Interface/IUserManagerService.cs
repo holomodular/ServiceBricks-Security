@@ -31,28 +31,28 @@ namespace ServiceBricks.Security
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        IResponseItem<ApplicationUserDto> FindByEmail(string email);
+        IResponseItem<UserDto> FindByEmail(string email);
 
         /// <summary>
         /// Find a user by email.
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        Task<IResponseItem<ApplicationUserDto>> FindByEmailAsync(string email);
+        Task<IResponseItem<UserDto>> FindByEmailAsync(string email);
 
         /// <summary>
         /// Find a user by id.
         /// </summary>
         /// <param name="userStorageKey"></param>
         /// <returns></returns>
-        IResponseItem<ApplicationUserDto> FindById(string userStorageKey);
+        IResponseItem<UserDto> FindById(string userStorageKey);
 
         /// <summary>
         /// Find a user by id.
         /// </summary>
         /// <param name="userStorageKey"></param>
         /// <returns></returns>
-        Task<IResponseItem<ApplicationUserDto>> FindByIdAsync(string userStorageKey);
+        Task<IResponseItem<UserDto>> FindByIdAsync(string userStorageKey);
 
         /// <summary>
         /// Confirm a user's email.
@@ -120,13 +120,13 @@ namespace ServiceBricks.Security
         /// Get the user that is currently signed in.
         /// </summary>
         /// <returns></returns>
-        IResponseItem<ApplicationUserDto> GetTwoFactorAuthenticationUser();
+        IResponseItem<UserDto> GetTwoFactorAuthenticationUser();
 
         /// <summary>
         /// Get the user that is currently signed in.
         /// </summary>
         /// <returns></returns>
-        Task<IResponseItem<ApplicationUserDto>> GetTwoFactorAuthenticationUserAsync();
+        Task<IResponseItem<UserDto>> GetTwoFactorAuthenticationUserAsync();
 
         /// <summary>
         /// Generate a two-factor token.
@@ -166,7 +166,7 @@ namespace ServiceBricks.Security
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        IResponseItem<ApplicationUserDto> Create(ApplicationUserDto user, string password);
+        IResponseItem<UserDto> Create(UserDto user, string password);
 
         /// <summary>
         /// Create a user.
@@ -174,7 +174,7 @@ namespace ServiceBricks.Security
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<IResponseItem<ApplicationUserDto>> CreateAsync(ApplicationUserDto user, string password);
+        Task<IResponseItem<UserDto>> CreateAsync(UserDto user, string password);
 
         /// <summary>
         /// Add a claim to a user.
@@ -259,14 +259,14 @@ namespace ServiceBricks.Security
         /// </summary>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        IResponseList<ApplicationUserDto> GetUsersInRole(string roleName);
+        IResponseList<UserDto> GetUsersInRole(string roleName);
 
         /// <summary>
         /// Get users in a role.
         /// </summary>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        Task<IResponseList<ApplicationUserDto>> GetUsersInRoleAsync(string roleName);
+        Task<IResponseList<UserDto>> GetUsersInRoleAsync(string roleName);
 
         /// <summary>
         /// Get a list of 2FA providers.
@@ -308,7 +308,7 @@ namespace ServiceBricks.Security
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        IResponseItem<ApplicationUserDto> VerifyPassword(string email, string password);
+        IResponseItem<UserDto> VerifyPassword(string email, string password);
 
         /// <summary>
         /// Verify a password.
@@ -316,6 +316,6 @@ namespace ServiceBricks.Security
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<IResponseItem<ApplicationUserDto>> VerifyPasswordAsync(string email, string password);
+        Task<IResponseItem<UserDto>> VerifyPasswordAsync(string email, string password);
     }
 }

@@ -12,11 +12,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// </summary>
         public ApplicationRoleClaimMappingProfile()
         {
-            CreateMap<ApplicationRoleClaimDto, ApplicationRoleClaim>()
+            CreateMap<RoleClaimDto, ApplicationRoleClaim>()
                 .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>())
                 .ForMember(x => x.RoleId, y => y.MapFrom<RoleIdResolver>());
 
-            CreateMap<ApplicationRoleClaim, ApplicationRoleClaimDto>()
+            CreateMap<ApplicationRoleClaim, RoleClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
         }
@@ -49,7 +49,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the role id.
         /// </summary>
-        public class RoleIdResolver : IValueResolver<ApplicationRoleClaimDto, object, Guid>
+        public class RoleIdResolver : IValueResolver<RoleClaimDto, object, Guid>
         {
             /// <summary>
             /// Resolve the role id.
@@ -59,7 +59,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationRoleClaimDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(RoleClaimDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.RoleStorageKey))
                     return Guid.Empty;

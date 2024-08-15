@@ -10,25 +10,25 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\TestFiles\Sqlite\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Sqlite\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Sqlite\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Sqlite\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Sqlite\MappingTest.cs" Link="MappingTest.cs" />
 		<Compile Include="..\TestFiles\StartupSqlite.cs" Link="StartupSqlite.cs" />

@@ -5,7 +5,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     /// <summary>
     /// This is a API service for the ApplicationUserLogin domain object.
     /// </summary>
-    public partial class ApplicationUserLoginApiService : ApiService<ApplicationUserLogin, ApplicationUserLoginDto>, IApplicationUserLoginApiService
+    public partial class ApplicationUserLoginApiService : ApiService<ApplicationUserLogin, UserLoginDto>, IUserLoginApiService
     {
         /// <summary>
         /// Constructor.

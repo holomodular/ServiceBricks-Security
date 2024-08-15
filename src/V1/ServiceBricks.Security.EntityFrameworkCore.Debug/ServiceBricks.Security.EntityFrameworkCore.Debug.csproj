@@ -14,11 +14,11 @@
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserLogin.cs" Link="ApplicationUserLogin.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
-	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\AuditUser.cs" Link="AuditUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Domain\UserAudit.cs" Link="UserAudit.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ResponseExtensions.cs" Link="ResponseExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Interface\IAuditUserStorageRepository.cs" Link="IAuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Interface\IUserAuditStorageRepository.cs" Link="IUserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
@@ -26,7 +26,7 @@
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserMappingProfile.cs" Link="ApplicationUserMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserRoleMappingProfile.cs" Link="ApplicationUserRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserTokenMappingProfile.cs" Link="ApplicationUserTokenMappingProfile.cs" />
-	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\AuditUserMappingProfile.cs" Link="AuditUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\UserAuditMappingProfile.cs" Link="UserAuditMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Model\SecurityEntityFrameworkCoreConstants.cs" Link="SecurityEntityFrameworkCoreConstants.cs" />
@@ -41,7 +41,7 @@
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserLoginApiService.cs" Link="ApplicationUserLoginApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserRoleApiService.cs" Link="ApplicationUserRoleApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\AuditUserApiService.cs" Link="AuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\UserAuditApiService.cs" Link="UserAuditApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Service\UserManagerService.cs" Link="UserManagerService.cs" />
 	</ItemGroup>
 

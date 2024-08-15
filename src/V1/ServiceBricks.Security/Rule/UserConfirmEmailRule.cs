@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     public sealed class UserConfirmEmailRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -24,7 +24,7 @@ namespace ServiceBricks.Security
         /// <param name="httpContextAccessor"></param>
         public UserConfirmEmailRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerService,
             IIpAddressService iPAddressService,
             IHttpContextAccessor httpContextAccessor
@@ -93,10 +93,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.CONFIRM_EMAIL_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.CONFIRM_EMAIL_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

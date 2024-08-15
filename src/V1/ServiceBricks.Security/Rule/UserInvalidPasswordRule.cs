@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     public sealed class UserInvalidPasswordRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
 
@@ -19,7 +19,7 @@ namespace ServiceBricks.Security
         /// <param name="loggerFactory"></param>
         public UserInvalidPasswordRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IIpAddressService iPAddressService
             )
@@ -28,7 +28,7 @@ namespace ServiceBricks.Security
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _iPAddressService = iPAddressService;
-            Priority = PRIORITY_NORMAL;
+            Priority = PRIORITY_LOW;
         }
 
         /// <summary>
@@ -53,21 +53,36 @@ namespace ServiceBricks.Security
             try
             {
                 // AI: Make sure the context object is the correct type
-                var e = context.Object as UserInvalidPasswordProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Determine if user was found
-                if (!string.IsNullOrEmpty(e.UserStorageKey))
+                var uipp = context.Object as UserInvalidPasswordProcess;
+                if (uipp != null)
                 {
-                    // AI: Audit user
-                    _auditUserApiService.Create(new AuditUserDto()
+                    // AI: Determine if user was found
+                    if (!string.IsNullOrEmpty(uipp.UserStorageKey))
                     {
-                        AuditName = AuditType.INVALID_PASSWORD_TEXT,
-                        UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
-                        UserStorageKey = e.UserStorageKey,
-                        IPAddress = _iPAddressService.GetIPAddress(),
-                    });
+                        // AI: Audit found user
+                        _auditUserApiService.Create(new UserAuditDto()
+                        {
+                            AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                            RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                            UserStorageKey = uipp.UserStorageKey,
+                            IPAddress = _iPAddressService.GetIPAddress(),
+                        });
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(uipp.Email))
+                        {
+                            // AI: Audit not found user
+                            _auditUserApiService.Create(new UserAuditDto()
+                            {
+                                AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                                IPAddress = _iPAddressService.GetIPAddress(),
+                                Data = uipp.Email
+                            });
+                        }
+                    }
+                    return response;
                 }
             }
             catch (Exception ex)

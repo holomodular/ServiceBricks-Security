@@ -10,25 +10,25 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\TestFiles\Cosmos\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Cosmos\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Cosmos\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Cosmos\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Cosmos\MappingTest.cs" Link="MappingTest.cs" />
 		<Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />

@@ -10,11 +10,11 @@ namespace ServiceBricks.Security
     public sealed class UserPasswordResetRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManager;
         private readonly IIpAddressService _iPAddressService;
-        private readonly IApplicationUserApiService _applicationUserApiService;
+        private readonly IUserApiService _applicationUserApiService;
 
         /// <summary>
         /// Constructor.
@@ -27,11 +27,11 @@ namespace ServiceBricks.Security
         /// <param name="applicationUserApiService"></param>
         public UserPasswordResetRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManager,
             IIpAddressService iPAddressService,
-            IApplicationUserApiService applicationUserApiService)
+            IUserApiService applicationUserApiService)
         {
             _logger = loggerFactory.CreateLogger<UserPasswordResetRule>();
             _auditUserApiService = auditUserApiService;
@@ -110,10 +110,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.PASSWORD_RESET_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.PASSWORD_RESET_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

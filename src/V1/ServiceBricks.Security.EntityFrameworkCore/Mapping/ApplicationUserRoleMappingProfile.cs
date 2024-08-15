@@ -14,13 +14,13 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// </summary>
         public ApplicationUserRoleMappingProfile()
         {
-            CreateMap<ApplicationUserRoleDto, ApplicationUserRole>()
+            CreateMap<UserRoleDto, ApplicationUserRole>()
                 .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>())
                 .ForMember(x => x.RoleId, y => y.MapFrom<RoleIdResolver>())
                 .ForMember(x => x.User, y => y.Ignore())
                 .ForMember(x => x.Role, y => y.Ignore());
 
-            CreateMap<ApplicationUserRole, ApplicationUserRoleDto>()
+            CreateMap<ApplicationUserRole, UserRoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z =>
                     z.UserId + StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER + z.RoleId))
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId))
@@ -30,7 +30,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the user id.
         /// </summary>
-        public class UserIdResolver : IValueResolver<ApplicationUserRoleDto, object, Guid>
+        public class UserIdResolver : IValueResolver<UserRoleDto, object, Guid>
         {
             /// <summary>
             /// Resolve the user id.
@@ -40,7 +40,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationUserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(UserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.UserStorageKey))
                 {
@@ -65,7 +65,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the role id.
         /// </summary>
-        public class RoleIdResolver : IValueResolver<ApplicationUserRoleDto, object, Guid>
+        public class RoleIdResolver : IValueResolver<UserRoleDto, object, Guid>
         {
             /// <summary>
             /// Resolve the role id.
@@ -75,7 +75,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationUserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(UserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.RoleStorageKey))
                 {

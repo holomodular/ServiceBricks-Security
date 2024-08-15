@@ -12,12 +12,12 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         public ApplicationRoleClaimMappingProfile()
         {
-            CreateMap<ApplicationRoleClaimDto, ApplicationRoleClaim>()
+            CreateMap<RoleClaimDto, ApplicationRoleClaim>()
                 .ForMember(x => x.Key, y => y.MapFrom<KeyResolver>())
                 .ForMember(x => x.Id, y => y.Ignore())
                 .ForMember(x => x.RoleId, y => y.MapFrom<RoleIdResolver>());
 
-            CreateMap<ApplicationRoleClaim, ApplicationRoleClaimDto>()
+            CreateMap<ApplicationRoleClaim, RoleClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
         }
@@ -50,7 +50,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <summary>
         /// Resolve the role id from the role storage key.
         /// </summary>
-        public class RoleIdResolver : IValueResolver<ApplicationRoleClaimDto, object, Guid>
+        public class RoleIdResolver : IValueResolver<RoleClaimDto, object, Guid>
         {
             /// <summary>
             /// Resolve the role id from the role storage key.
@@ -60,7 +60,7 @@ namespace ServiceBricks.Security.Cosmos
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationRoleClaimDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(RoleClaimDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.RoleStorageKey))
                     return Guid.Empty;

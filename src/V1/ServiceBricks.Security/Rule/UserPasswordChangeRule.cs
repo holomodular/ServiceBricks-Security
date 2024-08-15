@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     public sealed class UserPasswordChangeRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
@@ -24,7 +24,7 @@ namespace ServiceBricks.Security
         /// <param name="iPAddressService"></param>
         public UserPasswordChangeRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService)
@@ -90,10 +90,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.PASSWORD_CHANGE_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.PASSWORD_CHANGE_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

@@ -14,12 +14,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// </summary>
         public ApplicationUserTokenMappingProfile()
         {
-            CreateMap<ApplicationUserTokenDto, ApplicationUserToken>()
+            CreateMap<UserTokenDto, ApplicationUserToken>()
                 .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>())
                 .ForMember(x => x.LoginProvider, y => y.MapFrom<LoginProviderResolver>())
                 .ForMember(x => x.Name, y => y.MapFrom<NameResolver>());
 
-            CreateMap<ApplicationUserToken, ApplicationUserTokenDto>()
+            CreateMap<ApplicationUserToken, UserTokenDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z =>
                     z.UserId.ToString() +
                     StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER +
@@ -32,7 +32,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the user id.
         /// </summary>
-        public class UserIdResolver : IValueResolver<ApplicationUserTokenDto, object, Guid>
+        public class UserIdResolver : IValueResolver<UserTokenDto, object, Guid>
         {
             /// <summary>
             /// Resolve the user id.
@@ -42,7 +42,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationUserTokenDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(UserTokenDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.UserStorageKey))
                 {
@@ -67,7 +67,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the login provider.
         /// </summary>
-        public class LoginProviderResolver : IValueResolver<ApplicationUserTokenDto, object, string>
+        public class LoginProviderResolver : IValueResolver<UserTokenDto, object, string>
         {
             /// <summary>
             /// Resolve the login provider.
@@ -77,7 +77,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public string Resolve(ApplicationUserTokenDto source, object destination, string sourceMember, ResolutionContext context)
+            public string Resolve(UserTokenDto source, object destination, string sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.LoginProvider))
                     return source.LoginProvider;
@@ -94,7 +94,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <summary>
         /// Resolve the name.
         /// </summary>
-        public class NameResolver : IValueResolver<ApplicationUserTokenDto, object, string>
+        public class NameResolver : IValueResolver<UserTokenDto, object, string>
         {
             /// <summary>
             /// Resolve the name.
@@ -104,7 +104,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public string Resolve(ApplicationUserTokenDto source, object destination, string sourceMember, ResolutionContext context)
+            public string Resolve(UserTokenDto source, object destination, string sourceMember, ResolutionContext context)
             {
                 if (!string.IsNullOrEmpty(source.Name))
                     return source.Name;

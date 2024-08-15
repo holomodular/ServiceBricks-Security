@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     public sealed class UserLoginRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -24,7 +24,7 @@ namespace ServiceBricks.Security
         /// <param name="httpContextAccessor"></param>
         public UserLoginRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService,
             IHttpContextAccessor httpContextAccessor
@@ -68,7 +68,10 @@ namespace ServiceBricks.Security
                     response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
                     return response;
                 }
+
+                // AI: Set response properties on process object
                 var user = respU.Item;
+                p.User = user;
                 p.ApplicationSigninResult = new ApplicationSigninResult()
                 {
                     User = user
@@ -105,10 +108,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.LOGIN_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.LOGIN_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respU.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

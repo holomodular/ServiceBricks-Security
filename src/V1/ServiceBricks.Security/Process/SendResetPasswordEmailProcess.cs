@@ -5,13 +5,13 @@
     /// </summary>
     public partial class SendResetPasswordEmailProcess : DomainProcess
     {
-        public SendResetPasswordEmailProcess(ApplicationUserDto applicationUser, string callbackUrl)
+        public SendResetPasswordEmailProcess(UserDto applicationUser, string callbackUrl)
         {
             ApplicationUser = applicationUser;
             CallbackUrl = callbackUrl;
         }
 
-        public ApplicationUserDto ApplicationUser { get; set; }
-        public string CallbackUrl { get; set; }
+        public virtual UserDto ApplicationUser { get; set; }
+        public virtual string CallbackUrl { get; set; }
     }
 }

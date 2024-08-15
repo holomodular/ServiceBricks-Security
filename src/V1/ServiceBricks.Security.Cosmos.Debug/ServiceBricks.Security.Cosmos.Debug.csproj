@@ -14,10 +14,10 @@
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\ApplicationUserLogin.cs" Link="ApplicationUserLogin.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\AuditUser.cs" Link="AuditUser.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\UserAudit.cs" Link="UserAudit.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Interface\IAuditUserStorageRepository.cs" Link="IAuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Interface\IUserAuditStorageRepository.cs" Link="IUserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
@@ -25,7 +25,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationUserMappingProfile.cs" Link="ApplicationUserMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationUserRoleMappingProfile.cs" Link="ApplicationUserRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationUserTokenMappingProfile.cs" Link="ApplicationUserTokenMappingProfile.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\AuditUserMappingProfile.cs" Link="AuditUserMappingProfile.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\UserAuditMappingProfile.cs" Link="UserAuditMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Model\SecurityCosmosConstants.cs" Link="SecurityCosmosConstants.cs" />
@@ -39,9 +39,9 @@
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationUserLoginApiService.cs" Link="ApplicationUserLoginApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationUserRoleApiService.cs" Link="ApplicationUserRoleApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\AuditUserApiService.cs" Link="AuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\UserAuditApiService.cs" Link="UserAuditApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\UserManagerService.cs" Link="UserManagerService.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 

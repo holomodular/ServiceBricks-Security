@@ -5,7 +5,7 @@ using ServiceBricks.Security;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public abstract class AuthenticationApiControllerTestBase : ApplicationUserConfirmEmailRuleTestBase
+    public abstract class AuthenticationApiControllerTestBase : UserConfirmEmailRuleTestBase
     {
         [Fact]
         public override async Task TestRule()

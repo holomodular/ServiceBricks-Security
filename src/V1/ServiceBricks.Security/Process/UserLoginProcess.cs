@@ -15,11 +15,13 @@
             RememberMe = rememberMe;
         }
 
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public virtual string Email { get; set; }
+        public virtual string Password { get; set; }
 
-        public bool RememberMe { get; set; }
+        public virtual bool RememberMe { get; set; }
 
-        public ApplicationSigninResult ApplicationSigninResult { get; set; }
+        public virtual ApplicationSigninResult ApplicationSigninResult { get; set; }
+
+        public virtual UserDto User { get; set; }
     }
 }

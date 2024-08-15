@@ -12,14 +12,14 @@ namespace ServiceBricks.Security.AzureDataTables
         /// </summary>
         public ApplicationRoleMappingProfile()
         {
-            CreateMap<ApplicationRoleDto, ApplicationRole>()
+            CreateMap<RoleDto, ApplicationRole>()
                 .ForMember(x => x.PartitionKey, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.ETag, y => y.Ignore())
                 .ForMember(x => x.Timestamp, y => y.Ignore())
                 .ForMember(x => x.RowKey, y => y.Ignore());
 
-            CreateMap<ApplicationRole, ApplicationRoleDto>()
+            CreateMap<ApplicationRole, RoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
     }

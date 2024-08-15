@@ -49,7 +49,7 @@ namespace ServiceBricks.Security.Sqlite
         /// <summary>
         /// Audit users.
         /// </summary>
-        public virtual DbSet<AuditUser> AuditUsers { get; set; }
+        public virtual DbSet<UserAudit> UserAudits { get; set; }
 
         /// <summary>
         /// Application users.
@@ -98,8 +98,8 @@ namespace ServiceBricks.Security.Sqlite
             builder.HasDefaultSchema(SecuritySqliteConstants.DATABASE_SCHEMA_NAME);
 
             // AI: Setup the entities to the model
-            builder.Entity<AuditUser>().HasKey(key => key.Key);
-            builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>().HasKey(key => key.Key);
+            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
 
             builder.Entity<ApplicationUserRole>(b =>
             {

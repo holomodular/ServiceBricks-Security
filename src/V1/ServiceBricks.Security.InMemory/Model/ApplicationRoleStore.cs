@@ -24,8 +24,8 @@ namespace ServiceBricks.Security.InMemory
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             SecurityInMemoryContext securityInMemoryContext,
             IdentityErrorDescriber describer = null) : base(
                 mapper,

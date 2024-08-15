@@ -67,8 +67,8 @@ namespace ServiceBricks.Security.SqlServer
             services.AddScoped<IStorageRepository<ApplicationUserLogin>, SecurityStorageRepository<ApplicationUserLogin>>();
             services.AddScoped<IStorageRepository<ApplicationUserRole>, SecurityStorageRepository<ApplicationUserRole>>();
             services.AddScoped<IStorageRepository<ApplicationUserToken>, SecurityStorageRepository<ApplicationUserToken>>();
-            services.AddScoped<IAuditUserStorageRepository, AuditUserStorageRepository>();
-            services.AddScoped<IStorageRepository<AuditUser>, AuditUserStorageRepository>();
+            services.AddScoped<IUserAuditStorageRepository, UserAuditStorageRepository>();
+            services.AddScoped<IStorageRepository<UserAudit>, UserAuditStorageRepository>();
 
             return services;
         }

@@ -12,22 +12,22 @@ namespace ServiceBricks.Security.MongoDb
         /// </summary>
         public ApplicationRoleMappingProfile()
         {
-            CreateMap<ApplicationRoleDto, ApplicationIdentityRole>()
+            CreateMap<RoleDto, ApplicationIdentityRole>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
 
             CreateMap<ApplicationIdentityRole, ApplicationRole>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationRoleDto, ApplicationRole>()
+            CreateMap<RoleDto, ApplicationRole>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
 
             CreateMap<ApplicationRole, ApplicationIdentityRole>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationIdentityRole, ApplicationRoleDto>()
+            CreateMap<ApplicationIdentityRole, RoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationRole, ApplicationRoleDto>()
+            CreateMap<ApplicationRole, RoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
     }

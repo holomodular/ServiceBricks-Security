@@ -15,7 +15,7 @@ namespace ServiceBricks.Security
         /// <summary>
         /// The user that was signed in
         /// </summary>
-        public ApplicationUserDto User { get; set; }
+        public UserDto User { get; set; }
 
         /// <summary>
         /// Determine if email is confirmed

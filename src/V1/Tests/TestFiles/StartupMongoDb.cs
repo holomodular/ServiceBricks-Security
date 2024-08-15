@@ -25,14 +25,14 @@ namespace ServiceBricks.Xunit
             //    services.Remove(logtimer);
 
             // Register TestManagers
-            services.AddScoped<ITestManager<ApplicationUserDto>, MongoDbApplicationUserTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserRoleDto>, MongoDbApplicationUserRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserClaimDto>, MongoDbApplicationUserClaimTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserTokenDto>, MongoDbApplicationUserTokenTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserLoginDto>, MongoDbApplicationUserLoginTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleDto>, MongoDbApplicationRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleClaimDto>, MongoDbApplicationRoleClaimTestManager>();
-            services.AddScoped<ITestManager<AuditUserDto>, MongoDbAuditUserTestManager>();
+            services.AddScoped<ITestManager<UserDto>, MongoDbUserTestManager>();
+            services.AddScoped<ITestManager<UserRoleDto>, MongoDbUserRoleTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, MongoDbApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserTokenDto>, MongoDbUserTokenTestManager>();
+            services.AddScoped<ITestManager<UserLoginDto>, MongoDbUserLoginTestManager>();
+            services.AddScoped<ITestManager<RoleDto>, MongoDbRoleTestManager>();
+            services.AddScoped<ITestManager<RoleClaimDto>, MongoDbRoleClaimTestManager>();
+            services.AddScoped<ITestManager<UserAuditDto>, MongoDbUserAuditTestManager>();
 
             services.AddServiceBricksComplete();
         }

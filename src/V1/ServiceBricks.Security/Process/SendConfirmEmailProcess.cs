@@ -5,13 +5,13 @@
     /// </summary>
     public partial class SendConfirmEmailProcess : DomainProcess
     {
-        public SendConfirmEmailProcess(ApplicationUserDto applicationUser, string callbackUrl)
+        public SendConfirmEmailProcess(UserDto applicationUser, string callbackUrl)
         {
             ApplicationUser = applicationUser;
             CallbackUrl = callbackUrl;
         }
 
-        public ApplicationUserDto ApplicationUser { get; set; }
-        public string CallbackUrl { get; set; }
+        public virtual UserDto ApplicationUser { get; set; }
+        public virtual string CallbackUrl { get; set; }
     }
 }

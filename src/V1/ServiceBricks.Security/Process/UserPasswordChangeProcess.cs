@@ -12,8 +12,8 @@
             NewPassword = newPassword;
         }
 
-        public string UserStorageKey { get; set; }
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
+        public virtual string UserStorageKey { get; set; }
+        public virtual string OldPassword { get; set; }
+        public virtual string NewPassword { get; set; }
     }
 }

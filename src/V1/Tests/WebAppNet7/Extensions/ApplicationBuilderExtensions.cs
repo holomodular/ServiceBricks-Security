@@ -60,7 +60,7 @@ namespace WebApp.Extensions
                 var respFind = userManager.FindByEmail("unittest@servicebricks.com");
                 if (respFind.Item == null)
                 {
-                    var testUser = new ApplicationUserDto()
+                    var testUser = new UserDto()
                     {
                         Email = "unittest@servicebricks.com",
                         UserName = "unittest@servicebricks.com",

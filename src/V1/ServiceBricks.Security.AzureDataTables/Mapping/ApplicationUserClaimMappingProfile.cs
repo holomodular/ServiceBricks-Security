@@ -14,7 +14,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// </summary>
         public ApplicationUserClaimMappingProfile()
         {
-            CreateMap<ApplicationUserClaimDto, ApplicationUserClaim>()
+            CreateMap<UserClaimDto, ApplicationUserClaim>()
                 .ForMember(x => x.PartitionKey, y => y.MapFrom<PartitionKeyResolver>())
                 .ForMember(x => x.RowKey, y => y.MapFrom<RowKeyResolver>())
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
@@ -23,7 +23,7 @@ namespace ServiceBricks.Security.AzureDataTables
                 .ForMember(x => x.Key, y => y.Ignore())
                 .ForMember(x => x.Id, y => y.Ignore());
 
-            CreateMap<ApplicationUserClaim, ApplicationUserClaimDto>()
+            CreateMap<ApplicationUserClaim, UserClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom<StorageKeyResolver>())
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }

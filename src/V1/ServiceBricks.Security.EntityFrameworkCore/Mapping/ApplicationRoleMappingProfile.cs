@@ -12,11 +12,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// </summary>
         public ApplicationRoleMappingProfile()
         {
-            CreateMap<ApplicationRoleDto, ApplicationRole>()
+            CreateMap<RoleDto, ApplicationRole>()
                 .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>())
                 .ForMember(x => x.ApplicationUserRoles, y => y.Ignore());
 
-            CreateMap<ApplicationRole, ApplicationRoleDto>()
+            CreateMap<ApplicationRole, RoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
 

@@ -12,8 +12,8 @@ namespace ServiceBricks.Security.AzureDataTables
     {
         protected readonly IMapper _mapper;
         protected readonly IBusinessRuleService _businessRuleService;
-        protected readonly IApplicationRoleApiService _applicationRoleApiService;
-        protected readonly IApplicationRoleClaimApiService _applicationRoleClaimApiService;
+        protected readonly IRoleApiService _applicationRoleApiService;
+        protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
 
         /// <summary>
         /// Constructor.
@@ -26,8 +26,8 @@ namespace ServiceBricks.Security.AzureDataTables
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             IdentityErrorDescriber describer = null) : base(describer)
         {
             _mapper = mapper;
@@ -46,7 +46,7 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             if (role.Id == Guid.Empty)
                 role.Id = Guid.NewGuid();
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.CreateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -59,7 +59,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.DeleteAsync(roleDto.StorageKey);
             return resp.GetIdentityResult();
         }
@@ -72,7 +72,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.UpdateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -86,7 +86,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// <returns></returns>
         public override async Task AddClaimAsync(ApplicationRole role, Claim claim, CancellationToken cancellationToken = default)
         {
-            var item = new ApplicationRoleClaimDto()
+            var item = new RoleClaimDto()
             {
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value,
@@ -103,7 +103,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// <returns></returns>
         protected override ApplicationRoleClaim CreateRoleClaim(ApplicationRole role, Claim claim)
         {
-            var item = new ApplicationRoleClaimDto()
+            var item = new RoleClaimDto()
             {
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value,
@@ -136,7 +136,7 @@ namespace ServiceBricks.Security.AzureDataTables
         public override async Task<ApplicationRole> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationRole>(respQuery.Item.List[0]);

@@ -44,7 +44,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <summary>
         /// Audit users.
         /// </summary>
-        public virtual DbSet<Cosmos.AuditUser> AuditUsers { get; set; }
+        public virtual DbSet<Cosmos.UserAudit> AuditUsers { get; set; }
 
         /// <summary>
         /// Application users.
@@ -93,8 +93,8 @@ namespace ServiceBricks.Security.Cosmos
             builder.Model.SetDefaultContainer(SecurityCosmosConstants.DATABASE_SCHEMA_NAME);
 
             // AI: Create the model for each table
-            builder.Entity<AuditUser>().HasKey(key => key.Key);
-            builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>().HasKey(key => key.Key);
+            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
 
             builder.Entity<ApplicationUserRole>(b =>
             {

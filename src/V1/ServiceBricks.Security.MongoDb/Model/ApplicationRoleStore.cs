@@ -13,8 +13,8 @@ namespace ServiceBricks.Security.MongoDb
     {
         protected readonly IMapper _mapper;
         protected readonly IBusinessRuleService _businessRuleService;
-        protected readonly IApplicationRoleApiService _applicationRoleApiService;
-        protected readonly IApplicationRoleClaimApiService _applicationRoleClaimApiService;
+        protected readonly IRoleApiService _applicationRoleApiService;
+        protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
         protected readonly SecurityStorageRepository<ApplicationRole> _securityStorageRepositoryApplicationRole;
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace ServiceBricks.Security.MongoDb
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             SecurityStorageRepository<ApplicationRole> securityStorageRepositoryApplicationRole,
             IdentityErrorDescriber describer = null) : base(describer)
         {
@@ -48,7 +48,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> CreateAsync(ApplicationIdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.CreateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -61,7 +61,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationIdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.DeleteAsync(roleDto.StorageKey);
             return resp.GetIdentityResult();
         }
@@ -74,7 +74,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationIdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<ApplicationRoleDto>(role);
+            var roleDto = _mapper.Map<RoleDto>(role);
             var resp = await _applicationRoleApiService.UpdateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -88,7 +88,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task AddClaimAsync(ApplicationIdentityRole role, Claim claim, CancellationToken cancellationToken = default)
         {
-            var item = new ApplicationRoleClaimDto()
+            var item = new RoleClaimDto()
             {
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value,
@@ -105,7 +105,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         protected override ApplicationIdentityRoleClaim CreateRoleClaim(ApplicationIdentityRole role, Claim claim)
         {
-            var item = new ApplicationRoleClaimDto()
+            var item = new RoleClaimDto()
             {
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value,
@@ -138,7 +138,7 @@ namespace ServiceBricks.Security.MongoDb
         public override async Task<ApplicationIdentityRole> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationIdentityRole>(respQuery.Item.List[0]);
@@ -154,7 +154,7 @@ namespace ServiceBricks.Security.MongoDb
         public override async Task<System.Collections.Generic.IList<Claim>> GetClaimsAsync(ApplicationIdentityRole role, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.RoleStorageKey), role.Id);
+            queryBuilder.IsEqual(nameof(RoleClaimDto.RoleStorageKey), role.Id);
             var respQuery = await _applicationRoleClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
@@ -174,9 +174,9 @@ namespace ServiceBricks.Security.MongoDb
         public override async Task RemoveClaimAsync(ApplicationIdentityRole role, Claim claim, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.RoleStorageKey), role.Id);
+            queryBuilder.IsEqual(nameof(RoleClaimDto.RoleStorageKey), role.Id);
             queryBuilder.And();
-            queryBuilder.IsEqual(nameof(ApplicationRoleClaimDto.ClaimType), claim.Type);
+            queryBuilder.IsEqual(nameof(RoleClaimDto.ClaimType), claim.Type);
             var respQuery = await _applicationRoleClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 await _applicationRoleClaimApiService.DeleteAsync(respQuery.Item.List[0].StorageKey);

@@ -11,7 +11,7 @@
             Email = email;
         }
 
-        public string Email { get; set; }
-        public string UserStorageKey { get; set; }
+        public virtual string Email { get; set; }
+        public virtual string UserStorageKey { get; set; }
     }
 }

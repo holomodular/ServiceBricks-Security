@@ -10,25 +10,25 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\TestFiles\Postgres\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\Postgres\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\Postgres\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Postgres\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\Postgres\MappingTest.cs" Link="MappingTest.cs" />
 		<Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />

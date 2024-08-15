@@ -10,25 +10,25 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\TestFiles\InMemory\ApplicationRoleApiControllerTest.cs" Link="ApplicationRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationRoleClaimApiControllerTest.cs" Link="ApplicationRoleClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserApiControllerTest.cs" Link="ApplicationUserApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserClaimApiControllerTest.cs" Link="ApplicationUserClaimApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserConfirmEmailRuleTest.cs" Link="ApplicationUserConfirmEmailRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserForgotPasswordRuleTest.cs" Link="ApplicationUserForgotPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserInvalidPasswordRuleTest.cs" Link="ApplicationUserInvalidPasswordRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserLoginApiControllerTest.cs" Link="ApplicationUserLoginApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserLoginRuleTest.cs" Link="ApplicationUserLoginRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserLogoutRuleTest.cs" Link="ApplicationUserLogoutRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserPasswordChangeRuleTest.cs" Link="ApplicationUserPasswordChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserPasswordResetRuleTest.cs" Link="ApplicationUserPasswordResetRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserProfileChangeRuleTest.cs" Link="ApplicationUserProfileChangeRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserRegisterAdminRuleTest.cs" Link="ApplicationUserRegisterAdminRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserRegisterRuleTest.cs" Link="ApplicationUserRegisterRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserResendConfirmationRuleTest.cs" Link="ApplicationUserResendConfirmationRuleTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserRoleApiControllerTest.cs" Link="ApplicationUserRoleApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\ApplicationUserTokenApiControllerTest.cs" Link="ApplicationUserTokenApiControllerTest.cs" />
-		<Compile Include="..\TestFiles\InMemory\AuditUserApiControllerTest.cs" Link="AuditUserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\InMemory\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
 		<Compile Include="..\TestFiles\InMemory\MappingTest.cs" Link="MappingTest.cs" />
 		<Compile Include="..\TestFiles\StartupInMemory.cs" Link="StartupInMemory.cs" />

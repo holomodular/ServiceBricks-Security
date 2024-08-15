@@ -12,24 +12,24 @@ namespace ServiceBricks.Security.MongoDb
         /// </summary>
         public ApplicationUserMappingProfile()
         {
-            CreateMap<ApplicationUserDto, ApplicationIdentityUser>()
+            CreateMap<UserDto, ApplicationIdentityUser>()
                 .ForMember(x => x.CreateDate, y => y.Ignore())
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
 
             CreateMap<ApplicationIdentityUser, ApplicationUser>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationUserDto, ApplicationUser>()
+            CreateMap<UserDto, ApplicationUser>()
                 .ForMember(x => x.CreateDate, y => y.Ignore())
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
 
             CreateMap<ApplicationUser, ApplicationIdentityUser>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationIdentityUser, ApplicationUserDto>()
+            CreateMap<ApplicationIdentityUser, UserDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
 
-            CreateMap<ApplicationUser, ApplicationUserDto>()
+            CreateMap<ApplicationUser, UserDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
     }

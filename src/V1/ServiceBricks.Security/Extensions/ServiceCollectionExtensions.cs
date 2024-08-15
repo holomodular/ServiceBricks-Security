@@ -26,7 +26,6 @@ namespace ServiceBricks.Security
             ModuleRegistry.Instance.RegisterItem(typeof(SecurityModule), new SecurityModule());
 
             // AI: Add any custom requirements for the module
-            services.AddRouting(); // For LinkGenerator
 
             // AI: Add Authentication
             services.Configure<SecurityTokenOptions>(configuration.GetSection(SecurityConstants.APPSETTING_SECURITY_TOKEN));
@@ -95,14 +94,14 @@ namespace ServiceBricks.Security
             services.AddScoped<IAuthenticationApiService, AuthenticationApiService>();
 
             // AI: Add API Controllers for each DTO in the module
-            services.AddScoped<IAuditUserApiController, AuditUserApiController>();
-            services.AddScoped<IApplicationUserApiController, ApplicationUserApiController>();
-            services.AddScoped<IApplicationUserClaimApiController, ApplicationUserClaimApiController>();
-            services.AddScoped<IApplicationUserRoleApiController, ApplicationUserRoleApiController>();
-            services.AddScoped<IApplicationRoleApiController, ApplicationRoleApiController>();
-            services.AddScoped<IApplicationUserLoginApiController, ApplicationUserLoginApiController>();
-            services.AddScoped<IApplicationRoleClaimApiController, ApplicationRoleClaimApiController>();
-            services.AddScoped<IApplicationUserTokenApiController, ApplicationUserTokenApiController>();
+            services.AddScoped<IUserAuditApiController, UserAuditApiController>();
+            services.AddScoped<IUserApiController, UserApiController>();
+            services.AddScoped<IUserClaimApiController, ApplicationUserClaimApiController>();
+            services.AddScoped<IUserRoleApiController, UserRoleApiController>();
+            services.AddScoped<IRoleApiController, RoleApiController>();
+            services.AddScoped<IUserLoginApiController, UserLoginApiController>();
+            services.AddScoped<IRoleClaimApiController, RoleClaimApiController>();
+            services.AddScoped<IUserTokenApiController, UserTokenApiController>();
             services.AddScoped<IAuthenticationApiController, AuthenticationApiController>();
 
             // AI: Register business rules for the module
@@ -134,14 +133,14 @@ namespace ServiceBricks.Security
         public static IServiceCollection AddServiceBricksSecurityClient(this IServiceCollection services, IConfiguration configuration)
         {
             // AI: Add clients for the module for each DTO
-            services.AddScoped<IApplicationUserApiClient, ApplicationUserApiClient>();
-            services.AddScoped<IApplicationUserClaimApiClient, ApplicationUserClaimApiClient>();
-            services.AddScoped<IApplicationUserRoleApiClient, ApplicationUserRoleApiClient>();
-            services.AddScoped<IApplicationUserTokenApiClient, ApplicationUserTokenApiClient>();
-            services.AddScoped<IApplicationUserLoginApiClient, ApplicationUserLoginApiClient>();
-            services.AddScoped<IApplicationRoleApiClient, ApplicationRoleApiClient>();
-            services.AddScoped<IApplicationRoleClaimApiClient, ApplicationRoleClaimApiClient>();
-            services.AddScoped<IAuditUserApiClient, AuditUserApiClient>();
+            services.AddScoped<IUserApiClient, UserApiClient>();
+            services.AddScoped<IUserClaimApiClient, UserClaimApiClient>();
+            services.AddScoped<IUserRoleApiClient, UserRoleApiClient>();
+            services.AddScoped<IUserTokenApiClient, UserTokenApiClient>();
+            services.AddScoped<IUserLoginApiClient, UserLoginApiClient>();
+            services.AddScoped<IRoleApiClient, RoleApiClient>();
+            services.AddScoped<IRoleClaimApiClient, RoleClaimApiClient>();
+            services.AddScoped<IUserAuditApiClient, UserAuditApiClient>();
             services.AddScoped<IAuthenticationApiClient, AuthenticationApiClient>();
             return services;
         }

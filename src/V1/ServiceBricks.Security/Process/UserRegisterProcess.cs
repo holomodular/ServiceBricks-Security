@@ -17,9 +17,9 @@
             EmailConfirmed = emailConfirmed;
         }
 
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool CreateEmail { get; set; }
-        public bool EmailConfirmed { get; set; }
+        public virtual string Email { get; set; }
+        public virtual string Password { get; set; }
+        public virtual bool CreateEmail { get; set; }
+        public virtual bool EmailConfirmed { get; set; }
     }
 }

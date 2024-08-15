@@ -14,7 +14,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteConstants.cs" Link="SecuritySqliteConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteContext.cs" Link="SecuritySqliteContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteModule.cs" Link="SecuritySqliteModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 

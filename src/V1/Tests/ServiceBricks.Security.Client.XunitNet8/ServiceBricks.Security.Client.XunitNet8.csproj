@@ -10,23 +10,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\TestFiles\client\ApplicationRoleApiClientReturnResponseTest.cs" Link="ApplicationRoleApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationRoleApiClientTest.cs" Link="ApplicationRoleApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationRoleClaimApiClientReturnResponseTest.cs" Link="ApplicationRoleClaimApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationRoleClaimApiClientTest.cs" Link="ApplicationRoleClaimApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserClaimApiClientReturnResponseTest.cs" Link="ApplicationUserClaimApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserClaimApiClientTest.cs" Link="ApplicationUserClaimApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserLoginApiClientReturnResponseTest.cs" Link="ApplicationUserLoginApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserLoginApiClientTest.cs" Link="ApplicationUserLoginApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserRoleApiClientReturnResponseTest.cs" Link="ApplicationUserRoleApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserRoleApiClientTest.cs" Link="ApplicationUserRoleApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserTokenApiClientReturnResponseTest.cs" Link="ApplicationUserTokenApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserTokenApiClientTest.cs" Link="ApplicationUserTokenApiClientTest.cs" />
-    <Compile Include="..\TestFiles\client\AuditUserApiClientReturnResponseTest.cs" Link="AuditUserApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\AuditUserApiClientTest.cs" Link="AuditUserApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\RoleApiClientReturnResponseTest.cs" Link="RoleApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\RoleApiClientTest.cs" Link="RoleApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\RoleClaimApiClientReturnResponseTest.cs" Link="RoleClaimApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\RoleClaimApiClientTest.cs" Link="RoleClaimApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserClaimApiClientReturnResponseTest.cs" Link="UserClaimApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserClaimApiClientTest.cs" Link="UserClaimApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserLoginApiClientReturnResponseTest.cs" Link="UserLoginApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserLoginApiClientTest.cs" Link="UserLoginApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserRoleApiClientReturnResponseTest.cs" Link="UserRoleApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserRoleApiClientTest.cs" Link="UserRoleApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserTokenApiClientReturnResponseTest.cs" Link="UserTokenApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserTokenApiClientTest.cs" Link="UserTokenApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserAuditApiClientReturnResponseTest.cs" Link="UserAuditApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserAuditApiClientTest.cs" Link="UserAuditApiClientTest.cs" />
     <Compile Include="..\TestFiles\client\ClientStartup.cs" Link="ClientStartup.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserApiClientReturnResponseTest.cs" Link="ApplicationUserApiClientReturnResponseTest.cs" />
-    <Compile Include="..\TestFiles\client\ApplicationUserApiClientTest.cs" Link="ApplicationUserApiClientTest.cs" />
+    <Compile Include="..\TestFiles\client\UserApiClientReturnResponseTest.cs" Link="UserApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\UserApiClientTest.cs" Link="UserApiClientTest.cs" />
   </ItemGroup>
 
   <ItemGroup>

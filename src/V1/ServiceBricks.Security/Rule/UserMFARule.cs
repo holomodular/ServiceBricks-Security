@@ -10,12 +10,10 @@ namespace ServiceBricks.Security
     public sealed class UserMFARule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManagerService;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IIpAddressService _iPAddressService;
-        private readonly IBusinessRuleService _businessRuleService;
         private readonly IServiceBus _serviceBus;
 
         /// <summary>
@@ -24,21 +22,17 @@ namespace ServiceBricks.Security
         /// <param name="loggerFactory"></param>
         public UserMFARule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManagerApiService,
-            LinkGenerator linkGenerator,
             IIpAddressService iPAddressService,
-            IBusinessRuleService businessRuleService,
             IServiceBus serviceBus)
         {
             _logger = loggerFactory.CreateLogger<UserMFARule>();
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _userManagerService = userManagerApiService;
-            _linkGenerator = linkGenerator;
             _iPAddressService = iPAddressService;
-            _businessRuleService = businessRuleService;
             _serviceBus = serviceBus;
             Priority = PRIORITY_NORMAL;
         }
@@ -148,10 +142,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.MFA_START_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.MFA_START_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

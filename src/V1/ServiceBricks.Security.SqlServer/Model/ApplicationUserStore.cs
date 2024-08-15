@@ -28,12 +28,12 @@ namespace ServiceBricks.Security.SqlServer
         public ApplicationUserStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationUserApiService applicationUserApiService,
-            IApplicationUserRoleApiService applicationUserRoleApiService,
-            IApplicationUserClaimApiService applicationUserClaimApiService,
-            IApplicationUserLoginApiService applicationUserLoginApiService,
-            IApplicationUserTokenApiService applicationUserTokenApiService,
-            IApplicationRoleApiService applicationRoleApiService,
+            IUserApiService applicationUserApiService,
+            IUserRoleApiService applicationUserRoleApiService,
+            IUserClaimApiService applicationUserClaimApiService,
+            IUserLoginApiService applicationUserLoginApiService,
+            IUserTokenApiService applicationUserTokenApiService,
+            IRoleApiService applicationRoleApiService,
             SecuritySqlServerContext SecuritySqlServerContext,
             IdentityErrorDescriber describer = null) : base(
                 mapper,

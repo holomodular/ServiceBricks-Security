@@ -10,7 +10,7 @@ namespace ServiceBricks.Security
     public sealed class UserLogoutRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
@@ -25,7 +25,7 @@ namespace ServiceBricks.Security
         /// <param name="iPAddressService"></param>
         public UserLogoutRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IHttpContextAccessor httpContextAccessor,
             IIpAddressService iPAddressService
@@ -85,10 +85,10 @@ namespace ServiceBricks.Security
                 // AI: Audit user
                 if (!string.IsNullOrEmpty(e.UserStorageKey))
                 {
-                    await _auditUserApiService.CreateAsync(new AuditUserDto()
+                    await _auditUserApiService.CreateAsync(new UserAuditDto()
                     {
-                        AuditName = AuditType.LOGOUT_TEXT,
-                        UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                        AuditType = AuditType.LOGOUT_TEXT,
+                        RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                         UserStorageKey = e.UserStorageKey,
                         IPAddress = _iPAddressService.GetIPAddress()
                     });

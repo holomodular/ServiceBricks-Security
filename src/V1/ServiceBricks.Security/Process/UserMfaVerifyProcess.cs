@@ -19,11 +19,11 @@ namespace ServiceBricks.Security
             RememberBrowser = rememberBrowser;
         }
 
-        public string Provider { get; set; }
-        public string Code { get; set; }
-        public bool RememberMe { get; set; }
-        public bool RememberBrowser { get; set; }
+        public virtual string Provider { get; set; }
+        public virtual string Code { get; set; }
+        public virtual bool RememberMe { get; set; }
+        public virtual bool RememberBrowser { get; set; }
 
-        public SignInResult SignInResult { get; set; }
+        public virtual SignInResult SignInResult { get; set; }
     }
 }

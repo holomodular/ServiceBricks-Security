@@ -14,12 +14,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     {
         protected readonly IMapper _mapper;
         protected readonly IBusinessRuleService _businessRuleService;
-        protected readonly IApplicationUserApiService _applicationUserApiService;
-        protected readonly IApplicationUserRoleApiService _applicationUserRoleApiService;
-        protected readonly IApplicationUserClaimApiService _applicationUserClaimApiService;
-        protected readonly IApplicationUserLoginApiService _applicationUserLoginApiService;
-        protected readonly IApplicationUserTokenApiService _applicationUserTokenApiService;
-        protected readonly IApplicationRoleApiService _applicationRoleApiService;
+        protected readonly IUserApiService _applicationUserApiService;
+        protected readonly IUserRoleApiService _applicationUserRoleApiService;
+        protected readonly IUserClaimApiService _applicationUserClaimApiService;
+        protected readonly IUserLoginApiService _applicationUserLoginApiService;
+        protected readonly IUserTokenApiService _applicationUserTokenApiService;
+        protected readonly IRoleApiService _applicationRoleApiService;
 
         /// <summary>
         /// Constructor.
@@ -37,12 +37,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         protected GenericApplicationUserStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationUserApiService applicationUserApiService,
-            IApplicationUserRoleApiService applicationUserRoleApiService,
-            IApplicationUserClaimApiService applicationUserClaimApiService,
-            IApplicationUserLoginApiService applicationUserLoginApiService,
-            IApplicationUserTokenApiService applicationUserTokenApiService,
-            IApplicationRoleApiService applicationRoleApiService,
+            IUserApiService applicationUserApiService,
+            IUserRoleApiService applicationUserRoleApiService,
+            IUserClaimApiService applicationUserClaimApiService,
+            IUserLoginApiService applicationUserLoginApiService,
+            IUserTokenApiService applicationUserTokenApiService,
+            IRoleApiService applicationRoleApiService,
             TContext context,
             IdentityErrorDescriber describer = null) : base(context, describer)
         {
@@ -66,7 +66,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             if (user.Id == Guid.Empty)
                 user.Id = Guid.NewGuid();
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             var resp = await _applicationUserApiService.CreateAsync(userDto);
             return resp.GetIdentityResult();
         }
@@ -79,7 +79,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             var resp = await _applicationUserApiService.UpdateAsync(userDto);
             return resp.GetIdentityResult();
         }
@@ -92,7 +92,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             var resp = await _applicationUserApiService.DeleteAsync(userDto.StorageKey);
             return resp.GetIdentityResult();
         }
@@ -108,7 +108,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             foreach (var claim in claims)
             {
-                var uc = new ApplicationUserClaimDto();
+                var uc = new UserClaimDto();
                 uc.ClaimType = claim.Type;
                 uc.ClaimValue = claim.Value;
                 uc.UserStorageKey = user.Id.ToString();
@@ -124,7 +124,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override ApplicationUserClaim CreateUserClaim(ApplicationUser user, Claim claim)
         {
-            var uc = new ApplicationUserClaimDto();
+            var uc = new UserClaimDto();
             uc.ClaimType = claim.Type;
             uc.ClaimValue = claim.Value;
             uc.UserStorageKey = user.Id.ToString();
@@ -142,9 +142,9 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<Claim>> GetClaimsAsync(ApplicationUser user, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.UserStorageKey), userDto.StorageKey);
+            queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
             if (respUserClaims.Success && respUserClaims.Item.List.Count > 0)
             {
@@ -164,12 +164,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task AddToRoleAsync(ApplicationUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedRoleName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respRole = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRole.Success && respRole.Item.List.Count > 0)
             {
                 var role = respRole.Item.List[0];
-                var userRole = new ApplicationUserRoleDto()
+                var userRole = new UserRoleDto()
                 {
                     UserStorageKey = user.Id.ToString(),
                     RoleStorageKey = role.StorageKey
@@ -201,7 +201,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserDto.NormalizedEmail), normalizedEmail);
+            queryBuilder.IsEqual(nameof(UserDto.NormalizedEmail), normalizedEmail);
             var respQuery = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUser>(respQuery.Item.List[0]);
@@ -219,9 +219,9 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             if (claims != null && claims.Count() > 0)
             {
-                var userDto = _mapper.Map<ApplicationUserDto>(user);
+                var userDto = _mapper.Map<UserDto>(user);
                 ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-                queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.UserStorageKey), userDto.StorageKey);
+                queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
                 var respQuery = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
                 if (respQuery.Success && respQuery.Item.List.Count > 0)
                 {
@@ -245,12 +245,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task<System.Collections.Generic.IList<ApplicationUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.ClaimType), claim.Type);
-            queryBuilder.Select(nameof(ApplicationUserClaimDto.UserStorageKey));
+            queryBuilder.IsEqual(nameof(UserClaimDto.ClaimType), claim.Type);
+            queryBuilder.Select(nameof(UserClaimDto.UserStorageKey));
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
 
             queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsInSet(nameof(ApplicationUserDto.StorageKey), respUserClaims.Item.List.Select(x => x.UserStorageKey).ToArray());
+            queryBuilder.IsInSet(nameof(UserDto.StorageKey), respUserClaims.Item.List.Select(x => x.UserStorageKey).ToArray());
             var respUsers = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             var users = _mapper.Map<List<ApplicationUser>>(respUsers.Item.List);
             return users;
@@ -266,11 +266,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task ReplaceClaimAsync(ApplicationUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.UserStorageKey), userDto.StorageKey);
+            queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
             queryBuilder.And();
-            queryBuilder.IsEqual(nameof(ApplicationUserClaimDto.ClaimType), claim.Type);
+            queryBuilder.IsEqual(nameof(UserClaimDto.ClaimType), claim.Type);
             var respQuery = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
@@ -289,7 +289,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override ApplicationUserRole CreateUserRole(ApplicationUser user, ApplicationRole role)
         {
-            var item = new ApplicationUserRoleDto()
+            var item = new UserRoleDto()
             {
                 UserStorageKey = user.Id.ToString(),
                 RoleStorageKey = role.Id.ToString()
@@ -307,7 +307,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         protected override async Task<ApplicationRole> FindRoleAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedRoleName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationRole>(respQuery.Item.List[0]);
@@ -324,9 +324,9 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         protected override async Task<ApplicationUserRole> FindUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userId.ToString());
+            queryBuilder.IsEqual(nameof(UserRoleDto.UserStorageKey), userId.ToString());
             queryBuilder.And();
-            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), roleId.ToString());
+            queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), roleId.ToString());
             var respQuery = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUserRole>(respQuery.Item.List[0]);
@@ -341,15 +341,15 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<string>> GetRolesAsync(ApplicationUser user, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<ApplicationUserDto>(user);
+            var userDto = _mapper.Map<UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userDto.StorageKey);
+            queryBuilder.IsEqual(nameof(UserRoleDto.UserStorageKey), userDto.StorageKey);
             var respQuery = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
                 var roleIds = respQuery.Item.List.Select(x => x.RoleStorageKey.ToString()).ToArray();
                 queryBuilder = new ServiceQueryRequestBuilder();
-                queryBuilder.IsInSet(nameof(ApplicationRoleDto.StorageKey), roleIds);
+                queryBuilder.IsInSet(nameof(RoleDto.StorageKey), roleIds);
                 var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
                 if (respRoles.Success && respRoles.Item.List.Count > 0)
                     return respRoles.Item.List.Select(x => x.Name).ToList();
@@ -366,19 +366,19 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task<System.Collections.Generic.IList<ApplicationUser>> GetUsersInRoleAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedRoleName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRoles.Success && respRoles.Item.List.Count > 0)
             {
                 var role = respRoles.Item.List[0];
                 queryBuilder = new ServiceQueryRequestBuilder();
-                queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), role.StorageKey);
+                queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), role.StorageKey);
                 var respUserRoles = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
                 if (respUserRoles.Success && respUserRoles.Item.List.Count > 0)
                 {
                     var userIds = respUserRoles.Item.List.Select(x => x.UserStorageKey.ToString()).ToArray();
                     queryBuilder = new ServiceQueryRequestBuilder();
-                    queryBuilder.IsInSet(nameof(ApplicationUserDto.StorageKey), userIds);
+                    queryBuilder.IsInSet(nameof(UserDto.StorageKey), userIds);
                     var respUsers = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
                     if (respUsers.Success && respUsers.Item.List.Count > 0)
                         return _mapper.Map<List<ApplicationUser>>(respUsers.Item.List);
@@ -397,16 +397,16 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task<bool> IsInRoleAsync(ApplicationUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedRoleName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRoles.Success && respRoles.Item.List.Count > 0)
             {
-                var userDto = _mapper.Map<ApplicationUserDto>(user);
+                var userDto = _mapper.Map<UserDto>(user);
                 var role = respRoles.Item.List[0];
                 queryBuilder = new ServiceQueryRequestBuilder();
-                queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), role.StorageKey);
+                queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), role.StorageKey);
                 queryBuilder.And();
-                queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userDto.StorageKey);
+                queryBuilder.IsEqual(nameof(UserRoleDto.UserStorageKey), userDto.StorageKey);
                 var respUserRoles = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
                 if (respUserRoles.Success && respUserRoles.Item.List.Count > 0)
                     return true;
@@ -424,16 +424,16 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task RemoveFromRoleAsync(ApplicationUser user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationRoleDto.NormalizedName), normalizedRoleName);
+            queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRoles.Success && respRoles.Item.List.Count > 0)
             {
-                var userDto = _mapper.Map<ApplicationUserDto>(user);
+                var userDto = _mapper.Map<UserDto>(user);
                 var role = respRoles.Item.List[0];
                 queryBuilder = new ServiceQueryRequestBuilder();
-                queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.RoleStorageKey), role.StorageKey);
+                queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), role.StorageKey);
                 queryBuilder.And();
-                queryBuilder.IsEqual(nameof(ApplicationUserRoleDto.UserStorageKey), userDto.StorageKey);
+                queryBuilder.IsEqual(nameof(UserRoleDto.UserStorageKey), userDto.StorageKey);
                 var respUserRoles = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
                 if (respUserRoles.Success && respUserRoles.Item.List.Count > 0)
                     await _applicationUserRoleApiService.DeleteAsync(respUserRoles.Item.List[0].StorageKey);
@@ -449,7 +449,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public override async Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
-            queryBuilder.IsEqual(nameof(ApplicationUserDto.NormalizedUserName), normalizedUserName);
+            queryBuilder.IsEqual(nameof(UserDto.NormalizedUserName), normalizedUserName);
             var respQuery = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUser>(respQuery.Item.List[0]);
@@ -476,7 +476,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override ApplicationUserLogin CreateUserLogin(ApplicationUser user, UserLoginInfo login)
         {
-            var ul = new ApplicationUserLoginDto()
+            var ul = new UserLoginDto()
             {
                 LoginProvider = login.LoginProvider,
                 ProviderDisplayName = login.ProviderDisplayName,
@@ -499,7 +499,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override ApplicationUserToken CreateUserToken(ApplicationUser user, string loginProvider, string name, string value)
         {
-            var ut = new ApplicationUserTokenDto()
+            var ut = new UserTokenDto()
             {
                 LoginProvider = loginProvider,
                 Name = name,
@@ -524,11 +524,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), userId.ToString())
+                .IsEqual(nameof(UserLoginDto.UserStorageKey), userId.ToString())
                 .And()
-                .IsEqual(nameof(ApplicationUserLoginDto.LoginProvider), loginProvider)
+                .IsEqual(nameof(UserLoginDto.LoginProvider), loginProvider)
                 .And()
-                .IsEqual(nameof(ApplicationUserLoginDto.ProviderKey), providerKey);
+                .IsEqual(nameof(UserLoginDto.ProviderKey), providerKey);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUserLogin>(respQuery.Item.List[0]);
@@ -546,9 +546,9 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.LoginProvider), loginProvider)
+                .IsEqual(nameof(UserLoginDto.LoginProvider), loginProvider)
                 .And()
-                .IsEqual(nameof(ApplicationUserLoginDto.ProviderKey), providerKey);
+                .IsEqual(nameof(UserLoginDto.ProviderKey), providerKey);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUserLogin>(respQuery.Item.List[0]);
@@ -564,7 +564,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task AddLoginAsync(ApplicationUser user, UserLoginInfo login, CancellationToken cancellationToken = default)
         {
-            ApplicationUserLoginDto obj = new ApplicationUserLoginDto();
+            UserLoginDto obj = new UserLoginDto();
             obj.LoginProvider = login.LoginProvider;
             obj.ProviderDisplayName = login.ProviderDisplayName;
             obj.ProviderKey = login.ProviderKey;
@@ -584,11 +584,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id.ToString())
+                .IsEqual(nameof(UserLoginDto.UserStorageKey), user.Id.ToString())
                 .And()
-                .IsEqual(nameof(ApplicationUserLoginDto.LoginProvider), loginProvider)
+                .IsEqual(nameof(UserLoginDto.LoginProvider), loginProvider)
                 .And()
-                .IsEqual(nameof(ApplicationUserLoginDto.ProviderKey), providerKey);
+                .IsEqual(nameof(UserLoginDto.ProviderKey), providerKey);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 await _applicationUserLoginApiService.DeleteAsync(respQuery.Item.List[0].StorageKey);
@@ -604,7 +604,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserLoginDto.UserStorageKey), user.Id.ToString());
+                .IsEqual(nameof(UserLoginDto.UserStorageKey), user.Id.ToString());
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
@@ -628,11 +628,11 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder
-                .IsEqual(nameof(ApplicationUserTokenDto.UserStorageKey), user.Id.ToString())
+                .IsEqual(nameof(UserTokenDto.UserStorageKey), user.Id.ToString())
                 .And()
-                .IsEqual(nameof(ApplicationUserTokenDto.LoginProvider), loginProvider)
+                .IsEqual(nameof(UserTokenDto.LoginProvider), loginProvider)
                 .And()
-                .IsEqual(nameof(ApplicationUserTokenDto.Name), name);
+                .IsEqual(nameof(UserTokenDto.Name), name);
             var respQuery = await _applicationUserTokenApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
                 return _mapper.Map<ApplicationUserToken>(respQuery.Item.List[0]);
@@ -646,7 +646,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override async Task AddUserTokenAsync(ApplicationUserToken token)
         {
-            var dto = _mapper.Map<ApplicationUserTokenDto>(token);
+            var dto = _mapper.Map<UserTokenDto>(token);
             await _applicationUserTokenApiService.CreateAsync(dto);
         }
 
@@ -657,7 +657,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         protected override async Task RemoveUserTokenAsync(ApplicationUserToken token)
         {
-            var dto = _mapper.Map<ApplicationUserTokenDto>(token);
+            var dto = _mapper.Map<UserTokenDto>(token);
             await _applicationUserTokenApiService.DeleteAsync(dto.StorageKey);
         }
 

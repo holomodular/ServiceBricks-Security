@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     {
         private readonly ILogger _logger;
         private readonly IUserManagerService _userManagerService;
-        private readonly IApplicationUserApiService _applicationUserApiService;
+        private readonly IUserApiService _applicationUserApiService;
         private readonly IBusinessRuleService _businessRuleService;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace ServiceBricks.Security
         /// <param name="businessRuleService"></param>
         public UserRegisterAdminRule(
             ILoggerFactory loggerFactory,
-            IApplicationUserApiService applicationUserApiService,
+            IUserApiService applicationUserApiService,
             IUserManagerService userManagerApiService,
             IBusinessRuleService businessRuleService)
         {

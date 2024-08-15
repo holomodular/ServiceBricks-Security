@@ -12,7 +12,7 @@ namespace ServiceBricks.Security.MongoDb
         /// </summary>
         public ApplicationUserClaimMappingProfile()
         {
-            CreateMap<ApplicationUserClaimDto, ApplicationIdentityUserClaim>()
+            CreateMap<UserClaimDto, ApplicationIdentityUserClaim>()
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
                 .ForMember(x => x.Id, y => y.Ignore());
@@ -21,7 +21,7 @@ namespace ServiceBricks.Security.MongoDb
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId));
 
-            CreateMap<ApplicationUserClaimDto, ApplicationUserClaim>()
+            CreateMap<UserClaimDto, ApplicationUserClaim>()
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey));
 
@@ -30,11 +30,11 @@ namespace ServiceBricks.Security.MongoDb
                 .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
                 .ForMember(x => x.Id, y => y.Ignore());
 
-            CreateMap<ApplicationIdentityUserClaim, ApplicationUserClaimDto>()
+            CreateMap<ApplicationIdentityUserClaim, UserClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
 
-            CreateMap<ApplicationUserClaim, ApplicationUserClaimDto>()
+            CreateMap<ApplicationUserClaim, UserClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }

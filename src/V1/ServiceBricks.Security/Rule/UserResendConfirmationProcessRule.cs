@@ -12,7 +12,7 @@ namespace ServiceBricks.Security
     public sealed class UserResendConfirmationProcessRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
         private readonly ApplicationOptions _options;
@@ -33,7 +33,7 @@ namespace ServiceBricks.Security
         /// <param name="configuration"></param>
         public UserResendConfirmationProcessRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService,
             IOptions<ApplicationOptions> options,
@@ -119,10 +119,10 @@ namespace ServiceBricks.Security
                 var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.RESEND_CONFIRMATION_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

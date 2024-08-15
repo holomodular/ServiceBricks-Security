@@ -14,7 +14,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresConstants.cs" Link="SecurityPostgresConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresContext.cs" Link="SecurityPostgresContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresModule.cs" Link="SecurityPostgresModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 

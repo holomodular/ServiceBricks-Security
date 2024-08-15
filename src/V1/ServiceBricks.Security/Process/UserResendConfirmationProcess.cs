@@ -10,6 +10,6 @@
             UserStorageKey = userStorageKey;
         }
 
-        public string UserStorageKey { get; set; }
+        public virtual string UserStorageKey { get; set; }
     }
 }

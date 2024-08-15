@@ -24,8 +24,8 @@ namespace ServiceBricks.Security.SqlServer
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             SecuritySqlServerContext SecuritySqlServerContext,
             IdentityErrorDescriber describer = null) : base(
                 mapper,

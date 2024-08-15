@@ -40,7 +40,7 @@ namespace ServiceBricks.Security.InMemory
         /// <summary>
         /// The audit users.
         /// </summary>
-        public virtual DbSet<AuditUser> AuditUsers { get; set; }
+        public virtual DbSet<UserAudit> UserAudits { get; set; }
 
         /// <summary>
         /// The application users.
@@ -86,8 +86,8 @@ namespace ServiceBricks.Security.InMemory
             base.OnModelCreating(builder);
 
             // AI: Create the model for each table
-            builder.Entity<AuditUser>().HasKey(key => key.Key);
-            builder.Entity<AuditUser>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>().HasKey(key => key.Key);
+            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
 
             builder.Entity<ApplicationUserRole>(b =>
             {

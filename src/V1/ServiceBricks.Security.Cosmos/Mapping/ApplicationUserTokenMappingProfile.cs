@@ -12,11 +12,11 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         public ApplicationUserTokenMappingProfile()
         {
-            CreateMap<ApplicationUserTokenDto, ApplicationUserToken>()
+            CreateMap<UserTokenDto, ApplicationUserToken>()
                 .ForMember(x => x.Key, y => y.MapFrom<KeyResolver>())
                 .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>());
 
-            CreateMap<ApplicationUserToken, ApplicationUserTokenDto>()
+            CreateMap<ApplicationUserToken, UserTokenDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
         }
@@ -49,7 +49,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <summary>
         /// Resolve the user id from the user storage key.
         /// </summary>
-        public class UserIdResolver : IValueResolver<ApplicationUserTokenDto, object, Guid>
+        public class UserIdResolver : IValueResolver<UserTokenDto, object, Guid>
         {
             /// <summary>
             /// Resolve the user id from the user storage key.
@@ -59,7 +59,7 @@ namespace ServiceBricks.Security.Cosmos
             /// <param name="sourceMember"></param>
             /// <param name="context"></param>
             /// <returns></returns>
-            public Guid Resolve(ApplicationUserTokenDto source, object destination, Guid sourceMember, ResolutionContext context)
+            public Guid Resolve(UserTokenDto source, object destination, Guid sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrEmpty(source.UserStorageKey))
                     return Guid.Empty;

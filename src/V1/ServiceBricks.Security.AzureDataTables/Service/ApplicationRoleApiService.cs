@@ -5,7 +5,7 @@ namespace ServiceBricks.Security.AzureDataTables
     /// <summary>
     /// This is a API service for the ApplicationRole domain object.
     /// </summary>
-    public partial class ApplicationRoleApiService : ApiService<ApplicationRole, ApplicationRoleDto>, IApplicationRoleApiService
+    public partial class ApplicationRoleApiService : ApiService<ApplicationRole, RoleDto>, IRoleApiService
     {
         /// <summary>
         /// Constructor.

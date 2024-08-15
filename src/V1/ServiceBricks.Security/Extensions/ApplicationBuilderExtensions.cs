@@ -24,7 +24,7 @@ namespace ServiceBricks.Security
             using (var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 // AI: Get the role service
-                var roleService = serviceScope.ServiceProvider.GetService<IApplicationRoleApiService>();
+                var roleService = serviceScope.ServiceProvider.GetService<IRoleApiService>();
 
                 // AI: Either roleservice is not registered because running unittest without provider (ok) or this module added out of order (bad)
                 if (roleService == null)
@@ -36,7 +36,7 @@ namespace ServiceBricks.Security
                 // AI: Create required role for admin
                 if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_ADMIN_NAME.ToUpper()))
                 {
-                    _ = roleService.Create(new ApplicationRoleDto()
+                    _ = roleService.Create(new RoleDto()
                     {
                         Name = SecurityConstants.ROLE_ADMIN_NAME,
                         NormalizedName = SecurityConstants.ROLE_ADMIN_NAME.ToUpper()
@@ -46,7 +46,7 @@ namespace ServiceBricks.Security
                 // AI: Create required roles for user
                 if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_USER_NAME.ToUpper()))
                 {
-                    _ = roleService.Create(new ApplicationRoleDto()
+                    _ = roleService.Create(new RoleDto()
                     {
                         Name = SecurityConstants.ROLE_USER_NAME,
                         NormalizedName = SecurityConstants.ROLE_USER_NAME.ToUpper()

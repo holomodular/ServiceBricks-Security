@@ -10,6 +10,6 @@
             SelectedProvider = selectedProvider;
         }
 
-        public string SelectedProvider { get; set; }
+        public virtual string SelectedProvider { get; set; }
     }
 }

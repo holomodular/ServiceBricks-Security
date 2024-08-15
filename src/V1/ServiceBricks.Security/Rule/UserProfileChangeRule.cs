@@ -9,9 +9,9 @@ namespace ServiceBricks.Security
     public sealed class UserProfileChangeRule : BusinessRule
     {
         private readonly ILogger _logger;
-        private readonly IAuditUserApiService _auditUserApiService;
+        private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
-        private readonly IApplicationUserApiService _applicationUserApiService;
+        private readonly IUserApiService _applicationUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
 
@@ -26,11 +26,11 @@ namespace ServiceBricks.Security
         /// <param name="applicationUserApiService"></param>
         public UserProfileChangeRule(
             ILoggerFactory loggerFactory,
-            IAuditUserApiService auditUserApiService,
+            IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IHttpContextAccessor httpContextAccessor,
             IIpAddressService iPAddressService,
-            IApplicationUserApiService applicationUserApiService)
+            IUserApiService applicationUserApiService)
         {
             _logger = loggerFactory.CreateLogger<UserProfileChangeRule>();
             _auditUserApiService = auditUserApiService;
@@ -96,10 +96,10 @@ namespace ServiceBricks.Security
                 }
 
                 // AI: Audit user
-                await _auditUserApiService.CreateAsync(new AuditUserDto()
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
                 {
-                    AuditName = AuditType.PROFILE_CHANGE_TEXT,
-                    UserAgent = _httpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent,
+                    AuditType = AuditType.PROFILE_CHANGE_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
                     UserStorageKey = respUser.Item.StorageKey,
                     IPAddress = _iPAddressService.GetIPAddress()
                 });

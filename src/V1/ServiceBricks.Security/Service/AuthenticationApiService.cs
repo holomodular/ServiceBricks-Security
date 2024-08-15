@@ -18,10 +18,10 @@ namespace ServiceBricks.Security
         protected readonly IConfiguration _configuration;
         protected readonly SecurityTokenOptions _securityOptions;
         protected readonly IUserManagerService _userManagerService;
-        protected readonly IApplicationUserClaimApiService _applicationUserClaimApiService;
-        protected readonly IApplicationUserRoleApiService _applicationUserRoleApiService;
-        protected readonly IApplicationRoleClaimApiService _applicationRoleClaimApiService;
-        protected readonly IApplicationRoleApiService _applicationRoleApiService;
+        protected readonly IUserClaimApiService _applicationUserClaimApiService;
+        protected readonly IUserRoleApiService _applicationUserRoleApiService;
+        protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
+        protected readonly IRoleApiService _applicationRoleApiService;
         protected readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace ServiceBricks.Security
             IOptions<SecurityTokenOptions> securityOptions,
             IConfiguration configuration,
             IUserManagerService userManagerApiService,
-            IApplicationUserClaimApiService applicationUserClaimApiService,
-            IApplicationUserRoleApiService applicationUserRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
-            IApplicationRoleApiService applicationRoleApiService,
+            IUserClaimApiService applicationUserClaimApiService,
+            IUserRoleApiService applicationUserRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
             IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
@@ -86,7 +86,7 @@ namespace ServiceBricks.Security
             claims.Add(new Claim(ClaimTypes.Name, respAuth.Item.UserName));
 
             var qb = ServiceQueryRequestBuilder.New().IsEqual(
-                nameof(ApplicationUserClaimDto.UserStorageKey), respAuth.Item.StorageKey);
+                nameof(UserClaimDto.UserStorageKey), respAuth.Item.StorageKey);
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(qb.Build());
             if (respUserClaims.Item.List.Count > 0)
             {
@@ -94,13 +94,13 @@ namespace ServiceBricks.Security
                     claims.Add(new Claim(c.ClaimType, c.ClaimValue));
             }
             qb = ServiceQueryRequestBuilder.New().IsEqual(
-                nameof(ApplicationUserRoleDto.UserStorageKey), respAuth.Item.StorageKey);
+                nameof(UserRoleDto.UserStorageKey), respAuth.Item.StorageKey);
             var respUserRoles = await _applicationUserRoleApiService.QueryAsync(qb.Build());
             if (respUserRoles.Item.List.Count > 0)
             {
                 var roleids = respUserRoles.Item.List.Select(x => x.RoleStorageKey).ToList();
                 qb = ServiceQueryRequestBuilder.New().IsInSet(
-                    nameof(ApplicationRoleClaimDto.RoleStorageKey), roleids.ToArray());
+                    nameof(RoleClaimDto.RoleStorageKey), roleids.ToArray());
                 var respRoleClaims = await _applicationRoleClaimApiService.QueryAsync(qb.Build());
                 if (respRoleClaims.Item.List.Count > 0)
                 {
@@ -109,7 +109,7 @@ namespace ServiceBricks.Security
                 }
 
                 qb = ServiceQueryRequestBuilder.New().IsInSet(
-                    nameof(ApplicationRoleDto.StorageKey), roleids.ToArray());
+                    nameof(RoleDto.StorageKey), roleids.ToArray());
                 var respRoles = await _applicationRoleApiService.QueryAsync(qb.Build());
                 if (respRoles.Item.List.Count > 0)
                 {

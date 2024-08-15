@@ -1,73 +1,58 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.0.7</Version>
-		<Description>ServiceBricks is the cornerstone for building a microservices foundation. Visit http://ServiceBricks.com to learn more.</Description>
-		<AssemblyTitle>ServiceBricks.Security</AssemblyTitle>
-		<Authors>holomodular</Authors>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
-		<Copyright>Copyright © 2023 HoloModular LLC. All Rights Reserved. Visit http://HoloModular.com to learn more.</Copyright>
-		<PackageProjectUrl>http://ServiceBricks.com</PackageProjectUrl>
-		<PackageIcon>logo.png</PackageIcon>
-		<PackageTags>service;bricks;security</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>ServiceBricks.Security.snk</AssemblyOriginatorKeyFile>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
-		<IsPackable>False</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationRoleClaimDto.cs" Link="ApplicationRoleClaimDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationRoleDto.cs" Link="ApplicationRoleDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationUserClaim.cs" Link="ApplicationUserClaim.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationUserDto.cs" Link="ApplicationUserDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationUserLoginDto.cs" Link="ApplicationUserLoginDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationUserRoleDto.cs" Link="ApplicationUserRoleDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\ApplicationUserTokenDto.cs" Link="ApplicationUserTokenDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Api\AuditUserDto.cs" Link="AuditUserDto.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationRoleApiController.cs" Link="ApplicationRoleApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationRoleClaimApiController.cs" Link="ApplicationRoleClaimApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationUserApiController.cs" Link="ApplicationUserApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationUserClaimApiController.cs" Link="ApplicationUserClaimApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationUserLoginApiController.cs" Link="ApplicationUserLoginApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationUserRoleApiController.cs" Link="ApplicationUserRoleApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\ApplicationUserTokenApiController.cs" Link="ApplicationUserTokenApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Controllers\AuditUserApiController.cs" Link="AuditUserApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\RoleClaimDto.cs" Link="RoleClaimDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\RoleDto.cs" Link="RoleDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserClaimDto.cs" Link="UserClaimDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserDto.cs" Link="UserDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserLoginDto.cs" Link="UserLoginDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserRoleDto.cs" Link="UserRoleDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserTokenDto.cs" Link="UserTokenDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Api\UserAuditDto.cs" Link="UserAuditDto.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\RoleApiController.cs" Link="RoleApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\RoleClaimApiController.cs" Link="RoleClaimApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserApiController.cs" Link="UserApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserClaimApiController.cs" Link="UserClaimApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserLoginApiController.cs" Link="UserLoginApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserRoleApiController.cs" Link="UserRoleApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserTokenApiController.cs" Link="UserTokenApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Controllers\UserAuditApiController.cs" Link="UserAuditApiController.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Controllers\AuthenticationApiController.cs" Link="AuthenticationApiController.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Extensions\ClaimsPrincipalExtensions.cs" Link="ClaimsPrincipalExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Extensions\IHeaderDictionaryExtensions.cs" Link="IHeaderDictionaryExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Extensions\ResponseExtensions.cs" Link="ResponseExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleApiClient.cs" Link="IApplicationRoleApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleApiController.cs" Link="IApplicationRoleApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleApiService.cs" Link="IApplicationRoleApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleClaimApiClient.cs" Link="IApplicationRoleClaimApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleClaimApiController.cs" Link="IApplicationRoleClaimApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationRoleClaimApiService.cs" Link="IApplicationRoleClaimApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserApiClient.cs" Link="IApplicationUserApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserApiController.cs" Link="IApplicationUserApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserApiService.cs" Link="IApplicationUserApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserClaimApiClient.cs" Link="IApplicationUserClaimApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserClaimApiController.cs" Link="IApplicationUserClaimApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserClaimApiService.cs" Link="IApplicationUserClaimApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserLoginApiClient.cs" Link="IApplicationUserLoginApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserLoginApiController.cs" Link="IApplicationUserLoginApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserLoginApiService.cs" Link="IApplicationUserLoginApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserRoleApiClient.cs" Link="IApplicationUserRoleApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserRoleApiController.cs" Link="IApplicationUserRoleApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserRoleApiService.cs" Link="IApplicationUserRoleApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserTokenApiClient.cs" Link="IApplicationUserTokenApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserTokenApiController.cs" Link="IApplicationUserTokenApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IApplicationUserTokenApiService.cs" Link="IApplicationUserTokenApiService.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IAuditUserApiClient.cs" Link="IAuditUserApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IAuditUserApiController.cs" Link="IAuditUserApiController.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Interface\IAuditUserApiService.cs" Link="IAuditUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleApiClient.cs" Link="IRoleApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleApiController.cs" Link="IRoleApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleApiService.cs" Link="IRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleClaimApiClient.cs" Link="IRoleClaimApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleClaimApiController.cs" Link="IRoleClaimApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IRoleClaimApiService.cs" Link="IRoleClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserApiClient.cs" Link="IUserApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserApiController.cs" Link="IUserApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserApiService.cs" Link="IUserApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserClaimApiClient.cs" Link="IUserClaimApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserClaimApiController.cs" Link="IUserClaimApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserClaimApiService.cs" Link="IUserClaimApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserLoginApiClient.cs" Link="IUserLoginApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserLoginApiController.cs" Link="IUserLoginApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserLoginApiService.cs" Link="IUserLoginApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserRoleApiClient.cs" Link="IUserRoleApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserRoleApiController.cs" Link="IUserRoleApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserRoleApiService.cs" Link="IUserRoleApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserTokenApiClient.cs" Link="IUserTokenApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserTokenApiController.cs" Link="IUserTokenApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserTokenApiService.cs" Link="IUserTokenApiService.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserAuditApiClient.cs" Link="IUserAuditApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserAuditApiController.cs" Link="IUserAuditApiController.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Interface\IUserAuditApiService.cs" Link="IUserAuditApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Interface\IAuthenticationApiClient.cs" Link="IAuthenticationApiClient.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Interface\IAuthenticationApiController.cs" Link="IAuthenticationApiController.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Interface\IAuthenticationApiService.cs" Link="IAuthenticationApiService.cs" />
@@ -110,14 +95,14 @@
 	  <Compile Include="..\ServiceBricks.Security\Rule\UserRegisterAdminRule.cs" Link="UserRegisterAdminRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Rule\UserRegisterRule.cs" Link="UserRegisterRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Rule\UserResendConfirmationProcessRule.cs" Link="UserResendConfirmationProcessRule.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationRoleApiClient.cs" Link="ApplicationRoleApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationRoleClaimApiClient.cs" Link="ApplicationRoleClaimApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationUserApiClient.cs" Link="ApplicationUserApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationUserClaimApiClient.cs" Link="ApplicationUserClaimApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationUserLoginApiClient.cs" Link="ApplicationUserLoginApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationUserRoleApiClient.cs" Link="ApplicationUserRoleApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\ApplicationUserTokenApiClient.cs" Link="ApplicationUserTokenApiClient.cs" />
-	  <Compile Include="..\ServiceBricks.Security\Service\AuditUserApiClient.cs" Link="AuditUserApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\RoleApiClient.cs" Link="RoleApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\RoleClaimApiClient.cs" Link="RoleClaimApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserApiClient.cs" Link="UserApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserClaimApiClient.cs" Link="UserClaimApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserLoginApiClient.cs" Link="UserLoginApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserRoleApiClient.cs" Link="UserRoleApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserTokenApiClient.cs" Link="UserTokenApiClient.cs" />
+	  <Compile Include="..\ServiceBricks.Security\Service\UserAuditApiClient.cs" Link="UserAuditApiClient.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Service\AuthenticationApiClient.cs" Link="AuthenticationApiClient.cs" />
 	  <Compile Include="..\ServiceBricks.Security\Service\AuthenticationApiService.cs" Link="AuthenticationApiService.cs" />
 	</ItemGroup>

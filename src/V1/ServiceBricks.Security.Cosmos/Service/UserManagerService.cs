@@ -12,13 +12,13 @@ namespace ServiceBricks.Security.Cosmos
     public partial class UserManagerService : IUserManagerService
     {
         protected readonly IMapper _mapper;
-        protected readonly IApplicationUserApiService _applicationUserApiService;
-        protected readonly IApplicationUserClaimApiService _applicationUserClaimApiService;
-        protected readonly IApplicationUserLoginApiService _applicationUserLoginApiService;
-        protected readonly IApplicationUserRoleApiService _applicationUserRoleApiService;
-        protected readonly IApplicationUserTokenApiService _applicationUserTokenApiService;
-        protected readonly IApplicationRoleApiService _applicationRoleApiService;
-        protected readonly IApplicationRoleClaimApiService _applicationRoleClaimApiService;
+        protected readonly IUserApiService _applicationUserApiService;
+        protected readonly IUserClaimApiService _applicationUserClaimApiService;
+        protected readonly IUserLoginApiService _applicationUserLoginApiService;
+        protected readonly IUserRoleApiService _applicationUserRoleApiService;
+        protected readonly IUserTokenApiService _applicationUserTokenApiService;
+        protected readonly IRoleApiService _applicationRoleApiService;
+        protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -37,13 +37,13 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="signInManager"></param>
         public UserManagerService(
             IMapper mapper,
-            IApplicationUserApiService applicationUserApiService,
-            IApplicationUserClaimApiService applicationUserClaimApiService,
-            IApplicationUserLoginApiService applicationUserLoginApiService,
-            IApplicationUserRoleApiService applicationUserRoleApiService,
-            IApplicationUserTokenApiService applicationUserTokenApiService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IUserApiService applicationUserApiService,
+            IUserClaimApiService applicationUserClaimApiService,
+            IUserLoginApiService applicationUserLoginApiService,
+            IUserRoleApiService applicationUserRoleApiService,
+            IUserTokenApiService applicationUserTokenApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
@@ -64,9 +64,9 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public virtual IResponseItem<ApplicationUserDto> FindByEmail(string email)
+        public virtual IResponseItem<UserDto> FindByEmail(string email)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             if (string.IsNullOrEmpty(email))
                 return response;
 
@@ -85,9 +85,9 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public virtual async Task<IResponseItem<ApplicationUserDto>> FindByEmailAsync(string email)
+        public virtual async Task<IResponseItem<UserDto>> FindByEmailAsync(string email)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             if (string.IsNullOrEmpty(email))
                 return response;
 
@@ -106,9 +106,9 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="userStorageKey"></param>
         /// <returns></returns>
-        public virtual IResponseItem<ApplicationUserDto> FindById(string userStorageKey)
+        public virtual IResponseItem<UserDto> FindById(string userStorageKey)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             if (string.IsNullOrEmpty(userStorageKey))
                 return response;
 
@@ -127,9 +127,9 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="userStorageKey"></param>
         /// <returns></returns>
-        public virtual async Task<IResponseItem<ApplicationUserDto>> FindByIdAsync(string userStorageKey)
+        public virtual async Task<IResponseItem<UserDto>> FindByIdAsync(string userStorageKey)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             if (string.IsNullOrEmpty(userStorageKey))
                 return response;
 
@@ -321,7 +321,7 @@ namespace ServiceBricks.Security.Cosmos
         /// Get 2FA user.
         /// </summary>
         /// <returns></returns>
-        public IResponseItem<ApplicationUserDto> GetTwoFactorAuthenticationUser()
+        public IResponseItem<UserDto> GetTwoFactorAuthenticationUser()
         {
             return GetTwoFactorAuthenticationUserAsync().GetAwaiter().GetResult();
         }
@@ -330,16 +330,16 @@ namespace ServiceBricks.Security.Cosmos
         /// Get 2FA user.
         /// </summary>
         /// <returns></returns>
-        public async Task<IResponseItem<ApplicationUserDto>> GetTwoFactorAuthenticationUserAsync()
+        public async Task<IResponseItem<UserDto>> GetTwoFactorAuthenticationUserAsync()
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
                 return response;
             }
-            response.Item = _mapper.Map<ApplicationUserDto>(user);
+            response.Item = _mapper.Map<UserDto>(user);
             return response;
         }
 
@@ -416,7 +416,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public IResponseItem<ApplicationUserDto> Create(ApplicationUserDto user, string password)
+        public IResponseItem<UserDto> Create(UserDto user, string password)
         {
             return CreateAsync(user, password).GetAwaiter().GetResult();
         }
@@ -427,15 +427,15 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<IResponseItem<ApplicationUserDto>> CreateAsync(ApplicationUserDto user, string password)
+        public async Task<IResponseItem<UserDto>> CreateAsync(UserDto user, string password)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             var appUser = _mapper.Map<ApplicationUser>(user);
             appUser.SecurityStamp = Guid.NewGuid().ToString();
             var respUser = await _userManager.CreateAsync(appUser, password);
             response.CopyFrom(respUser);
             if (response.Success)
-                response.Item = _mapper.Map<ApplicationUserDto>(appUser);
+                response.Item = _mapper.Map<UserDto>(appUser);
             return response;
         }
 
@@ -530,7 +530,7 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        public IResponseList<ApplicationUserDto> GetUsersInRole(string roleName)
+        public IResponseList<UserDto> GetUsersInRole(string roleName)
         {
             return GetUsersInRoleAsync(roleName).GetAwaiter().GetResult();
         }
@@ -540,11 +540,11 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        public async Task<IResponseList<ApplicationUserDto>> GetUsersInRoleAsync(string roleName)
+        public async Task<IResponseList<UserDto>> GetUsersInRoleAsync(string roleName)
         {
             var users = await _userManager.GetUsersInRoleAsync(roleName);
-            var response = new ResponseList<ApplicationUserDto>();
-            response.List = _mapper.Map<List<ApplicationUserDto>>(users);
+            var response = new ResponseList<UserDto>();
+            response.List = _mapper.Map<List<UserDto>>(users);
             return response;
         }
 
@@ -610,7 +610,7 @@ namespace ServiceBricks.Security.Cosmos
                 return response;
             }
 
-            response.Item.User = _mapper.Map<ApplicationUserDto>(user);
+            response.Item.User = _mapper.Map<UserDto>(user);
             response.Item.SignInResult = await _signInManager.PasswordSignInAsync(
                 email,
                 password,
@@ -697,7 +697,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public IResponseItem<ApplicationUserDto> VerifyPassword(string email, string password)
+        public IResponseItem<UserDto> VerifyPassword(string email, string password)
         {
             return VerifyPasswordAsync(email, password).GetAwaiter().GetResult();
         }
@@ -708,9 +708,9 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<IResponseItem<ApplicationUserDto>> VerifyPasswordAsync(string email, string password)
+        public async Task<IResponseItem<UserDto>> VerifyPasswordAsync(string email, string password)
         {
-            var response = new ResponseItem<ApplicationUserDto>();
+            var response = new ResponseItem<UserDto>();
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
@@ -733,7 +733,7 @@ namespace ServiceBricks.Security.Cosmos
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }
-            response.Item = _mapper.Map<ApplicationUserDto>(user);
+            response.Item = _mapper.Map<UserDto>(user);
             return response;
         }
     }

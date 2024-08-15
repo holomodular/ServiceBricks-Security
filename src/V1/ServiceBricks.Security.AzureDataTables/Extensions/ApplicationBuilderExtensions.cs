@@ -66,7 +66,7 @@ namespace ServiceBricks.Security.AzureDataTables
 
             tableClient = new TableClient(
                 connectionString,
-                SecurityAzureDataTablesConstants.GetTableName(nameof(AuditUser)));
+                SecurityAzureDataTablesConstants.GetTableName(nameof(UserAudit)));
             tableClient.CreateIfNotExists();
 
             // AI: Set the module started flag

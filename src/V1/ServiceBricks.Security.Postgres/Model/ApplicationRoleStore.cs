@@ -24,8 +24,8 @@ namespace ServiceBricks.Security.Postgres
         public ApplicationRoleStore(
             IMapper mapper,
             IBusinessRuleService businessRuleService,
-            IApplicationRoleApiService applicationRoleApiService,
-            IApplicationRoleClaimApiService applicationRoleClaimApiService,
+            IRoleApiService applicationRoleApiService,
+            IRoleClaimApiService applicationRoleClaimApiService,
             SecurityPostgresContext SecurityPostgresContext,
             IdentityErrorDescriber describer = null) : base(
                 mapper,

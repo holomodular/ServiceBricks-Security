@@ -17,15 +17,15 @@ namespace ServiceBricks.Security.MongoDb
                 .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleId))
                 .ForMember(x => x.Id, y => y.Ignore());
 
-            CreateMap<ApplicationIdentityRoleClaim, ApplicationRoleClaimDto>()
+            CreateMap<ApplicationIdentityRoleClaim, RoleClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
 
-            CreateMap<ApplicationRoleClaim, ApplicationRoleClaimDto>()
+            CreateMap<ApplicationRoleClaim, RoleClaimDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
 
-            CreateMap<ApplicationRoleClaimDto, ApplicationIdentityRoleClaim>()
+            CreateMap<RoleClaimDto, ApplicationIdentityRoleClaim>()
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey))
                 .ForMember(x => x.Id, y => y.Ignore());
@@ -34,7 +34,7 @@ namespace ServiceBricks.Security.MongoDb
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
                 .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleId));
 
-            CreateMap<ApplicationRoleClaimDto, ApplicationRoleClaim>()
+            CreateMap<RoleClaimDto, ApplicationRoleClaim>()
                 .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey));
         }

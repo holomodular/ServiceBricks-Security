@@ -13,7 +13,7 @@
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\SecurityInMemoryContext.cs" Link="SecurityInMemoryContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\SecurityInMemoryModule.cs" Link="SecurityInMemoryModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.InMemory\Storage\AuditUserStorageRepository.cs" Link="AuditUserStorageRepository.cs" />
+	  <Compile Include="..\ServiceBricks.Security.InMemory\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 

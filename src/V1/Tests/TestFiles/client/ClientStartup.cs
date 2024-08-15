@@ -21,14 +21,14 @@ namespace ServiceBricks.Security.Client.Xunit
             // Remove all background tasks/timers for unit testing
 
             // Register TestManagers
-            services.AddScoped<ITestManager<ApplicationUserDto>, ApplicationUserTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserClaimDto>, ApplicationUserClaimTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserRoleDto>, ApplicationUserRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserTokenDto>, ApplicationUserTokenTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserLoginDto>, ApplicationUserLoginTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleDto>, ApplicationRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleClaimDto>, ApplicationRoleClaimTestManager>();
-            services.AddScoped<ITestManager<AuditUserDto>, AuditUserTestManager>();
+            services.AddScoped<ITestManager<UserDto>, UserTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, ApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserRoleDto>, UserRoleTestManager>();
+            services.AddScoped<ITestManager<UserTokenDto>, UserTokenTestManager>();
+            services.AddScoped<ITestManager<UserLoginDto>, UserLoginTestManager>();
+            services.AddScoped<ITestManager<RoleDto>, RoleTestManager>();
+            services.AddScoped<ITestManager<RoleClaimDto>, RoleClaimTestManager>();
+            services.AddScoped<ITestManager<UserAuditDto>, UserAuditTestManager>();
 
             services.AddServiceBricksComplete();
         }

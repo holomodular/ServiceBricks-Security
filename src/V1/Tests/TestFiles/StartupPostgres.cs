@@ -25,14 +25,14 @@ namespace ServiceBricks.Xunit
             //    services.Remove(logtimer);
 
             // Register TestManagers
-            services.AddScoped<ITestManager<ApplicationUserDto>, ApplicationUserTestManagerPostgres>();
-            services.AddScoped<ITestManager<ApplicationUserRoleDto>, ApplicationUserRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserClaimDto>, ApplicationUserClaimTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserTokenDto>, ApplicationUserTokenTestManager>();
-            services.AddScoped<ITestManager<ApplicationUserLoginDto>, ApplicationUserLoginTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleDto>, ApplicationRoleTestManager>();
-            services.AddScoped<ITestManager<ApplicationRoleClaimDto>, ApplicationRoleClaimTestManager>();
-            services.AddScoped<ITestManager<AuditUserDto>, AuditUserTestManagerPostgres>();
+            services.AddScoped<ITestManager<UserDto>, UserTestManagerPostgres>();
+            services.AddScoped<ITestManager<UserRoleDto>, UserRoleTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, ApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserTokenDto>, UserTokenTestManager>();
+            services.AddScoped<ITestManager<UserLoginDto>, UserLoginTestManager>();
+            services.AddScoped<ITestManager<RoleDto>, RoleTestManager>();
+            services.AddScoped<ITestManager<RoleClaimDto>, RoleClaimTestManager>();
+            services.AddScoped<ITestManager<UserAuditDto>, UserAuditTestManagerPostgres>();
 
             services.AddServiceBricksComplete();
         }

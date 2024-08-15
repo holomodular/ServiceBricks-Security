@@ -12,7 +12,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// </summary>
         public ApplicationUserMappingProfile()
         {
-            CreateMap<ApplicationUserDto, ApplicationUser>()
+            CreateMap<UserDto, ApplicationUser>()
                 .ForMember(x => x.CreateDate, y => y.Ignore())
                 .ForMember(x => x.PartitionKey, y => y.MapFrom(z => z.StorageKey))
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey))
@@ -20,7 +20,7 @@ namespace ServiceBricks.Security.AzureDataTables
                 .ForMember(x => x.ETag, y => y.Ignore())
                 .ForMember(x => x.Timestamp, y => y.Ignore());
 
-            CreateMap<ApplicationUser, ApplicationUserDto>()
+            CreateMap<ApplicationUser, UserDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
         }
     }
