@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -14,7 +14,6 @@
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerConstants.cs" Link="SecuritySqlServerConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerContext.cs" Link="SecuritySqlServerContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerModule.cs" Link="SecuritySqlServerModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -22,16 +21,8 @@
 	  <ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore.Debug\ServiceBricks.Security.EntityFrameworkCore.Debug.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.20" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.20" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.SqlServer" Version="1.1.0-b" />
 	</ItemGroup>
 	
 </Project>

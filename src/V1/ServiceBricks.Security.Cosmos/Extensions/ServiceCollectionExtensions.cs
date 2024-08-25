@@ -55,22 +55,19 @@ namespace ServiceBricks.Security.Cosmos
                 .AddDefaultTokenProviders();
 
             // AI: Add the parent module
-            // AI: If the primary keys of the Cosmos models do not match the EFC module, we can't use EFC rules, so skip EFC and call start on the core module instead.
-            services.AddServiceBricksSecurity(configuration); // Skip EFC
+            services.AddServiceBricksSecurityEntityFrameworkCore(configuration);
 
             // AI: Storage Services for the module for each domain object
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationRole>, SecurityStorageRepository<Cosmos.ApplicationRole>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationRoleClaim>, SecurityStorageRepository<Cosmos.ApplicationRoleClaim>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationUser>, SecurityStorageRepository<Cosmos.ApplicationUser>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationUserClaim>, SecurityStorageRepository<Cosmos.ApplicationUserClaim>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationUserLogin>, SecurityStorageRepository<Cosmos.ApplicationUserLogin>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationUserRole>, SecurityStorageRepository<Cosmos.ApplicationUserRole>>();
-            services.AddScoped<IStorageRepository<Cosmos.ApplicationUserToken>, SecurityStorageRepository<Cosmos.ApplicationUserToken>>();
-            services.AddScoped<IUserAuditStorageRepository, UserAuditStorageRepository>();
-            services.AddScoped<IStorageRepository<UserAudit>, UserAuditStorageRepository>();
+            services.AddScoped<IStorageRepository<ApplicationRole>, SecurityStorageRepository<Cosmos.ApplicationRole>>();
+            services.AddScoped<IStorageRepository<ApplicationRoleClaim>, SecurityStorageRepository<Cosmos.ApplicationRoleClaim>>();
+            services.AddScoped<IStorageRepository<ApplicationUser>, SecurityStorageRepository<Cosmos.ApplicationUser>>();
+            services.AddScoped<IStorageRepository<ApplicationUserClaim>, SecurityStorageRepository<Cosmos.ApplicationUserClaim>>();
+            services.AddScoped<IStorageRepository<ApplicationUserLogin>, SecurityStorageRepository<Cosmos.ApplicationUserLogin>>();
+            services.AddScoped<IStorageRepository<ApplicationUserRole>, SecurityStorageRepository<ApplicationUserRole>>();
+            services.AddScoped<IStorageRepository<ApplicationUserToken>, SecurityStorageRepository<ApplicationUserToken>>();
+            services.AddScoped<IStorageRepository<UserAudit>, SecurityStorageRepository<UserAudit>>();
 
             // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
-            // AI: If the primary keys of the Cosmos models match the EFC module, we can use the EFC rules
             services.AddScoped<IApiService<UserAuditDto>, UserAuditApiService>();
             services.AddScoped<IUserAuditApiService, UserAuditApiService>();
 
@@ -98,7 +95,6 @@ namespace ServiceBricks.Security.Cosmos
             services.AddScoped<IUserManagerService, UserManagerService>();
 
             // AI: Register business rules for the module
-            // AI: If the primary keys of the Cosmos models match the EFC module, we can use the EFC rules
             DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 
@@ -131,7 +127,9 @@ namespace ServiceBricks.Security.Cosmos
             DomainQueryPropertyRenameRule<ApplicationRole>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "Id");
 
             ApplicationUserLoginQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
+
             ApplicationUserTokenQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
+
             ApplicationUserRoleQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
 
             return services;

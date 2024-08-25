@@ -45,7 +45,7 @@ namespace ServiceBricks.Security.Postgres
         {
             get
             {
-                return _context.ApplicationRoles.AsQueryable();
+                return _context.Roles.AsQueryable();
             }
         }
     }

@@ -13,8 +13,7 @@ namespace ServiceBricks.Security.Cosmos
         public ApplicationRoleMappingProfile()
         {
             CreateMap<RoleDto, ApplicationRole>()
-                .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>())
-                .ForMember(x => x.ApplicationUserRoles, y => y.Ignore());
+                .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>());
 
             CreateMap<ApplicationRole, RoleDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));

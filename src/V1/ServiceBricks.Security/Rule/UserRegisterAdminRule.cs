@@ -49,7 +49,40 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserRegisterAdminProcess;
+                if (e == null || response.Error)
+                    return response;
+
+                // AI: Call user register Process (no confirmation email)
+                UserRegisterProcess registerProcess = new UserRegisterProcess(
+                    e.Email, e.Password, false, true);
+                var respRegisterUser = _businessRuleService.ExecuteProcess(registerProcess);
+                if (respRegisterUser.Error)
+                {
+                    response.CopyFrom(respRegisterUser);
+                    return response;
+                }
+
+                // AI: Find the user by email
+                var respUser = _userManagerService.FindByEmail(e.Email);
+                if (respUser.Item != null)
+                {
+                    // AI: Add the admin role
+                    var respAdminRole = _userManagerService.AddToRole(respUser.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

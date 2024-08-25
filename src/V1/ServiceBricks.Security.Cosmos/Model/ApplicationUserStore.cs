@@ -672,7 +672,7 @@ namespace ServiceBricks.Security.Cosmos
         {
             get
             {
-                return _context.ApplicationUsers.AsQueryable();
+                return _context.Users.AsQueryable();
             }
         }
     }

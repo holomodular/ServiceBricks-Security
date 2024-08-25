@@ -44,42 +44,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <summary>
         /// Audit users.
         /// </summary>
-        public virtual DbSet<Cosmos.UserAudit> AuditUsers { get; set; }
-
-        /// <summary>
-        /// Application users.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationUser> ApplicationUsers { get; set; }
-
-        /// <summary>
-        /// Application user claims.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationUserClaim> ApplicationUserClaims { get; set; }
-
-        /// <summary>
-        /// Application user roles.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationUserRole> ApplicationUserRoles { get; set; }
-
-        /// <summary>
-        /// Application user tokens.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationUserToken> ApplicationUserTokens { get; set; }
-
-        /// <summary>
-        /// Application user logins.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationUserLogin> ApplicationUserLogins { get; set; }
-
-        /// <summary>
-        /// Application roles.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationRole> ApplicationRoles { get; set; }
-
-        /// <summary>
-        /// Application role claims.
-        /// </summary>
-        public virtual DbSet<Cosmos.ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
+        public virtual DbSet<UserAudit> UserAudits { get; set; }
 
         /// <summary>
         /// OnModelCreating.
@@ -90,66 +55,83 @@ namespace ServiceBricks.Security.Cosmos
             base.OnModelCreating(builder);
 
             // AI: Set the default container name
-            builder.Model.SetDefaultContainer(SecurityCosmosConstants.DATABASE_SCHEMA_NAME);
+            //builder.Model.SetDefaultContainer(SecurityCosmosConstants.CONTAINER_PREFIX);
 
             // AI: Create the model for each table
-            builder.Entity<UserAudit>().HasKey(key => key.Key);
-            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>(b =>
+            {
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(UserAudit)));
+                b.ToTable("UserAudit");
+                b.HasKey(key => key.Key);
+                b.HasPartitionKey(key => key.UserId);
+                b.Property(key => key.Key).ValueGeneratedOnAdd();
+                b.HasIndex(key => new { key.UserId, key.CreateDate });
+            });
 
             builder.Entity<ApplicationUserRole>(b =>
             {
-                b.ToTable("UserRole").HasKey(key => new { key.UserId, key.RoleId });
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationUserRole)));
+                b.ToTable("UserRole");
+                b.HasKey(key => new { key.UserId, key.RoleId });
+                b.HasPartitionKey(x => x.UserId);
                 b.Property<Guid>("UserId");
                 b.Property<Guid>("RoleId");
-                b.HasOne(x => x.User).WithMany(x => x.ApplicationUserRoles).HasForeignKey(x => x.UserId);
-                b.HasOne(x => x.Role).WithMany(x => x.ApplicationUserRoles).HasForeignKey(x => x.RoleId);
             });
 
             builder.Entity<ApplicationUserClaim>(b =>
             {
-                b.ToTable("UserClaim").HasKey(x => x.Key);
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationUserClaim)));
+                b.ToTable("UserClaim");
+                b.HasKey(x => x.Key);
+                b.HasPartitionKey(x => x.UserId);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUserLogin>(b =>
             {
-                b.ToTable("UserLogin").HasKey(key => key.Key);
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationUserLogin)));
+                b.ToTable("UserLogin");
+                b.HasKey(key => key.Key);
+                b.HasPartitionKey(x => x.UserId);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationRoleClaim>(b =>
             {
-                b.ToTable("RoleClaim").HasKey(key => key.Key);
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationRoleClaim)));
+                b.ToTable("RoleClaim");
+                b.HasKey(key => key.Key);
+                b.HasPartitionKey(x => x.RoleId);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUserToken>(b =>
             {
-                b.ToTable("UserToken").HasKey(key => key.Key);
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationUserToken)));
+                b.ToTable("UserToken");
+                b.HasKey(key => key.Key);
+                b.HasPartitionKey(x => x.UserId);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUser>(b =>
             {
-                b.ToTable("User").Property(key => key.Id).ValueGeneratedOnAdd();
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationUser)));
+                b.ToTable("User");
+                b.HasKey(x => x.Id);
+                b.Property(key => key.Id).ValueGeneratedOnAdd();
+                b.HasPartitionKey(x => x.Id);
                 b.Property(x => x.ConcurrencyStamp).IsETagConcurrency();
-
-                // Each User can have many entries in the UserRole join table
-                b.HasMany(e => e.ApplicationUserRoles)
-                    .WithOne(e => e.User)
-                    .HasForeignKey(ur => ur.UserId)
-                    .IsRequired();
             });
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.ToTable("Role").Property(key => key.Id).ValueGeneratedOnAdd();
+                b.ToContainer(SecurityCosmosConstants.GetContainerName(nameof(ApplicationRole)));
+                b.ToTable("Role");
+                b.HasKey(x => x.Id);
+                b.HasPartitionKey(x => x.Id);
+                b.Property(key => key.Id).ValueGeneratedOnAdd();
                 b.Property(x => x.ConcurrencyStamp).IsETagConcurrency();
-                // Each Role can have many entries in the UserRole join table
-                b.HasMany(e => e.ApplicationUserRoles)
-                    .WithOne(e => e.Role)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .IsRequired();
             });
         }
 

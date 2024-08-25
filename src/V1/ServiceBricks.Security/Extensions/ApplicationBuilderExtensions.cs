@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceQuery;
 
 namespace ServiceBricks.Security
 {
@@ -30,8 +31,13 @@ namespace ServiceBricks.Security
                 if (roleService == null)
                     return applicationBuilder;
 
-                // AI: Query all roles
-                var respRoles = roleService.Query(new ServiceQuery.ServiceQueryRequest());
+                // AI: Query for roles needed
+                var sq = new ServiceQueryRequestBuilder().
+                    IsEqual(nameof(RoleDto.Name), SecurityConstants.ROLE_ADMIN_NAME)
+                    .Or()
+                    .IsEqual(nameof(RoleDto.Name), SecurityConstants.ROLE_USER_NAME)
+                    .Build();
+                var respRoles = roleService.Query(sq);
 
                 // AI: Create required role for admin
                 if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_ADMIN_NAME.ToUpper()))

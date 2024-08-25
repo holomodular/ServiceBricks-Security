@@ -55,7 +55,52 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var p = context.Object as UserMfaVerifyProcess;
+                if (p == null)
+                    return response;
+
+                // AI: attempt 2FA sign in
+                var result = _userManagerService.TwoFactorSignIn(
+                    p.Provider,
+                    p.Code,
+                    p.RememberMe,
+                    p.RememberBrowser);
+
+                if (result.Error)
+                {
+                    response.CopyFrom(result);
+                    return response;
+                }
+
+                // AI: Find the user
+                var respUser = _userManagerService.GetTwoFactorAuthenticationUser();
+                if (respUser.Item == null)
+                {
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                    return response;
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.MFA_VERIFY_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

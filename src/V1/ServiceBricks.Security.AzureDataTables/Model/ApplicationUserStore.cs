@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Data.Tables;
 using Microsoft.AspNetCore.Identity;
 using ServiceQuery;
 using System.Security.Claims;
@@ -18,6 +19,7 @@ namespace ServiceBricks.Security.AzureDataTables
         protected readonly IUserLoginApiService _applicationUserLoginApiService;
         protected readonly IUserTokenApiService _applicationUserTokenApiService;
         protected readonly IRoleApiService _applicationRoleApiService;
+        protected readonly IStorageRepository<ApplicationUser> _storageRepositoryApplicationUser;
 
         /// <summary>
         /// Constructor.
@@ -40,6 +42,7 @@ namespace ServiceBricks.Security.AzureDataTables
             IUserLoginApiService applicationUserLoginApiService,
             IUserTokenApiService applicationUserTokenApiService,
             IRoleApiService applicationRoleApiService,
+            IStorageRepository<ApplicationUser> storageRepositoryApplicationUser,
             IdentityErrorDescriber describer = null) : base(describer)
         {
             _mapper = mapper;
@@ -50,6 +53,7 @@ namespace ServiceBricks.Security.AzureDataTables
             _applicationUserLoginApiService = applicationUserLoginApiService;
             _applicationUserTokenApiService = applicationUserTokenApiService;
             _applicationRoleApiService = applicationRoleApiService;
+            _storageRepositoryApplicationUser = storageRepositoryApplicationUser;
         }
 
         /// <summary>
@@ -668,9 +672,8 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             get
             {
-                var respUsers = _applicationUserApiService.Query(new ServiceQueryRequest());
-                var users = _mapper.Map<List<ApplicationUser>>(respUsers.Item.List);
-                return users.AsQueryable();
+                // Not supported
+                return new List<ApplicationUser>().AsQueryable();
             }
         }
     }

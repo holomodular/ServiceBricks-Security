@@ -17,7 +17,6 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\UserAudit.cs" Link="UserAudit.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Interface\IUserAuditStorageRepository.cs" Link="IUserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
@@ -53,11 +52,10 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\UserAuditApiService.cs" Link="UserAuditApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\UserManagerService.cs" Link="UserManagerService.cs" />
-	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.0.11" />
+		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.1.0-b" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />

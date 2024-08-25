@@ -54,36 +54,62 @@ namespace ServiceBricks.Security
             {
                 // AI: Make sure the context object is the correct type
                 var uipp = context.Object as UserInvalidPasswordProcess;
-                if (uipp != null)
-                {
-                    // AI: Determine if user was found
-                    if (!string.IsNullOrEmpty(uipp.UserStorageKey))
-                    {
-                        // AI: Audit found user
-                        _auditUserApiService.Create(new UserAuditDto()
-                        {
-                            AuditType = AuditType.INVALID_PASSWORD_TEXT,
-                            RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                            UserStorageKey = uipp.UserStorageKey,
-                            IPAddress = _iPAddressService.GetIPAddress(),
-                        });
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(uipp.Email))
-                        {
-                            // AI: Audit not found user
-                            _auditUserApiService.Create(new UserAuditDto()
-                            {
-                                AuditType = AuditType.INVALID_PASSWORD_TEXT,
-                                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                                IPAddress = _iPAddressService.GetIPAddress(),
-                                Data = uipp.Email
-                            });
-                        }
-                    }
+                if (uipp == null)
                     return response;
-                }
+
+                // AI: If user not found, don't log anything
+                if (string.IsNullOrEmpty(uipp.UserStorageKey))
+                    return response;
+
+                // AI: Audit found user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = uipp.UserStorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress(),
+                });
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Execute the business rule.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task<IResponse> ExecuteRuleAsync(IBusinessRuleContext context)
+        {
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var uipp = context.Object as UserInvalidPasswordProcess;
+                if (uipp == null)
+                    return response;
+
+                // AI: If user not found, don't log anything
+                if (string.IsNullOrEmpty(uipp.UserStorageKey))
+                    return response;
+
+                // AI: Audit found user
+                await _auditUserApiService.CreateAsync(new UserAuditDto()
+                {
+                    AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = uipp.UserStorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress(),
+                });
+
+                return response;
             }
             catch (Exception ex)
             {

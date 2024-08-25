@@ -27,8 +27,10 @@ namespace ServiceBricks.Security
 
             // AI: Add any custom requirements for the module
 
-            // AI: Add Authentication
+            // AI: Add any options for the module
             services.Configure<SecurityTokenOptions>(configuration.GetSection(SecurityConstants.APPSETTING_SECURITY_TOKEN));
+
+            // AI: Add Authentication
             var securityOptions = services.BuildServiceProvider().GetService<IOptions<SecurityTokenOptions>>().Value;
             services.AddAuthentication(options =>
             {
@@ -105,9 +107,10 @@ namespace ServiceBricks.Security
             services.AddScoped<IAuthenticationApiController, AuthenticationApiController>();
 
             // AI: Register business rules for the module
+            SendConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
+            SendResetPasswordEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserForgotPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
-            SendResetPasswordEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserInvalidPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserLoginRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserLogoutRule.RegisterRule(BusinessRuleRegistry.Instance);
@@ -118,7 +121,6 @@ namespace ServiceBricks.Security
             UserProfileChangeRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserRegisterAdminRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserRegisterRule.RegisterRule(BusinessRuleRegistry.Instance);
-            SendConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
             UserResendConfirmationProcessRule.RegisterRule(BusinessRuleRegistry.Instance);
 
             return services;

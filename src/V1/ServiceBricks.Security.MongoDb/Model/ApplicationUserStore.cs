@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
+using ServiceBricks.Storage.MongoDb;
 using ServiceQuery;
 using System.Security.Claims;
 
@@ -19,7 +20,7 @@ namespace ServiceBricks.Security.MongoDb
         protected readonly IUserLoginApiService _applicationUserLoginApiService;
         protected readonly IUserTokenApiService _applicationUserTokenApiService;
         protected readonly IRoleApiService _applicationRoleApiService;
-        protected readonly SecurityStorageRepository<ApplicationUser> _securityStorageRepositoryApplicationUser;
+        protected readonly IStorageRepository<ApplicationUser> _storageRepositoryApplicationUser;
 
         /// <summary>
         /// Constructor
@@ -42,7 +43,7 @@ namespace ServiceBricks.Security.MongoDb
             IUserLoginApiService applicationUserLoginApiService,
             IUserTokenApiService applicationUserTokenApiService,
             IRoleApiService applicationRoleApiService,
-            SecurityStorageRepository<ApplicationUser> securityStorageRepositoryApplicationUser,
+            IStorageRepository<ApplicationUser> storageRepositoryApplicationUser,
             IdentityErrorDescriber describer = null) : base(describer)
         {
             _mapper = mapper;
@@ -53,7 +54,7 @@ namespace ServiceBricks.Security.MongoDb
             _applicationUserLoginApiService = applicationUserLoginApiService;
             _applicationUserTokenApiService = applicationUserTokenApiService;
             _applicationRoleApiService = applicationRoleApiService;
-            _securityStorageRepositoryApplicationUser = securityStorageRepositoryApplicationUser;
+            _storageRepositoryApplicationUser = storageRepositoryApplicationUser;
         }
 
         /// <summary>
@@ -668,9 +669,10 @@ namespace ServiceBricks.Security.MongoDb
         {
             get
             {
-                MongoClient client = new MongoClient(_securityStorageRepositoryApplicationUser.ConnectionString);
-                var db = client.GetDatabase(_securityStorageRepositoryApplicationUser.DatabaseName);
-                var collection = db.GetCollection<ApplicationIdentityUser>(_securityStorageRepositoryApplicationUser.CollectionName);
+                var repo = _storageRepositoryApplicationUser as SecurityStorageRepository<ApplicationUser>;
+                MongoClient client = new MongoClient(repo.ConnectionString);
+                var db = client.GetDatabase(repo.DatabaseName);
+                var collection = db.GetCollection<ApplicationIdentityUser>(repo.CollectionName);
                 return collection.AsQueryable();
             }
         }

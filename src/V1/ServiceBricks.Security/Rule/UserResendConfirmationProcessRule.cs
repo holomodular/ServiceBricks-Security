@@ -69,7 +69,61 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserResendConfirmationProcess;
+                if (e == null)
+                    return response;
+
+                // AI: Find the user
+                var respUser = _userManagerService.FindById(e.UserStorageKey);
+                if (respUser.Error || respUser.Item == null)
+                {
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                    return response;
+                }
+
+                // AI: Create confirmation code
+                var respCode = _userManagerService.GenerateEmailConfirmationToken(e.UserStorageKey);
+                if (respCode.Error)
+                {
+                    response.CopyFrom(respCode);
+                    return response;
+                }
+
+                // AI: Create callback URL
+                string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+                if (string.IsNullOrEmpty(baseUrl))
+                    baseUrl = _options.Url;
+                string callbackUrl = string.Format(
+                        "{0}/ConfirmEmail?code={1}&userId={2}",
+                        baseUrl, encodedConfirmCode, e.UserStorageKey);
+
+                // AI: Send confirm email process
+                SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                    respUser.Item, callbackUrl);
+                var respSend = _businessRuleService.ExecuteProcess(sendProcess);
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

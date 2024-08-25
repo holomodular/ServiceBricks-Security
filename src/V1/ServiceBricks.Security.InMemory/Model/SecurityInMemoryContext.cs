@@ -43,41 +43,6 @@ namespace ServiceBricks.Security.InMemory
         public virtual DbSet<UserAudit> UserAudits { get; set; }
 
         /// <summary>
-        /// The application users.
-        /// </summary>
-        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-        /// <summary>
-        /// The application roles.
-        /// </summary>
-        public virtual DbSet<ApplicationUserClaim> ApplicationUserClaims { get; set; }
-
-        /// <summary>
-        /// The application user roles.
-        /// </summary>
-        public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-
-        /// <summary>
-        /// The application user tokens
-        /// </summary>
-        public virtual DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
-
-        /// <summary>
-        /// The application user logins.
-        /// </summary>
-        public virtual DbSet<ApplicationUserLogin> ApplicationUserLogins { get; set; }
-
-        /// <summary>
-        /// The application roles.
-        /// </summary>
-        public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
-
-        /// <summary>
-        /// The application role claims.
-        /// </summary>
-        public virtual DbSet<ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
-
-        /// <summary>
         /// OnModelCreating.
         /// </summary>
         /// <param name="builder"></param>
@@ -86,12 +51,18 @@ namespace ServiceBricks.Security.InMemory
             base.OnModelCreating(builder);
 
             // AI: Create the model for each table
-            builder.Entity<UserAudit>().HasKey(key => key.Key);
-            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>(b =>
+            {
+                b.ToTable("UserAudit");
+                b.HasKey(key => key.Key);
+                b.Property(key => key.Key).ValueGeneratedOnAdd();
+                b.HasIndex(key => new { key.UserId, key.CreateDate });
+            });
 
             builder.Entity<ApplicationUserRole>(b =>
             {
-                b.ToTable("UserRole").HasKey(key => new { key.UserId, key.RoleId });
+                b.ToTable("UserRole");
+                b.HasKey(key => new { key.UserId, key.RoleId });
                 b.Property<Guid>("UserId");
                 b.Property<Guid>("RoleId");
                 b.HasOne(x => x.User).WithMany(x => x.ApplicationUserRoles).HasForeignKey(x => x.UserId);
@@ -100,29 +71,35 @@ namespace ServiceBricks.Security.InMemory
 
             builder.Entity<ApplicationUserClaim>(b =>
             {
-                b.ToTable("UserClaim").HasKey(x => x.Id);
+                b.ToTable("UserClaim");
+                b.HasKey(x => x.Id);
+                b.Property(x => x.Id).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUserLogin>(b =>
             {
-                b.ToTable("UserLogin").HasKey(key => new { key.LoginProvider, key.ProviderKey });
+                b.ToTable("UserLogin");
+                b.HasKey(key => new { key.LoginProvider, key.ProviderKey });
             });
 
             builder.Entity<ApplicationRoleClaim>(b =>
             {
-                b.ToTable("RoleClaim").HasKey(key => key.Id);
+                b.ToTable("RoleClaim");
+                b.HasKey(key => key.Id);
             });
 
             builder.Entity<ApplicationUserToken>(b =>
             {
-                b.ToTable("UserToken").HasKey(key => new { key.UserId, key.LoginProvider, key.Name });
+                b.ToTable("UserToken");
+                b.HasKey(key => new { key.UserId, key.LoginProvider, key.Name });
             });
 
             builder.Entity<ApplicationUser>(b =>
             {
-                b.ToTable("User").Property(key => key.Id).HasDefaultValueSql("newsequentialid()");
+                b.ToTable("User");
+                b.HasKey(key => key.Id);
+                b.Property(key => key.Id).HasDefaultValueSql("newsequentialid()");
 
-                // Each User can have many entries in the UserRole join table
                 b.HasMany(e => e.ApplicationUserRoles)
                     .WithOne(e => e.User)
                     .HasForeignKey(ur => ur.UserId)
@@ -131,9 +108,10 @@ namespace ServiceBricks.Security.InMemory
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.ToTable("Role").Property(key => key.Id).HasDefaultValueSql("newsequentialid()");
+                b.ToTable("Role");
+                b.HasKey(key => key.Id);
+                b.Property(key => key.Id).HasDefaultValueSql("newsequentialid()");
 
-                // Each Role can have many entries in the UserRole join table
                 b.HasMany(e => e.ApplicationUserRoles)
                     .WithOne(e => e.Role)
                     .HasForeignKey(ur => ur.RoleId)

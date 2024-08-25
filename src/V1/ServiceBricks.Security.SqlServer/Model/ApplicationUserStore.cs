@@ -57,7 +57,7 @@ namespace ServiceBricks.Security.SqlServer
         {
             get
             {
-                return _context.ApplicationUsers.AsQueryable();
+                return _context.Users.AsQueryable();
             }
         }
     }

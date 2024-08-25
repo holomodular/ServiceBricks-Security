@@ -50,8 +50,7 @@ namespace ServiceBricks.Security.MongoDb
             services.AddScoped<IStorageRepository<ApplicationUserLogin>, SecurityStorageRepository<ApplicationUserLogin>>();
             services.AddScoped<IStorageRepository<ApplicationUserRole>, SecurityStorageRepository<ApplicationUserRole>>();
             services.AddScoped<IStorageRepository<ApplicationUserToken>, SecurityStorageRepository<ApplicationUserToken>>();
-            services.AddScoped<IUserAuditStorageRepository, UserAuditStorageRepository>();
-            services.AddScoped<IStorageRepository<UserAudit>, UserAuditStorageRepository>();
+            services.AddScoped<IStorageRepository<UserAudit>, SecurityStorageRepository<UserAudit>>();
 
             // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
             services.AddScoped<IApiService<UserAuditDto>, UserAuditApiService>();

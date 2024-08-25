@@ -16,8 +16,19 @@
         public const string APPSETTING_DATABASE = "ServiceBricks:Security:Storage:Cosmos:Database";
 
         /// <summary>
-        /// The database schema name.
+        /// The container prefix name.
         /// </summary>
-        public const string DATABASE_SCHEMA_NAME = "Security";
+        public const string CONTAINER_PREFIX = "Security";
+
+        /// <summary>
+        /// Get the container name for the given table name.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public static string GetContainerName(string tableName)
+        {
+            string replaceName = tableName.Replace("Application", string.Empty);
+            return CONTAINER_PREFIX + replaceName;
+        }
     }
 }

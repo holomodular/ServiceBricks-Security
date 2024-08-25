@@ -117,7 +117,9 @@ namespace ServiceBricks.Xunit
             dto.Data = Guid.NewGuid().ToString();
             dto.IPAddress = "222.222.222.222";
             dto.AuditType = Guid.NewGuid().ToString();
-            dto.UserStorageKey = Guid.NewGuid().ToString();
+
+            // Don't update user
+            //dto.UserStorageKey = Guid.NewGuid().ToString();
         }
 
         public override void ValidateObjects(UserAuditDto clientDto, UserAuditDto serviceDto, HttpMethod method)

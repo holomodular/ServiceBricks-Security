@@ -14,8 +14,7 @@ namespace ServiceBricks.Security.Cosmos
         {
             CreateMap<UserDto, ApplicationUser>()
                 .ForMember(x => x.CreateDate, y => y.Ignore())
-                .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>())
-                .ForMember(x => x.ApplicationUserRoles, y => y.Ignore());
+                .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>());
 
             CreateMap<ApplicationUser, UserDto>()
                 .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));

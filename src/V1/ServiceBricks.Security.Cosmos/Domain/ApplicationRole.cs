@@ -10,19 +10,6 @@ namespace ServiceBricks.Security.Cosmos
     public partial class ApplicationRole : IdentityRole<Guid>, IEntityFrameworkCoreDomainObject<ApplicationRole>
     {
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        public ApplicationRole()
-        {
-            ApplicationUserRoles = new List<ApplicationUserRole>();
-        }
-
-        /// <summary>
-        /// The list of user roles.
-        /// </summary>
-        public virtual List<ApplicationUserRole> ApplicationUserRoles { get; set; }
-
-        /// <summary>
         /// Provide any defaults for the IQueryable object.
         /// </summary>
         /// <param name="query"></param>

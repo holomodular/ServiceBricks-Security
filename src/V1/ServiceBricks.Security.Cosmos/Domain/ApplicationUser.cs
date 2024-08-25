@@ -9,11 +9,6 @@ namespace ServiceBricks.Security.Cosmos
     /// </summary>
     public partial class ApplicationUser : IdentityUser<Guid>, IEntityFrameworkCoreDomainObject<ApplicationUser>, IDpCreateDate, IDpUpdateDate
     {
-        public ApplicationUser()
-        {
-            ApplicationUserRoles = new List<ApplicationUserRole>();
-        }
-
         /// <summary>
         /// The create date.
         /// </summary>
@@ -23,11 +18,6 @@ namespace ServiceBricks.Security.Cosmos
         /// The update date.
         /// </summary>
         public virtual DateTimeOffset UpdateDate { get; set; }
-
-        /// <summary>
-        /// The list of user roles.
-        /// </summary>
-        public virtual List<ApplicationUserRole> ApplicationUserRoles { get; set; }
 
         /// <summary>
         /// Provide any defaults for the IQueryable object.

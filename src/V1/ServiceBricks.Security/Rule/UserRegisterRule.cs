@@ -73,7 +73,96 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserRegisterProcess;
+                if (e == null)
+                    return response;
+
+                // AI: create user object
+                var nowDate = DateTimeOffset.UtcNow;
+                UserDto user = new UserDto()
+                {
+                    Email = e.Email,
+                    UserName = e.Email,
+                    EmailConfirmed = e.EmailConfirmed,
+                    TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    CreateDate = nowDate,
+                    UpdateDate = nowDate,
+                    PhoneNumberConfirmed = false,
+                    NormalizedEmail = e.Email.ToUpper(),
+                    NormalizedUserName = e.Email.ToUpper(),
+                };
+
+                // AI: Call usermanager to create user
+                var respUser = _userManagerService.Create(
+                    user,
+                    e.Password);
+                if (respUser.Error)
+                {
+                    response.CopyFrom(respUser);
+                    return response;
+                }
+
+                // AI: Add user to user role
+                var respAddRole = _userManagerService.AddToRole(
+                    respUser.Item.StorageKey,
+                    SecurityConstants.ROLE_USER_NAME);
+
+                // Add Claims
+                //var respAddClaim = await _userManagerService.AddClaimAsync(
+                //    respUser.Item.StorageKey,
+                //    new Claim(ClaimTypes.Email, e.Email));
+                //respAddClaim = await _userManagerService.AddClaimAsync(
+                //    respUser.Item.StorageKey,
+                //    new Claim(TimezoneService.CLAIM_TIMEZONE, e.TimezoneName));
+
+                // AI: Determine if we need to send an email
+                if (e.CreateEmail)
+                {
+                    // AI: Generate email confirmation code
+                    var respCode = _userManagerService.GenerateEmailConfirmationToken(respUser.Item.StorageKey);
+                    if (respCode.Error)
+                    {
+                        response.CopyFrom(respCode);
+                        return response;
+                    }
+
+                    // AI: Create the callback URL
+                    string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+                    string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+                    if (string.IsNullOrEmpty(baseUrl))
+                        baseUrl = _options.Url;
+                    string callbackUrl = string.Format(
+                            "{0}/ConfirmEmail?code={1}&userId={2}",
+                            baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
+
+                    // AI: Send the confirm email process
+                    SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                        respUser.Item, callbackUrl);
+                    var respSend = _businessRuleService.ExecuteProcess(sendProcess);
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.REGISTER_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

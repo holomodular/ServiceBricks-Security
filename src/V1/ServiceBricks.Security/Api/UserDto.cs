@@ -82,7 +82,14 @@
         /// </summary>
         public virtual int AccessFailedCount { get; set; }
 
+        /// <summary>
+        /// The create date.
+        /// </summary>
         public virtual DateTimeOffset CreateDate { get; set; }
+
+        /// <summary>
+        /// The update date.
+        /// </summary>
         public virtual DateTimeOffset UpdateDate { get; set; }
     }
 }

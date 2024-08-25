@@ -668,9 +668,8 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             get
             {
-                var respUsers = _applicationUserApiService.Query(new ServiceQueryRequest());
-                var users = _mapper.Map<List<ApplicationUser>>(respUsers.Item.List);
-                return users.AsQueryable();
+                // Not supported
+                return new List<ApplicationUser>().AsQueryable();
             }
         }
     }

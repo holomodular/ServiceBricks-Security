@@ -54,7 +54,47 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserPasswordChangeProcess;
+                if (e == null)
+                    return response;
+
+                // AI: Get the user
+                var respUser = _userManagerService.FindById(e.UserStorageKey.ToString());
+                if (respUser.Error || respUser.Item == null)
+                {
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                    return response;
+                }
+
+                // AI: Change the password
+                var result = _userManagerService.ChangePassword(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
+                if (result.Error)
+                {
+                    response.CopyFrom(result);
+                    return response;
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.PASSWORD_CHANGE_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

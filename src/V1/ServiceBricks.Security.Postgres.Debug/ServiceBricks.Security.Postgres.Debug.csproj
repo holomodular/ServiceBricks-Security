@@ -14,7 +14,6 @@
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresConstants.cs" Link="SecurityPostgresConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresContext.cs" Link="SecurityPostgresContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresModule.cs" Link="SecurityPostgresModule.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -22,16 +21,8 @@
 	  <ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore.Debug\ServiceBricks.Security.EntityFrameworkCore.Debug.csproj" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.18" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.Postgres" Version="1.1.0-b" />
 	</ItemGroup>
 
 </Project>

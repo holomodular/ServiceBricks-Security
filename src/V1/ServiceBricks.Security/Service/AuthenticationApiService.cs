@@ -127,23 +127,23 @@ namespace ServiceBricks.Security
                 TimeSpan.FromMinutes(_securityOptions.ExpireMinutes),
                 claims.ToArray());
 
-            if (_httpContextAccessor != null && _httpContextAccessor.HttpContext != null)
-            {
-                // add cookie
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
-                foreach (var c in claims)
-                    identity.AddClaim(c);
-                var principal = new ClaimsPrincipal(identity);
-                await _httpContextAccessor.HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal,
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        AllowRefresh = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(_securityOptions.ExpireMinutes)
-                    });
-            }
+            //if (_httpContextAccessor != null && _httpContextAccessor.HttpContext != null)
+            //{
+            //    // add cookie
+            //    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+            //    foreach (var c in claims)
+            //        identity.AddClaim(c);
+            //    var principal = new ClaimsPrincipal(identity);
+            //    await _httpContextAccessor.HttpContext.SignInAsync(
+            //        CookieAuthenticationDefaults.AuthenticationScheme,
+            //        principal,
+            //        new AuthenticationProperties
+            //        {
+            //            IsPersistent = true,
+            //            AllowRefresh = true,
+            //            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(_securityOptions.ExpireMinutes)
+            //        });
+            //}
 
             // return the token to API client
             response.Item = new AccessTokenResponse()

@@ -1,5 +1,6 @@
 using ServiceBricks;
-using ServiceBricks.Logging;
+
+//using ServiceBricks.Logging;
 
 namespace WebApp
 {
@@ -23,7 +24,7 @@ namespace WebApp
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     logging.AddConsole();
                     logging.AddDebug();
-                    logging.AddServiceBricksLogging();
+                    //logging.AddServiceBricksLogging();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

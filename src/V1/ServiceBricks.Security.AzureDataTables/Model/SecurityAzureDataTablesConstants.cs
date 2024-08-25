@@ -22,7 +22,8 @@
         /// <returns></returns>
         public static string GetTableName(string tableName)
         {
-            return TABLENAME_PREFIX + tableName;
+            string replaceName = tableName.Replace("Application", string.Empty);
+            return TABLENAME_PREFIX + replaceName;
         }
     }
 }

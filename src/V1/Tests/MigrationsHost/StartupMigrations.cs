@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using ServiceBricks.Security.Postgres;
+using ServiceBricks.Security.Postgres;
+using ServiceBricks.Security.Sqlite;
+using ServiceBricks.Security.SqlServer;
 
 namespace ServiceBricks.Xunit
 {
@@ -21,7 +23,7 @@ namespace ServiceBricks.Xunit
             //UNCOMMENT THE ONE YOU NEED
             //**************************
             //services.AddServiceBricksSecurityPostgres(Configuration);
-            //services.AddServiceBricksSecuritySqlServer(Configuration);
+            services.AddServiceBricksSecuritySqlServer(Configuration);
             //services.AddServiceBricksSecuritySqlite(Configuration);
 
             // Remove all background tasks/timers for unit testing
@@ -38,7 +40,7 @@ namespace ServiceBricks.Xunit
             //UNCOMMENT THE ONE YOU NEED
             //**************************
             //app.StartServiceBricksSecurityPostgres();
-            //app.StartServiceBricksSecuritySqlServer();
+            app.StartServiceBricksSecuritySqlServer();
             //app.StartServiceBricksSecuritySqlite();
         }
     }

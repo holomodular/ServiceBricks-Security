@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -18,7 +18,6 @@
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ResponseExtensions.cs" Link="ResponseExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Interface\IUserAuditStorageRepository.cs" Link="IUserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.EntityFrameworkCore\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
@@ -49,11 +48,11 @@
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.0.11" />
+		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.1.0-b" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.32" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.33" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
@@ -61,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
 	</ItemGroup>
 	
 </Project>

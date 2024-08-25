@@ -57,7 +57,7 @@ namespace ServiceBricks.Security.Sqlite
         {
             get
             {
-                return _context.ApplicationUsers.AsQueryable();
+                return _context.Users.AsQueryable();
             }
         }
     }

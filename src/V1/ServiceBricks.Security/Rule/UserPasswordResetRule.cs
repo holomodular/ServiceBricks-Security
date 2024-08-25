@@ -59,7 +59,62 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserPasswordResetProcess;
+                if (e == null)
+                    return response;
+
+                // AI: Find user by email
+                var respUser = _userManager.FindByEmail(e.Email);
+                if (respUser.Error || respUser.Item == null)
+                {
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                    return response;
+                }
+
+                // AI: Fix the code for spaces (encoding issue)
+                string code = e.Code;
+                if (!string.IsNullOrEmpty(code))
+                    code = code.Replace(" ", "+");
+
+                // AI: Reset the password
+                var result = _userManager.ResetPassword(respUser.Item.StorageKey, e.Code, e.Password);
+                response.CopyFrom(result);
+                if (response.Error)
+                    return response;
+
+                // AI: Reset email confirmed (since they received the email)
+                if (!respUser.Item.EmailConfirmed)
+                {
+                    var respU = _applicationUserApiService.Get(respUser.Item.StorageKey);
+                    if (respU.Item != null)
+                    {
+                        // AI: Update the user email confirmed
+                        respU.Item.EmailConfirmed = true;
+                        _applicationUserApiService.Update(respU.Item);
+                    }
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.PASSWORD_RESET_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+
+            return response;
         }
 
         /// <summary>

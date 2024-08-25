@@ -187,9 +187,8 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             get
             {
-                var respRoles = _applicationRoleApiService.Query(new ServiceQueryRequest());
-                var roles = _mapper.Map<List<ApplicationRole>>(respRoles.Item.List);
-                return roles.AsQueryable();
+                // Not supported
+                return new List<ApplicationRole>().AsQueryable();
             }
         }
     }

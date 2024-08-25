@@ -57,7 +57,7 @@ namespace ServiceBricks.Security.InMemory
         {
             get
             {
-                return _context.ApplicationUsers.AsQueryable();
+                return _context.Users.AsQueryable();
             }
         }
     }

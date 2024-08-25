@@ -66,8 +66,7 @@ namespace ServiceBricks.Security.Sqlite
             services.AddScoped<IStorageRepository<ApplicationUserLogin>, SecurityStorageRepository<ApplicationUserLogin>>();
             services.AddScoped<IStorageRepository<ApplicationUserRole>, SecurityStorageRepository<ApplicationUserRole>>();
             services.AddScoped<IStorageRepository<ApplicationUserToken>, SecurityStorageRepository<ApplicationUserToken>>();
-            services.AddScoped<IUserAuditStorageRepository, UserAuditStorageRepository>();
-            services.AddScoped<IStorageRepository<UserAudit>, UserAuditStorageRepository>();
+            services.AddScoped<IStorageRepository<UserAudit>, SecurityStorageRepository<UserAudit>>();
 
             return services;
         }

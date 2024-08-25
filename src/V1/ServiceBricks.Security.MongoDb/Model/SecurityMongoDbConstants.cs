@@ -27,7 +27,8 @@
         /// <returns></returns>
         public static string GetCollectionName(string tableName)
         {
-            return COLLECTIONNAME_PREFIX + tableName;
+            string replacename = tableName.Replace("Application", string.Empty);
+            return COLLECTIONNAME_PREFIX + replacename;
         }
     }
 }

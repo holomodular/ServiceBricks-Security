@@ -55,7 +55,48 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var e = context.Object as UserConfirmEmailProcess;
+                if (e == null)
+                    return response;
+
+                // AI: Find the user
+                var respUser = _userManagerService.FindById(e.UserStorageKey);
+                if (respUser.Error || respUser.Item == null)
+                {
+                    _logger.LogWarning($"Warning confirming email. User not found: {e.UserStorageKey}");
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
+                    return response;
+                }
+
+                // AI: Confirm email with code
+                var result = _userManagerService.ConfirmEmail(respUser.Item.StorageKey, e.Code);
+                if (result.Error)
+                {
+                    _logger.LogWarning($"Warning confirming email. Invalid code for user: {e.UserStorageKey} {e.Code}");
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
+                    return response;
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.CONFIRM_EMAIL_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respUser.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+            return response;
         }
 
         /// <summary>

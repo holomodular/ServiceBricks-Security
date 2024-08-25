@@ -21,7 +21,6 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\UserAudit.cs" Link="UserAudit.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
-	  <Compile Include="..\ServiceBricks.Security.MongoDb\Interface\IUserAuditStorageRepository.cs" Link="IUserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationUserClaimMappingProfile.cs" Link="ApplicationUserClaimMappingProfile.cs" />
@@ -43,11 +42,10 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserTokenApiService.cs" Link="ApplicationUserTokenApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\UserAuditApiService.cs" Link="UserAuditApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\UserManagerService.cs" Link="UserManagerService.cs" />
-	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\UserAuditStorageRepository.cs" Link="UserAuditStorageRepository.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.0.11" />
+		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-b" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />

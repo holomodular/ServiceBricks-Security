@@ -1,5 +1,6 @@
 ﻿using ServiceBricks;
-using ServiceBricks.Logging;
+
+//using ServiceBricks.Logging;
 using ServiceBricks.Security;
 
 namespace WebApp.Extensions
@@ -8,8 +9,8 @@ namespace WebApp.Extensions
     {
         private static IApplicationBuilder RegisterMiddleware(this IApplicationBuilder app)
         {
-            app.UseMiddleware<CustomLoggerMiddleware>();
-            app.UseMiddleware<WebRequestMessageMiddleware>();
+            //app.UseMiddleware<CustomLoggerMiddleware>();
+            //app.UseMiddleware<WebRequestMessageMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>();
             return app;
         }

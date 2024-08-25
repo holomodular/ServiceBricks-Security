@@ -45,28 +45,9 @@ namespace ServiceBricks.Security
 
             try
             {
-                // AI: Make sure the context object is the correct type
-                var obj = context.Object as SendConfirmEmailProcess;
-                if (obj == null)
-                    return response;
-
-                // AI: Create Email
-                var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
-                var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);
-                ApplicationEmailDto email = new ApplicationEmailDto()
-                {
-                    ToAddress = obj.ApplicationUser.Email,
-                    Subject = "Verify Your Email",
-                    Body = emailText,
-                    BodyHtml = emailHtml,
-                    IsHtml = true
-                };
-
-                // AI: Create Email Broadcast
-                var createEmailBroadcast = new CreateApplicationEmailBroadcast(email);
-
-                // AI: Send to servicebus
-                _serviceBus.Send(createEmailBroadcast);
+                var broadcast = GetEmailBroadcast(context);
+                if (broadcast != null)
+                    _serviceBus.Send(broadcast);
             }
             catch (Exception ex)
             {
@@ -88,28 +69,9 @@ namespace ServiceBricks.Security
 
             try
             {
-                // AI: Make sure the context object is the correct type
-                var obj = context.Object as SendConfirmEmailProcess;
-                if (obj == null)
-                    return response;
-
-                // AI: Create Email
-                var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
-                var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);
-                ApplicationEmailDto email = new ApplicationEmailDto()
-                {
-                    ToAddress = obj.ApplicationUser.Email,
-                    Subject = "Verify Your Email",
-                    Body = emailText,
-                    BodyHtml = emailHtml,
-                    IsHtml = true
-                };
-
-                // AI: Create Email Broadcast
-                var createEmailBroadcast = new CreateApplicationEmailBroadcast(email);
-
-                // AI: Send to servicebus
-                await _serviceBus.SendAsync(createEmailBroadcast);
+                var broadcast = GetEmailBroadcast(context);
+                if (broadcast != null)
+                    await _serviceBus.SendAsync(broadcast);
             }
             catch (Exception ex)
             {
@@ -118,6 +80,29 @@ namespace ServiceBricks.Security
             }
 
             return response;
+        }
+
+        private CreateApplicationEmailBroadcast GetEmailBroadcast(IBusinessRuleContext context)
+        {
+            // AI: Make sure the context object is the correct type
+            var obj = context.Object as SendConfirmEmailProcess;
+            if (obj == null)
+                return null;
+
+            // AI: Create Email
+            var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
+            var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);
+            ApplicationEmailDto email = new ApplicationEmailDto()
+            {
+                ToAddress = obj.ApplicationUser.Email,
+                Subject = "Verify Your Email",
+                Body = emailText,
+                BodyHtml = emailHtml,
+                IsHtml = true
+            };
+
+            // AI: Create Email Broadcast
+            return new CreateApplicationEmailBroadcast(email);
         }
 
         private string EMAIL_TEMPLATE_TEXT = @"Verify Your Email.

@@ -47,7 +47,77 @@ namespace ServiceBricks.Security
 
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
-            return ExecuteRuleAsync(context).GetAwaiter().GetResult();
+            var response = new Response();
+
+            try
+            {
+                // AI: Make sure the context object is the correct type
+                var p = context.Object as UserLoginProcess;
+                if (p == null)
+                    return response;
+
+                // AI: Find the user
+                var respU = _userManagerService.FindByEmail(p.Email);
+                if (respU.Error || respU.Item == null)
+                {
+                    response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
+                    return response;
+                }
+
+                // AI: Set response properties on process object
+                var user = respU.Item;
+                p.User = user;
+                p.ApplicationSigninResult = new ApplicationSigninResult()
+                {
+                    User = user
+                };
+
+                // AI: Determine if email confirmed
+                if (!user.EmailConfirmed)
+                {
+                    p.ApplicationSigninResult.EmailNotConfirmed = true;
+                    response.AddMessage(ResponseMessage.CreateError("Email Not Confirmed"));
+                    return response;
+                }
+
+                IResponseItem<ApplicationSigninResult> respSignin = null;
+                if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
+                {
+                    // AI: This is not a web request, unit test
+                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
+                    return response;
+                }
+                else
+                {
+                    // AI: attempt to sign in
+                    respSignin = _userManagerService.PasswordSignIn(
+                        p.Email,
+                        p.Password,
+                        p.RememberMe);
+                    p.ApplicationSigninResult = respSignin.Item;
+                }
+                if (respSignin.Error)
+                {
+                    response.CopyFrom(respSignin);
+                    return response;
+                }
+
+                // AI: Audit user
+                _auditUserApiService.Create(new UserAuditDto()
+                {
+                    AuditType = AuditType.LOGIN_TEXT,
+                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                    UserStorageKey = respU.Item.StorageKey,
+                    IPAddress = _iPAddressService.GetIPAddress()
+                });
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+            }
+            return response;
         }
 
         public override async Task<IResponse> ExecuteRuleAsync(IBusinessRuleContext context)

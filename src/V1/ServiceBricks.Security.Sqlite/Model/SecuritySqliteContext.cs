@@ -8,7 +8,7 @@ using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Sqlite
 {
-    // dotnet ef migrations add SecurityV1 --context SecuritySqliteContext --startup-project ../Test/MigrationsHost
+    // dotnet ef migrations add SecurityV1 --context SecuritySqliteContext --startup-project ../Tests/MigrationsHost
 
     /// <summary>
     /// This is the database context for the Security module.
@@ -52,41 +52,6 @@ namespace ServiceBricks.Security.Sqlite
         public virtual DbSet<UserAudit> UserAudits { get; set; }
 
         /// <summary>
-        /// Application users.
-        /// </summary>
-        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-        /// <summary>
-        /// Application user claims
-        /// </summary>
-        public virtual DbSet<ApplicationUserClaim> ApplicationUserClaims { get; set; }
-
-        /// <summary>
-        /// Application user roles
-        /// </summary>
-        public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-
-        /// <summary>
-        /// Application user tokens
-        /// </summary>
-        public virtual DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
-
-        /// <summary>
-        /// Application user logins
-        /// </summary>
-        public virtual DbSet<ApplicationUserLogin> ApplicationUserLogins { get; set; }
-
-        /// <summary>
-        /// Application roles
-        /// </summary>
-        public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
-
-        /// <summary>
-        /// Application role claims
-        /// </summary>
-        public virtual DbSet<ApplicationRoleClaim> ApplicationRoleClaims { get; set; }
-
-        /// <summary>
         /// OnModelCreating.
         /// </summary>
         /// <param name="builder"></param>
@@ -94,16 +59,19 @@ namespace ServiceBricks.Security.Sqlite
         {
             base.OnModelCreating(builder);
 
-            // AI: Set the default schema
-            builder.HasDefaultSchema(SecuritySqliteConstants.DATABASE_SCHEMA_NAME);
-
             // AI: Setup the entities to the model
-            builder.Entity<UserAudit>().HasKey(key => key.Key);
-            builder.Entity<UserAudit>().HasIndex(key => new { key.UserId, key.CreateDate });
+            builder.Entity<UserAudit>(b =>
+            {
+                b.ToTable("UserAudit");
+                b.HasKey(key => key.Key);
+                b.Property(key => key.Key).ValueGeneratedOnAdd();
+                b.HasIndex(key => new { key.UserId, key.CreateDate });
+            });
 
             builder.Entity<ApplicationUserRole>(b =>
             {
-                b.ToTable("UserRole").HasKey(key => new { key.UserId, key.RoleId });
+                b.ToTable("UserRole");
+                b.HasKey(key => new { key.UserId, key.RoleId });
                 b.Property<Guid>("UserId");
                 b.Property<Guid>("RoleId");
                 b.HasOne(x => x.User).WithMany(x => x.ApplicationUserRoles).HasForeignKey(x => x.UserId);
@@ -112,29 +80,36 @@ namespace ServiceBricks.Security.Sqlite
 
             builder.Entity<ApplicationUserClaim>(b =>
             {
-                b.ToTable("UserClaim").HasKey(x => x.Id);
+                b.ToTable("UserClaim");
+                b.HasKey(x => x.Id);
+                b.Property(x => x.Id).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUserLogin>(b =>
             {
-                b.ToTable("UserLogin").HasKey(key => new { key.LoginProvider, key.ProviderKey });
+                b.ToTable("UserLogin");
+                b.HasKey(key => new { key.LoginProvider, key.ProviderKey });
             });
 
             builder.Entity<ApplicationRoleClaim>(b =>
             {
-                b.ToTable("RoleClaim").HasKey(key => key.Id);
+                b.ToTable("RoleClaim");
+                b.HasKey(key => key.Id);
+                b.Property(x => x.Id).ValueGeneratedOnAdd();
             });
 
             builder.Entity<ApplicationUserToken>(b =>
             {
-                b.ToTable("UserToken").HasKey(key => new { key.UserId, key.LoginProvider, key.Name });
+                b.ToTable("UserToken");
+                b.HasKey(key => new { key.UserId, key.LoginProvider, key.Name });
             });
 
             builder.Entity<ApplicationUser>(b =>
             {
-                b.ToTable("User").HasKey(key => key.Id);
+                b.ToTable("User");
+                b.HasKey(x => x.Id);
+                b.Property(key => key.Id).ValueGeneratedOnAdd();
 
-                // Each User can have many entries in the UserRole join table
                 b.HasMany(e => e.ApplicationUserRoles)
                     .WithOne(e => e.User)
                     .HasForeignKey(ur => ur.UserId)
@@ -143,9 +118,10 @@ namespace ServiceBricks.Security.Sqlite
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.ToTable("Role").HasKey(key => key.Id);
+                b.ToTable("Role");
+                b.HasKey(x => x.Id);
+                b.Property(key => key.Id).ValueGeneratedOnAdd();
 
-                // Each Role can have many entries in the UserRole join table
                 b.HasMany(e => e.ApplicationUserRoles)
                     .WithOne(e => e.Role)
                     .HasForeignKey(ur => ur.RoleId)
