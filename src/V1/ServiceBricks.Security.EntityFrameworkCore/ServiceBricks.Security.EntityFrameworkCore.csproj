@@ -2,9 +2,13 @@
 
 	<PropertyGroup>
 		<Version>1.1.0-b</Version>
-		<Description>ServiceBricks - The open source microservices foundation. Visit https://ServiceBricks.com to learn more.</Description>
+		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
+		<PackageId>ServiceBricks.Security.EntityFrameworkCore</PackageId>
+		<Title>ServiceBricks.Security.EntityFrameworkCore</Title>
 		<AssemblyTitle>ServiceBricks.Security.EntityFrameworkCore</AssemblyTitle>
 		<Authors>holomodular</Authors>
+		<Company>HoloModular LLC</Company>
+		<Product>ServiceBricks</Product>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<Copyright>Copyright © 2024 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
@@ -13,7 +17,7 @@
 		<PackageTags>service;bricks;security;entityframeworkcore;efc</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>ServiceBricks.Security.EntityFrameworkCore.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>Resource\ServiceBricks.Security.EntityFrameworkCore.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
@@ -22,11 +26,11 @@
 		<IsPackable>True</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Include="docs\readme.md" Pack="True" PackagePath="\" />
-		<EmbeddedResource Include="logo.png">
+		<None Include="Resource\readme.md" Pack="True" PackagePath="\" />
+		<None Include="Resource\logo.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
-		</EmbeddedResource>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.1.0-b" />

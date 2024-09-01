@@ -21,16 +21,6 @@
         public const string APPSETTING_CLIENT_APICONFIG = @"ServiceBricks:Security:Client:Api";
 
         /// <summary>
-        /// The admin role name.
-        /// </summary>
-        public const string ROLE_ADMIN_NAME = "ADMIN";
-
-        /// <summary>
-        /// The user role name.
-        /// </summary>
-        public const string ROLE_USER_NAME = "USER";
-
-        /// <summary>
         /// The authentication scheme for the ServiceBricks.Security module.
         /// </summary>
         public const string SERVICEBRICKS_AUTHENTICATION_SCHEME = "SERVICEBRICKS_AUTH";
