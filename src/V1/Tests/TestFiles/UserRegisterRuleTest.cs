@@ -63,7 +63,7 @@ namespace ServiceBricks.Xunit.Integration
 
             // Verify roles
             var roleApiService = SystemManager.ServiceProvider.GetRequiredService<IRoleApiService>();
-            var qb = ServiceQueryRequestBuilder.New().IsEqual(nameof(RoleDto.Name), SecurityConstants.ROLE_USER_NAME);
+            var qb = ServiceQueryRequestBuilder.New().IsEqual(nameof(RoleDto.Name), ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
             var respUserRole = await roleApiService.QueryAsync(qb.Build());
             Assert.True(respUserRole.Item.List != null && respUserRole.Item.List.Count == 1);
             if (respUserRole.Item.List == null)

@@ -45,7 +45,7 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-b" />
+		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-g" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />

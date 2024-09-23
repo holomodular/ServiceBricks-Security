@@ -82,14 +82,14 @@ namespace ServiceBricks.Security
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddAuthenticationSchemes(IdentityConstants.ApplicationScheme)
-                    .RequireRole(SecurityConstants.ROLE_ADMIN_NAME));
+                    .RequireRole(ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME));
 
                 options.AddPolicy(ServiceBricksConstants.SECURITY_POLICY_USER, policy =>
                     policy
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddAuthenticationSchemes(IdentityConstants.ApplicationScheme)
-                    .RequireRole(SecurityConstants.ROLE_USER_NAME));
+                    .RequireRole(ServiceBricksConstants.SECURITY_ROLE_USER_NAME));
             });
 
             // AI: Add any miscellaneous services for the module
@@ -107,21 +107,21 @@ namespace ServiceBricks.Security
             services.AddScoped<IAuthenticationApiController, AuthenticationApiController>();
 
             // AI: Register business rules for the module
-            SendConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
-            SendResetPasswordEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserConfirmEmailRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserForgotPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserInvalidPasswordRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserLoginRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserLogoutRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserMFARule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserMfaVerifyRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserPasswordChangeRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserPasswordResetRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserProfileChangeRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserRegisterAdminRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserRegisterRule.RegisterRule(BusinessRuleRegistry.Instance);
-            UserResendConfirmationProcessRule.RegisterRule(BusinessRuleRegistry.Instance);
+            SendConfirmEmailRule.Register(BusinessRuleRegistry.Instance);
+            SendResetPasswordEmailRule.Register(BusinessRuleRegistry.Instance);
+            UserConfirmEmailRule.Register(BusinessRuleRegistry.Instance);
+            UserForgotPasswordRule.Register(BusinessRuleRegistry.Instance);
+            UserInvalidPasswordRule.Register(BusinessRuleRegistry.Instance);
+            UserLoginRule.Register(BusinessRuleRegistry.Instance);
+            UserLogoutRule.Register(BusinessRuleRegistry.Instance);
+            UserMFARule.Register(BusinessRuleRegistry.Instance);
+            UserMfaVerifyRule.Register(BusinessRuleRegistry.Instance);
+            UserPasswordChangeRule.Register(BusinessRuleRegistry.Instance);
+            UserPasswordResetRule.Register(BusinessRuleRegistry.Instance);
+            UserProfileChangeRule.Register(BusinessRuleRegistry.Instance);
+            UserRegisterAdminRule.Register(BusinessRuleRegistry.Instance);
+            UserRegisterRule.Register(BusinessRuleRegistry.Instance);
+            UserResendConfirmationProcessRule.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

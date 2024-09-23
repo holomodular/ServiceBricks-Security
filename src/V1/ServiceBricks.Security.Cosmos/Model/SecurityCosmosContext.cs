@@ -65,7 +65,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.HasKey(key => key.Key);
                 b.HasPartitionKey(key => key.UserId);
                 b.Property(key => key.Key).ValueGeneratedOnAdd();
-                b.HasIndex(key => new { key.UserId, key.CreateDate });
+                b.HasIndex(key => new { key.UserId, key.AuditType, key.CreateDate });
             });
 
             builder.Entity<ApplicationUserRole>(b =>

@@ -11,7 +11,7 @@ namespace WebApp.Extensions
         {
             //app.UseMiddleware<CustomLoggerMiddleware>();
             //app.UseMiddleware<WebRequestMessageMiddleware>();
-            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<TrapExceptionResponseMiddleware>();
             return app;
         }
 
@@ -71,7 +71,7 @@ namespace WebApp.Extensions
                     };
                     var respCreate = userManager.Create(testUser, "UnitTest123!@#");
                     if (respCreate.Success && respCreate.Item != null)
-                        userManager.AddToRole(respCreate.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
+                        userManager.AddToRole(respCreate.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
                 }
             }
 

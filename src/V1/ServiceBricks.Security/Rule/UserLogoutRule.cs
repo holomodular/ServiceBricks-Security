@@ -42,9 +42,20 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Register the business rule.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(UserLogoutProcess),
+                typeof(UserLogoutRule));
+        }
+
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(UserLogoutProcess),
                 typeof(UserLogoutRule));
         }

@@ -56,7 +56,7 @@ namespace ServiceBricks.Security.InMemory
                 b.ToTable("UserAudit");
                 b.HasKey(key => key.Key);
                 b.Property(key => key.Key).ValueGeneratedOnAdd();
-                b.HasIndex(key => new { key.UserId, key.CreateDate });
+                b.HasIndex(key => new { key.UserId, key.AuditType, key.CreateDate });
             });
 
             builder.Entity<ApplicationUserRole>(b =>

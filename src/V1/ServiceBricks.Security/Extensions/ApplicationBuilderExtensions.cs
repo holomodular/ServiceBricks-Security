@@ -33,29 +33,29 @@ namespace ServiceBricks.Security
 
                 // AI: Query for roles needed
                 var sq = new ServiceQueryRequestBuilder().
-                    IsEqual(nameof(RoleDto.Name), SecurityConstants.ROLE_ADMIN_NAME)
+                    IsEqual(nameof(RoleDto.Name), ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME)
                     .Or()
-                    .IsEqual(nameof(RoleDto.Name), SecurityConstants.ROLE_USER_NAME)
+                    .IsEqual(nameof(RoleDto.Name), ServiceBricksConstants.SECURITY_ROLE_USER_NAME)
                     .Build();
                 var respRoles = roleService.Query(sq);
 
                 // AI: Create required role for admin
-                if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_ADMIN_NAME.ToUpper()))
+                if (respRoles.Success && !respRoles.Item.List.Any(x => string.Compare(x.NormalizedName, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME, true) == 0))
                 {
                     _ = roleService.Create(new RoleDto()
                     {
-                        Name = SecurityConstants.ROLE_ADMIN_NAME,
-                        NormalizedName = SecurityConstants.ROLE_ADMIN_NAME.ToUpper()
+                        Name = ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME,
+                        NormalizedName = ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME.ToUpper()
                     });
                 }
 
                 // AI: Create required roles for user
-                if (respRoles.Success && !respRoles.Item.List.Any(x => x.NormalizedName == SecurityConstants.ROLE_USER_NAME.ToUpper()))
+                if (respRoles.Success && !respRoles.Item.List.Any(x => string.Compare(x.NormalizedName, ServiceBricksConstants.SECURITY_ROLE_USER_NAME, true) == 0))
                 {
                     _ = roleService.Create(new RoleDto()
                     {
-                        Name = SecurityConstants.ROLE_USER_NAME,
-                        NormalizedName = SecurityConstants.ROLE_USER_NAME.ToUpper()
+                        Name = ServiceBricksConstants.SECURITY_ROLE_USER_NAME,
+                        NormalizedName = ServiceBricksConstants.SECURITY_ROLE_USER_NAME.ToUpper()
                     });
                 }
             }

@@ -55,7 +55,7 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.1.0-b" />
+		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.1.0-g" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />

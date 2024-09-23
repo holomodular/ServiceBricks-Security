@@ -35,9 +35,20 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Register the business rule.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(UserRegisterAdminProcess),
+                typeof(UserRegisterAdminRule));
+        }
+
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(UserRegisterAdminProcess),
                 typeof(UserRegisterAdminRule));
         }
@@ -73,7 +84,7 @@ namespace ServiceBricks.Security
                 if (respUser.Item != null)
                 {
                     // AI: Add the admin role
-                    var respAdminRole = _userManagerService.AddToRole(respUser.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
+                    var respAdminRole = _userManagerService.AddToRole(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
                 }
             }
             catch (Exception ex)
@@ -116,7 +127,7 @@ namespace ServiceBricks.Security
                 if (respUser.Item != null)
                 {
                     // AI: Add the admin role
-                    var respAdminRole = await _userManagerService.AddToRoleAsync(respUser.Item.StorageKey, SecurityConstants.ROLE_ADMIN_NAME);
+                    var respAdminRole = await _userManagerService.AddToRoleAsync(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
                 }
             }
             catch (Exception ex)

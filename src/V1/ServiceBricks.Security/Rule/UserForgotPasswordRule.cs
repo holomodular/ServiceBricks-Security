@@ -54,9 +54,16 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Register the business rule.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(UserForgotPasswordProcess),
+                typeof(UserForgotPasswordRule));
+        }
+
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(UserForgotPasswordProcess),
                 typeof(UserForgotPasswordRule));
         }
@@ -96,8 +103,6 @@ namespace ServiceBricks.Security
 
                 // AI: Create the callback URL
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                if (string.IsNullOrEmpty(baseUrl))
-                    baseUrl = _options.Url;
                 string callbackUrl = string.Format(
                         "{0}/ResetPassword?code={1}&userId={2}",
                         baseUrl, respCode.Item, e.DomainObject);
@@ -159,8 +164,6 @@ namespace ServiceBricks.Security
 
                 // AI: Create the callback URL
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                if (string.IsNullOrEmpty(baseUrl))
-                    baseUrl = _options.Url;
                 string callbackUrl = string.Format(
                         "{0}/ResetPassword?code={1}&userId={2}",
                         baseUrl, respCode.Item, e.DomainObject);

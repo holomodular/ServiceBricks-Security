@@ -7,7 +7,7 @@ using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Postgres
 {
-    // dotnet ef migrations add SecurityV1 --context SecurityPostgresContext --startup-project ../Test/MigrationsHost
+    // dotnet ef migrations add SecurityV1 --context SecurityPostgresContext --startup-project ../Tests/MigrationsHost
 
     /// <summary>
     /// This is the database context for the Security module.
@@ -68,7 +68,7 @@ namespace ServiceBricks.Security.Postgres
                 b.ToTable("UserAudit");
                 b.HasKey(key => key.Key);
                 b.Property(key => key.Key).ValueGeneratedOnAdd();
-                b.HasIndex(key => new { key.UserId, key.CreateDate });
+                b.HasIndex(key => new { key.UserId, key.AuditType, key.CreateDate });
             });
 
             builder.Entity<ApplicationUserRole>(b =>

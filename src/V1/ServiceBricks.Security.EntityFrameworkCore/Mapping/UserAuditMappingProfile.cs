@@ -70,7 +70,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                     if (Guid.TryParse(source.UserStorageKey, out tempGuid))
                         return tempGuid;
                 }
-                if (string.IsNullOrEmpty(source.StorageKey))
+                if (string.IsNullOrEmpty(source.UserStorageKey))
                     return Guid.Empty;
 
                 string[] split = source.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);

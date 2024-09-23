@@ -80,45 +80,44 @@ namespace ServiceBricks.Security.AzureDataTables
             services.AddScoped<IUserManagerService, UserManagerService>();
 
             // AI: Register business rules for the module
-            DomainCreateUpdateDateRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
-            ApplicationUserCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationUser>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "PartitionKey");
+            DomainCreateUpdateDateRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
+            ApplicationUserCreateRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance, "StorageKey", "PartitionKey");
 
-            DomainCreateDateRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance);
-            UserAuditQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<UserAudit>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
-            UserAuditCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
+            DomainCreateDateRule<UserAudit>.Register(BusinessRuleRegistry.Instance);
+            UserAuditQueryRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<UserAudit>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
+            UserAuditCreateRule.Register(BusinessRuleRegistry.Instance);
 
-            ApplicationUserClaimCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationUserClaim>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationUserClaim>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
+            ApplicationUserClaimCreateRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationUserClaim>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationUserClaim>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
 
-            ApplicationUserLoginCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
-            ApplicationUserRoleCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
-            ApplicationUserTokenCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
+            ApplicationUserLoginCreateRule.Register(BusinessRuleRegistry.Instance);
+            ApplicationUserRoleCreateRule.Register(BusinessRuleRegistry.Instance);
+            ApplicationUserTokenCreateRule.Register(BusinessRuleRegistry.Instance);
 
-            ApplicationRoleClaimCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
+            ApplicationRoleClaimCreateRule.Register(BusinessRuleRegistry.Instance);
 
-            ApplicationRoleCreateRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationRole>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationRole>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationRole>.RegisterRule(BusinessRuleRegistry.Instance, "StorageKey", "PartitionKey");
+            ApplicationRoleCreateRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationRole>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationRole>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationRole>.Register(BusinessRuleRegistry.Instance, "StorageKey", "PartitionKey");
 
-            ApplicationRoleClaimQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
+            ApplicationRoleClaimQueryRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
 
-            ApplicationUserClaimQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
-            ApplicationUserLoginQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
+            ApplicationUserClaimQueryRule.Register(BusinessRuleRegistry.Instance);
+            ApplicationUserLoginQueryRule.Register(BusinessRuleRegistry.Instance);
 
-            ApplicationUserTokenQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationUserToken>.RegisterRule(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
-            DomainQueryPropertyRenameRule<ApplicationUserToken>.RegisterRule(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
+            ApplicationUserTokenQueryRule.Register(BusinessRuleRegistry.Instance);
+            DomainQueryPropertyRenameRule<ApplicationUserToken>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");
+            DomainQueryPropertyRenameRule<ApplicationUserToken>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "PartitionKey");
 
-            ApplicationUserRoleQueryRule.RegisterRule(BusinessRuleRegistry.Instance);
+            ApplicationUserRoleQueryRule.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

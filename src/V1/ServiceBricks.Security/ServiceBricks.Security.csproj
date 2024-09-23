@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-b</Version>
+		<Version>1.1.0-g</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security</PackageId>
 		<Title>ServiceBricks.Security</Title>
@@ -14,7 +14,7 @@
 		<Copyright>Copyright © 2024 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
 		<PackageProjectUrl>https://ServiceBricks.com</PackageProjectUrl>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageTags>service;bricks;security</PackageTags>
+		<PackageTags>servicebricks;security</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>Resource\ServiceBricks.Security.snk</AssemblyOriginatorKeyFile>
@@ -36,7 +36,7 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.1.0-b" />
+		<PackageReference Include="ServiceBricks" Version="1.1.0-g" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">

@@ -23,9 +23,20 @@ namespace ServiceBricks.Security.AzureDataTables
         /// <summary>
         /// Register a rule for a domain object.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(DomainCreateBeforeEvent<UserAudit>),
+                typeof(UserAuditCreateRule));
+        }
+
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(DomainCreateBeforeEvent<UserAudit>),
                 typeof(UserAuditCreateRule));
         }

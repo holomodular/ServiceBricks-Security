@@ -59,9 +59,20 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Register the business rule.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(UserRegisterProcess),
+                typeof(UserRegisterRule));
+        }
+
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(UserRegisterProcess),
                 typeof(UserRegisterRule));
         }
@@ -111,7 +122,7 @@ namespace ServiceBricks.Security
                 // AI: Add user to user role
                 var respAddRole = _userManagerService.AddToRole(
                     respUser.Item.StorageKey,
-                    SecurityConstants.ROLE_USER_NAME);
+                    ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
 
                 // Add Claims
                 //var respAddClaim = await _userManagerService.AddClaimAsync(
@@ -135,8 +146,6 @@ namespace ServiceBricks.Security
                     // AI: Create the callback URL
                     string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                     string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                    if (string.IsNullOrEmpty(baseUrl))
-                        baseUrl = _options.Url;
                     string callbackUrl = string.Format(
                             "{0}/ConfirmEmail?code={1}&userId={2}",
                             baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
@@ -210,7 +219,7 @@ namespace ServiceBricks.Security
                 // AI: Add user to user role
                 var respAddRole = await _userManagerService.AddToRoleAsync(
                     respUser.Item.StorageKey,
-                    SecurityConstants.ROLE_USER_NAME);
+                    ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
 
                 // Add Claims
                 //var respAddClaim = await _userManagerService.AddClaimAsync(
@@ -234,8 +243,6 @@ namespace ServiceBricks.Security
                     // AI: Create the callback URL
                     string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                     string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                    if (string.IsNullOrEmpty(baseUrl))
-                        baseUrl = _options.Url;
                     string callbackUrl = string.Format(
                             "{0}/ConfirmEmail?code={1}&userId={2}",
                             baseUrl, encodedConfirmCode, respUser.Item.StorageKey);

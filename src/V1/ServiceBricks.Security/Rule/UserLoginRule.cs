@@ -38,13 +38,33 @@ namespace ServiceBricks.Security
             Priority = PRIORITY_NORMAL;
         }
 
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        /// <summary>
+        /// Register the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
                     typeof(UserLoginProcess),
                     typeof(UserLoginRule));
         }
 
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
+                    typeof(UserLoginProcess),
+                    typeof(UserLoginRule));
+        }
+
+        /// <summary>
+        /// Execute the rule
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override IResponse ExecuteRule(IBusinessRuleContext context)
         {
             var response = new Response();

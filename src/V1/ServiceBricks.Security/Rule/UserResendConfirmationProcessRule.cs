@@ -55,9 +55,20 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Register the business rule.
         /// </summary>
-        public static void RegisterRule(IBusinessRuleRegistry registry)
+        public static void Register(IBusinessRuleRegistry registry)
         {
-            registry.RegisterItem(
+            registry.Register(
+                typeof(UserResendConfirmationProcess),
+                typeof(UserResendConfirmationProcessRule));
+        }
+
+        /// <summary>
+        /// Unregister the rule
+        /// </summary>
+        /// <param name="registry"></param>
+        public static void UnRegister(IBusinessRuleRegistry registry)
+        {
+            registry.UnRegister(
                 typeof(UserResendConfirmationProcess),
                 typeof(UserResendConfirmationProcessRule));
         }
@@ -97,8 +108,6 @@ namespace ServiceBricks.Security
                 // AI: Create callback URL
                 string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                if (string.IsNullOrEmpty(baseUrl))
-                    baseUrl = _options.Url;
                 string callbackUrl = string.Format(
                         "{0}/ConfirmEmail?code={1}&userId={2}",
                         baseUrl, encodedConfirmCode, e.UserStorageKey);
@@ -161,8 +170,6 @@ namespace ServiceBricks.Security
                 // AI: Create callback URL
                 string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
                 string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                if (string.IsNullOrEmpty(baseUrl))
-                    baseUrl = _options.Url;
                 string callbackUrl = string.Format(
                         "{0}/ConfirmEmail?code={1}&userId={2}",
                         baseUrl, encodedConfirmCode, e.UserStorageKey);

@@ -9,6 +9,9 @@
 	<ItemGroup>
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Migrations\20240921072902_SecurityV1.cs" Link="20240921072902_SecurityV1.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Migrations\20240921072902_SecurityV1.Designer.cs" Link="20240921072902_SecurityV1.Designer.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Migrations\SecuritySqliteContextModelSnapshot.cs" Link="SecuritySqliteContextModelSnapshot.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteConstants.cs" Link="SecuritySqliteConstants.cs" />
@@ -22,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.Sqlite" Version="1.1.0-b" />
+		<PackageReference Include="ServiceBricks.Storage.Sqlite" Version="1.1.0-g" />
 	</ItemGroup>
 	
 </Project>
