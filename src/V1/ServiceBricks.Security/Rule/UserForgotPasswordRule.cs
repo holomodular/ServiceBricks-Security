@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ServiceBricks.Security
@@ -10,7 +9,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserForgotPasswordRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
@@ -22,7 +20,6 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="iPAddressService"></param>
@@ -31,7 +28,6 @@ namespace ServiceBricks.Security
         /// <param name="httpContextAccessor"></param>
         /// <param name="configuration"></param>
         public UserForgotPasswordRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService,
@@ -40,7 +36,6 @@ namespace ServiceBricks.Security
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
         {
-            _logger = loggerFactory.CreateLogger<UserForgotPasswordRule>();
             _auditUserApiService = auditUserApiService;
             _userManagerService = userManagerApiService;
             _iPAddressService = iPAddressService;
@@ -77,55 +72,56 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserForgotPasswordProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = _userManagerService.FindById(e.DomainObject.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Generate the password reset token
-                var user = e.DomainObject;
-                var respCode = _userManagerService.GeneratePasswordResetToken(respUser.Item.StorageKey);
-                if (respCode.Error)
-                {
-                    response.CopyFrom(respCode);
-                    return response;
-                }
-
-                // AI: Create the callback URL
-                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                string callbackUrl = string.Format(
-                        "{0}/ResetPassword?code={1}&userId={2}",
-                        baseUrl, respCode.Item, e.DomainObject);
-
-                // AI: Send the reset email process
-                SendResetPasswordEmailProcess sendProcess = new SendResetPasswordEmailProcess(
-                    respUser.Item, callbackUrl);
-                var respSend = _businessRuleService.ExecuteProcess(sendProcess);
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.FORGOT_PASSWORD_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserForgotPasswordProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respUser = _userManagerService.FindById(e.DomainObject.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Generate the password reset token
+            var user = e.DomainObject;
+            var respCode = _userManagerService.GeneratePasswordResetToken(respUser.Item.StorageKey);
+            if (respCode.Error)
+            {
+                response.CopyFrom(respCode);
+                return response;
+            }
+
+            // AI: Create the callback URL
+            string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+            string callbackUrl = string.Format(
+                    "{0}/ResetPassword?code={1}&userId={2}",
+                    baseUrl, respCode.Item, e.DomainObject);
+
+            // AI: Send the reset email process
+            SendResetPasswordEmailProcess sendProcess = new SendResetPasswordEmailProcess(
+                respUser.Item, callbackUrl);
+            var respSend = _businessRuleService.ExecuteProcess(sendProcess);
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.FORGOT_PASSWORD_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
+
             return response;
         }
 
@@ -138,55 +134,56 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserForgotPasswordProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = await _userManagerService.FindByIdAsync(e.DomainObject.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Generate the password reset token
-                var user = e.DomainObject;
-                var respCode = await _userManagerService.GeneratePasswordResetTokenAsync(respUser.Item.StorageKey);
-                if (respCode.Error)
-                {
-                    response.CopyFrom(respCode);
-                    return response;
-                }
-
-                // AI: Create the callback URL
-                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                string callbackUrl = string.Format(
-                        "{0}/ResetPassword?code={1}&userId={2}",
-                        baseUrl, respCode.Item, e.DomainObject);
-
-                // AI: Send the reset email process
-                SendResetPasswordEmailProcess sendProcess = new SendResetPasswordEmailProcess(
-                    respUser.Item, callbackUrl);
-                var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.FORGOT_PASSWORD_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserForgotPasswordProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respUser = await _userManagerService.FindByIdAsync(e.DomainObject.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Generate the password reset token
+            var user = e.DomainObject;
+            var respCode = await _userManagerService.GeneratePasswordResetTokenAsync(respUser.Item.StorageKey);
+            if (respCode.Error)
+            {
+                response.CopyFrom(respCode);
+                return response;
+            }
+
+            // AI: Create the callback URL
+            string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+            string callbackUrl = string.Format(
+                    "{0}/ResetPassword?code={1}&userId={2}",
+                    baseUrl, respCode.Item, e.DomainObject);
+
+            // AI: Send the reset email process
+            SendResetPasswordEmailProcess sendProcess = new SendResetPasswordEmailProcess(
+                respUser.Item, callbackUrl);
+            var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.FORGOT_PASSWORD_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
+
             return response;
         }
     }

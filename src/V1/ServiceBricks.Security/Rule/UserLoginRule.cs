@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
@@ -8,7 +7,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserLoginRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
@@ -17,20 +15,17 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="iPAddressService"></param>
         /// <param name="httpContextAccessor"></param>
         public UserLoginRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService,
             IHttpContextAccessor httpContextAccessor
             )
         {
-            _logger = loggerFactory.CreateLogger<UserLoginRule>();
             _auditUserApiService = auditUserApiService;
             _userManagerService = userManagerApiService;
             _iPAddressService = iPAddressService;
@@ -69,74 +64,73 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var p = context.Object as UserLoginProcess;
-                if (p == null)
-                    return response;
-
-                // AI: Find the user
-                var respU = _userManagerService.FindByEmail(p.Email);
-                if (respU.Error || respU.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
-                    return response;
-                }
-
-                // AI: Set response properties on process object
-                var user = respU.Item;
-                p.User = user;
-                p.ApplicationSigninResult = new ApplicationSigninResult()
-                {
-                    User = user
-                };
-
-                // AI: Determine if email confirmed
-                if (!user.EmailConfirmed)
-                {
-                    p.ApplicationSigninResult.EmailNotConfirmed = true;
-                    response.AddMessage(ResponseMessage.CreateError("Email Not Confirmed"));
-                    return response;
-                }
-
-                IResponseItem<ApplicationSigninResult> respSignin = null;
-                if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
-                {
-                    // AI: This is not a web request, unit test
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
-                    return response;
-                }
-                else
-                {
-                    // AI: attempt to sign in
-                    respSignin = _userManagerService.PasswordSignIn(
-                        p.Email,
-                        p.Password,
-                        p.RememberMe);
-                    p.ApplicationSigninResult = respSignin.Item;
-                }
-                if (respSignin.Error)
-                {
-                    response.CopyFrom(respSignin);
-                    return response;
-                }
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.LOGIN_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respU.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
                 return response;
             }
-            catch (Exception ex)
+            var p = context.Object as UserLoginProcess;
+            if (p == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respU = _userManagerService.FindByEmail(p.Email);
+            if (respU.Error || respU.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
+                return response;
+            }
+
+            // AI: Set response properties on process object
+            var user = respU.Item;
+            p.User = user;
+            p.ApplicationSigninResult = new ApplicationSigninResult()
+            {
+                User = user
+            };
+
+            // AI: Determine if email confirmed
+            if (!user.EmailConfirmed)
+            {
+                p.ApplicationSigninResult.EmailNotConfirmed = true;
+                response.AddMessage(ResponseMessage.CreateError("Email Not Confirmed"));
+                return response;
+            }
+
+            IResponseItem<ApplicationSigninResult> respSignin = null;
+            if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
+            {
+                // AI: This is not a web request, unit test
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
+                return response;
+            }
+            else
+            {
+                // AI: attempt to sign in
+                respSignin = _userManagerService.PasswordSignIn(
+                    p.Email,
+                    p.Password,
+                    p.RememberMe);
+                p.ApplicationSigninResult = respSignin.Item;
+            }
+            if (respSignin.Error)
+            {
+                response.CopyFrom(respSignin);
+                return response;
+            }
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.LOGIN_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respU.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
             return response;
         }
 
@@ -144,74 +138,73 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var p = context.Object as UserLoginProcess;
-                if (p == null)
-                    return response;
-
-                // AI: Find the user
-                var respU = await _userManagerService.FindByEmailAsync(p.Email);
-                if (respU.Error || respU.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
-                    return response;
-                }
-
-                // AI: Set response properties on process object
-                var user = respU.Item;
-                p.User = user;
-                p.ApplicationSigninResult = new ApplicationSigninResult()
-                {
-                    User = user
-                };
-
-                // AI: Determine if email confirmed
-                if (!user.EmailConfirmed)
-                {
-                    p.ApplicationSigninResult.EmailNotConfirmed = true;
-                    response.AddMessage(ResponseMessage.CreateError("Email Not Confirmed"));
-                    return response;
-                }
-
-                IResponseItem<ApplicationSigninResult> respSignin = null;
-                if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
-                {
-                    // AI: This is not a web request, unit test
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
-                    return response;
-                }
-                else
-                {
-                    // AI: attempt to sign in
-                    respSignin = await _userManagerService.PasswordSignInAsync(
-                        p.Email,
-                        p.Password,
-                        p.RememberMe);
-                    p.ApplicationSigninResult = respSignin.Item;
-                }
-                if (respSignin.Error)
-                {
-                    response.CopyFrom(respSignin);
-                    return response;
-                }
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.LOGIN_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respU.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
                 return response;
             }
-            catch (Exception ex)
+            var p = context.Object as UserLoginProcess;
+            if (p == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respU = await _userManagerService.FindByEmailAsync(p.Email);
+            if (respU.Error || respU.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError("Invalid login attempt"));
+                return response;
+            }
+
+            // AI: Set response properties on process object
+            var user = respU.Item;
+            p.User = user;
+            p.ApplicationSigninResult = new ApplicationSigninResult()
+            {
+                User = user
+            };
+
+            // AI: Determine if email confirmed
+            if (!user.EmailConfirmed)
+            {
+                p.ApplicationSigninResult.EmailNotConfirmed = true;
+                response.AddMessage(ResponseMessage.CreateError("Email Not Confirmed"));
+                return response;
+            }
+
+            IResponseItem<ApplicationSigninResult> respSignin = null;
+            if (_httpContextAccessor == null || _httpContextAccessor.HttpContext == null)
+            {
+                // AI: This is not a web request, unit test
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.UNIT_TEST));
+                return response;
+            }
+            else
+            {
+                // AI: attempt to sign in
+                respSignin = await _userManagerService.PasswordSignInAsync(
+                    p.Email,
+                    p.Password,
+                    p.RememberMe);
+                p.ApplicationSigninResult = respSignin.Item;
+            }
+            if (respSignin.Error)
+            {
+                response.CopyFrom(respSignin);
+                return response;
+            }
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.LOGIN_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respU.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
             return response;
         }
     }

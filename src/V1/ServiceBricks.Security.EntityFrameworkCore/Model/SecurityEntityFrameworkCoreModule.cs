@@ -5,8 +5,13 @@ namespace ServiceBricks.Security.EntityFrameworkCore
     /// <summary>
     /// The module definition for the Security Entity Framework Core module.
     /// </summary>
-    public partial class SecurityEntityFrameworkCoreModule : IModule
+    public partial class SecurityEntityFrameworkCoreModule : ServiceBricks.Module
     {
+        /// <summary>
+        /// Instance
+        /// </summary>
+        public static SecurityEntityFrameworkCoreModule Instance = new SecurityEntityFrameworkCoreModule();
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -21,20 +26,5 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 new SecurityModule()
             };
         }
-
-        /// <summary>
-        /// The list of dependent modules.
-        /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain Automapper profiles.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain views.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
     }
 }

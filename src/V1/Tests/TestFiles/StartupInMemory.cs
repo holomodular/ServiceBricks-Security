@@ -42,13 +42,12 @@ namespace ServiceBricks.Xunit
             services.AddScoped<ITestManager<RoleClaimDto>, RoleClaimTestManager>();
             services.AddScoped<ITestManager<UserAuditDto>, UserAuditTestManager>();
 
-            services.AddServiceBricksComplete();
+            services.AddServiceBricksComplete(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app)
         {
             app.StartServiceBricks();
-            app.StartServiceBricksSecurityInMemory();
             base.CustomConfigure(app);
         }
     }

@@ -1,6 +1,5 @@
 using ServiceBricks;
-
-//using ServiceBricks.Logging.InMemory;
+using ServiceBricks.Logging.InMemory;
 using ServiceBricks.Security.InMemory;
 using WebApp.Extensions;
 
@@ -18,17 +17,16 @@ namespace WebApp
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddServiceBricks(Configuration);
-            //services.AddServiceBricksLoggingInMemory(Configuration);
+            services.AddServiceBricksLoggingInMemory(Configuration);
             services.AddServiceBricksSecurityInMemory(Configuration);
             services.AddCustomWebsite(Configuration);
-            services.AddServiceBricksComplete();
+            services.AddServiceBricksComplete(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment webHostEnvironment)
         {
             app.StartServiceBricks();
-            //app.StartServiceBricksLoggingInMemory();
-            app.StartServiceBricksSecurityInMemory();
+            app.StartServiceBricksLoggingInMemory();
             app.StartCustomWebsite(webHostEnvironment);
             var logger = app.ApplicationServices.GetRequiredService<ILogger<StartupInMemory>>();
             logger.LogInformation("Application Started");

@@ -44,13 +44,13 @@ namespace ServiceBricks.Xunit
         public override IApiController<UserClaimDto> GetController(IServiceProvider serviceProvider)
         {
             var options = new OptionsWrapper<ApiOptions>(new ApiOptions() { ReturnResponseObject = false, ExposeSystemErrors = true });
-            return new ApplicationUserClaimApiController(serviceProvider.GetRequiredService<IUserClaimApiService>(), options);
+            return new UserClaimApiController(serviceProvider.GetRequiredService<IUserClaimApiService>(), options);
         }
 
         public override IApiController<UserClaimDto> GetControllerReturnResponse(IServiceProvider serviceProvider)
         {
             var options = new OptionsWrapper<ApiOptions>(new ApiOptions() { ReturnResponseObject = true, ExposeSystemErrors = true });
-            return new ApplicationUserClaimApiController(serviceProvider.GetRequiredService<IUserClaimApiService>(), options);
+            return new UserClaimApiController(serviceProvider.GetRequiredService<IUserClaimApiService>(), options);
         }
 
         public override IApiClient<UserClaimDto> GetClient(IServiceProvider serviceProvider)

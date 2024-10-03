@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Migrations\20240921072902_SecurityV1.cs" Link="20240921072902_SecurityV1.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Migrations\20240921072902_SecurityV1.Designer.cs" Link="20240921072902_SecurityV1.Designer.cs" />
@@ -17,6 +16,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteConstants.cs" Link="SecuritySqliteConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteContext.cs" Link="SecuritySqliteContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Model\SecuritySqliteModule.cs" Link="SecuritySqliteModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Sqlite\Rule\SecuritySqliteModuleAddRule.cs" Link="SecuritySqliteModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Sqlite\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.Sqlite" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.Sqlite" Version="1.1.0-l" />
 	</ItemGroup>
 	
 </Project>

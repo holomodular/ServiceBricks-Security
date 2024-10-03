@@ -1,35 +1,65 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceQuery;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// Extension methods to start the ServiceBricks.Security module.
+    /// This rule is executed when the ServiceBricks module is added.
     /// </summary>
-    public static partial class ApplicationBuilderExtensions
+    public sealed class SecurityModuleStartRule : BusinessRule
     {
         /// <summary>
-        /// Flag to indicate if the module has been started.
+        /// Register the rule
         /// </summary>
-        public static bool ModuleStarted = false;
+        public static void Register(IBusinessRuleRegistry registry)
+        {
+            registry.Register(
+                typeof(ModuleStartEvent<SecurityModule>),
+                typeof(SecurityModuleStartRule));
+        }
 
         /// <summary>
-        /// Start the ServiceBricks.Security module.
+        /// UnRegister the rule.
         /// </summary>
-        /// <param name="applicationBuilder"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder StartServiceBricksSecurity(this IApplicationBuilder applicationBuilder)
+        public static void UnRegister(IBusinessRuleRegistry registry)
         {
+            registry.UnRegister(
+                typeof(ModuleStartEvent<SecurityModule>),
+                typeof(SecurityModuleStartRule));
+        }
+
+        /// <summary>
+        /// Execute the business rule.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override IResponse ExecuteRule(IBusinessRuleContext context)
+        {
+            var response = new Response();
+
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+            var e = context.Object as ModuleStartEvent<SecurityModule>;
+            if (e == null || e.DomainObject == null || e.ApplicationBuilder == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Perform logic
             // AI: Initialize Data. Ensure admin and user roles are created
-            using (var serviceScope = applicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = e.ApplicationBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 // AI: Get the role service
                 var roleService = serviceScope.ServiceProvider.GetService<IRoleApiService>();
 
                 // AI: Either roleservice is not registered because running unittest without provider (ok) or this module added out of order (bad)
                 if (roleService == null)
-                    return applicationBuilder;
+                    return response;
 
                 // AI: Query for roles needed
                 var sq = new ServiceQueryRequestBuilder().
@@ -59,11 +89,7 @@ namespace ServiceBricks.Security
                     });
                 }
             }
-
-            // AI: Set the module started flag
-            ModuleStarted = true;
-
-            return applicationBuilder;
+            return response;
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -15,7 +15,6 @@
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Domain\UserAudit.cs" Link="UserAudit.cs" />
-	  <Compile Include="..\ServiceBricks.Security.Cosmos\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
@@ -31,6 +30,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Model\SecurityCosmosContext.cs" Link="SecurityCosmosContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Model\SecurityCosmosModule.cs" Link="SecurityCosmosModule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Rule\ApplicationUserRoleQueryRule.cs" Link="ApplicationUserRoleQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Cosmos\Rule\SecurityCosmosModuleAddRule.cs" Link="SecurityCosmosModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationRoleClaimApiService.cs" Link="ApplicationRoleClaimApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Cosmos\Service\ApplicationUserApiService.cs" Link="ApplicationUserApiService.cs" />
@@ -48,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.Cosmos" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.Cosmos" Version="1.1.0-l" />
 	</ItemGroup>
 	
 </Project>

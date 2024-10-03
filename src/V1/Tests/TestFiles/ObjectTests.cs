@@ -1,12 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using ServiceBricks.Security;
-using ServiceQuery;
-using static ServiceBricks.Xunit.BusinessRuleTests;
 
 namespace ServiceBricks.Xunit
 {

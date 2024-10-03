@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security.Postgres\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Migrations\20240921072823_SecurityV1.cs" Link="20240921072823_SecurityV1.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Migrations\20240921072823_SecurityV1.Designer.cs" Link="20240921072823_SecurityV1.Designer.cs" />
@@ -17,6 +16,7 @@
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresConstants.cs" Link="SecurityPostgresConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresContext.cs" Link="SecurityPostgresContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Model\SecurityPostgresModule.cs" Link="SecurityPostgresModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.Postgres\Rule\SecurityPostgresModuleAddRule.cs" Link="SecurityPostgresModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Postgres\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.Postgres" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.Postgres" Version="1.1.0-l" />
 	</ItemGroup>
 
 </Project>

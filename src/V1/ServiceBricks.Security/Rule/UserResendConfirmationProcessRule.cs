@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Web;
 
@@ -11,7 +10,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserResendConfirmationProcessRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IIpAddressService _iPAddressService;
@@ -23,7 +21,6 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="iPAddressService"></param>
@@ -32,7 +29,6 @@ namespace ServiceBricks.Security
         /// <param name="httpContextAccessor"></param>
         /// <param name="configuration"></param>
         public UserResendConfirmationProcessRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService,
@@ -41,7 +37,6 @@ namespace ServiceBricks.Security
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
         {
-            _logger = loggerFactory.CreateLogger<UserResendConfirmationProcessRule>();
             _auditUserApiService = auditUserApiService;
             _userManagerService = userManagerApiService;
             _iPAddressService = iPAddressService;
@@ -82,55 +77,55 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserResendConfirmationProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = _userManagerService.FindById(e.UserStorageKey);
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Create confirmation code
-                var respCode = _userManagerService.GenerateEmailConfirmationToken(e.UserStorageKey);
-                if (respCode.Error)
-                {
-                    response.CopyFrom(respCode);
-                    return response;
-                }
-
-                // AI: Create callback URL
-                string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
-                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                string callbackUrl = string.Format(
-                        "{0}/ConfirmEmail?code={1}&userId={2}",
-                        baseUrl, encodedConfirmCode, e.UserStorageKey);
-
-                // AI: Send confirm email process
-                SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
-                    respUser.Item, callbackUrl);
-                var respSend = _businessRuleService.ExecuteProcess(sendProcess);
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserResendConfirmationProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respUser = _userManagerService.FindById(e.UserStorageKey);
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Create confirmation code
+            var respCode = _userManagerService.GenerateEmailConfirmationToken(e.UserStorageKey);
+            if (respCode.Error)
+            {
+                response.CopyFrom(respCode);
+                return response;
+            }
+
+            // AI: Create callback URL
+            string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+            string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+            string callbackUrl = string.Format(
+                    "{0}/ConfirmEmail?code={1}&userId={2}",
+                    baseUrl, encodedConfirmCode, e.UserStorageKey);
+
+            // AI: Send confirm email process
+            SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                respUser.Item, callbackUrl);
+            var respSend = _businessRuleService.ExecuteProcess(sendProcess);
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }
@@ -144,55 +139,55 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserResendConfirmationProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey);
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Create confirmation code
-                var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(e.UserStorageKey);
-                if (respCode.Error)
-                {
-                    response.CopyFrom(respCode);
-                    return response;
-                }
-
-                // AI: Create callback URL
-                string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
-                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                string callbackUrl = string.Format(
-                        "{0}/ConfirmEmail?code={1}&userId={2}",
-                        baseUrl, encodedConfirmCode, e.UserStorageKey);
-
-                // AI: Send confirm email process
-                SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
-                    respUser.Item, callbackUrl);
-                var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserResendConfirmationProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Find the user
+            var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey);
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Create confirmation code
+            var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(e.UserStorageKey);
+            if (respCode.Error)
+            {
+                response.CopyFrom(respCode);
+                return response;
+            }
+
+            // AI: Create callback URL
+            string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+            string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+            string callbackUrl = string.Format(
+                    "{0}/ConfirmEmail?code={1}&userId={2}",
+                    baseUrl, encodedConfirmCode, e.UserStorageKey);
+
+            // AI: Send confirm email process
+            SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                respUser.Item, callbackUrl);
+            var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.RESEND_CONFIRMATION_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }

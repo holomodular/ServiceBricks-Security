@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\TestFiles\InMemory\RoleApiControllerTest.cs" Link="RoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\RoleClaimApiControllerTest.cs" Link="RoleClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserApiControllerTest.cs" Link="UserApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserClaimApiControllerTest.cs" Link="UserClaimApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserConfirmEmailRuleTest.cs" Link="UserConfirmEmailRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserForgotPasswordRuleTest.cs" Link="UserForgotPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserInvalidPasswordRuleTest.cs" Link="UserInvalidPasswordRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginApiControllerTest.cs" Link="UserLoginApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginRuleTest.cs" Link="UserLoginRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLogoutRuleTest.cs" Link="UserLogoutRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserPasswordChangeRuleTest.cs" Link="UserPasswordChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserPasswordResetRuleTest.cs" Link="UserPasswordResetRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserProfileChangeRuleTest.cs" Link="UserProfileChangeRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRegisterAdminRuleTest.cs" Link="UserRegisterAdminRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRegisterRuleTest.cs" Link="UserRegisterRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserResendConfirmationRuleTest.cs" Link="UserResendConfirmationRuleTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRoleApiControllerTest.cs" Link="UserRoleApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserTokenApiControllerTest.cs" Link="UserTokenApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserAuditApiControllerTest.cs" Link="UserAuditApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\AuthenticationApiControllerTest.cs" Link="AuthenticationApiControllerTest.cs" />
+		<Compile Include="..\TestFiles\InMemory\MappingTest.cs" Link="MappingTest.cs" />
+		<Compile Include="..\TestFiles\ObjectTests.cs" Link="ObjectTests.cs" />
+		<Compile Include="..\TestFiles\StartupInMemory.cs" Link="StartupInMemory.cs" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\TestFiles\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.8" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+		<PackageReference Include="xunit" Version="2.9.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.2">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.msbuild" Version="6.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ServiceBricks.Security.InMemory.Debug\ServiceBricks.Security.InMemory.Debug.csproj" />
+	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+	</ItemGroup>
+
+</Project>

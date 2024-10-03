@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Web;
 
@@ -13,7 +10,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserRegisterRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManagerService;
@@ -25,7 +21,6 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="userManagerApiService"></param>
@@ -36,7 +31,6 @@ namespace ServiceBricks.Security
         /// <param name="serviceBus"></param>
         /// <param name="configuration"></param>
         public UserRegisterRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManagerApiService,
@@ -45,7 +39,6 @@ namespace ServiceBricks.Security
             IBusinessRuleService businessRuleService,
             IConfiguration configuration)
         {
-            _logger = loggerFactory.CreateLogger<UserRegisterRule>();
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _userManagerService = userManagerApiService;
@@ -86,90 +79,82 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserRegisterProcess;
-                if (e == null)
-                    return response;
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+            var e = context.Object as UserRegisterProcess;
+            if (e == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
 
-                // AI: create user object
-                var nowDate = DateTimeOffset.UtcNow;
-                UserDto user = new UserDto()
-                {
-                    Email = e.Email,
-                    UserName = e.Email,
-                    EmailConfirmed = e.EmailConfirmed,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    CreateDate = nowDate,
-                    UpdateDate = nowDate,
-                    PhoneNumberConfirmed = false,
-                    NormalizedEmail = e.Email.ToUpper(),
-                    NormalizedUserName = e.Email.ToUpper(),
-                };
+            // AI: create user object
+            var nowDate = DateTimeOffset.UtcNow;
+            UserDto user = new UserDto()
+            {
+                Email = e.Email,
+                UserName = e.Email,
+                EmailConfirmed = e.EmailConfirmed,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                CreateDate = nowDate,
+                UpdateDate = nowDate,
+                PhoneNumberConfirmed = false,
+                NormalizedEmail = e.Email.ToUpper(),
+                NormalizedUserName = e.Email.ToUpper(),
+            };
 
-                // AI: Call usermanager to create user
-                var respUser = _userManagerService.Create(
-                    user,
-                    e.Password);
-                if (respUser.Error)
+            // AI: Call usermanager to create user
+            var respUser = _userManagerService.Create(
+                user,
+                e.Password);
+            if (respUser.Error)
+            {
+                response.CopyFrom(respUser);
+                return response;
+            }
+
+            // AI: Add user to user role
+            var respAddRole = _userManagerService.AddToRole(
+                respUser.Item.StorageKey,
+                ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
+
+            // AI: Determine if we need to send an email
+            if (e.CreateEmail)
+            {
+                // AI: Generate email confirmation code
+                var respCode = _userManagerService.GenerateEmailConfirmationToken(respUser.Item.StorageKey);
+                if (respCode.Error)
                 {
-                    response.CopyFrom(respUser);
+                    response.CopyFrom(respCode);
                     return response;
                 }
 
-                // AI: Add user to user role
-                var respAddRole = _userManagerService.AddToRole(
-                    respUser.Item.StorageKey,
-                    ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
+                // AI: Create the callback URL
+                string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+                string callbackUrl = string.Format(
+                        "{0}/ConfirmEmail?code={1}&userId={2}",
+                        baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
 
-                // Add Claims
-                //var respAddClaim = await _userManagerService.AddClaimAsync(
-                //    respUser.Item.StorageKey,
-                //    new Claim(ClaimTypes.Email, e.Email));
-                //respAddClaim = await _userManagerService.AddClaimAsync(
-                //    respUser.Item.StorageKey,
-                //    new Claim(TimezoneService.CLAIM_TIMEZONE, e.TimezoneName));
-
-                // AI: Determine if we need to send an email
-                if (e.CreateEmail)
-                {
-                    // AI: Generate email confirmation code
-                    var respCode = _userManagerService.GenerateEmailConfirmationToken(respUser.Item.StorageKey);
-                    if (respCode.Error)
-                    {
-                        response.CopyFrom(respCode);
-                        return response;
-                    }
-
-                    // AI: Create the callback URL
-                    string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
-                    string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                    string callbackUrl = string.Format(
-                            "{0}/ConfirmEmail?code={1}&userId={2}",
-                            baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
-
-                    // AI: Send the confirm email process
-                    SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
-                        respUser.Item, callbackUrl);
-                    var respSend = _businessRuleService.ExecuteProcess(sendProcess);
-                }
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.REGISTER_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                // AI: Send the confirm email process
+                SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                    respUser.Item, callbackUrl);
+                var respSend = _businessRuleService.ExecuteProcess(sendProcess);
             }
-            catch (Exception ex)
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
-            }
+                AuditType = AuditType.REGISTER_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }
@@ -183,90 +168,82 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserRegisterProcess;
-                if (e == null)
-                    return response;
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+            var e = context.Object as UserRegisterProcess;
+            if (e == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
 
-                // AI: create user object
-                var nowDate = DateTimeOffset.UtcNow;
-                UserDto user = new UserDto()
-                {
-                    Email = e.Email,
-                    UserName = e.Email,
-                    EmailConfirmed = e.EmailConfirmed,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    CreateDate = nowDate,
-                    UpdateDate = nowDate,
-                    PhoneNumberConfirmed = false,
-                    NormalizedEmail = e.Email.ToUpper(),
-                    NormalizedUserName = e.Email.ToUpper(),
-                };
+            // AI: create user object
+            var nowDate = DateTimeOffset.UtcNow;
+            UserDto user = new UserDto()
+            {
+                Email = e.Email,
+                UserName = e.Email,
+                EmailConfirmed = e.EmailConfirmed,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                CreateDate = nowDate,
+                UpdateDate = nowDate,
+                PhoneNumberConfirmed = false,
+                NormalizedEmail = e.Email.ToUpper(),
+                NormalizedUserName = e.Email.ToUpper(),
+            };
 
-                // AI: Call usermanager to create user
-                var respUser = await _userManagerService.CreateAsync(
-                    user,
-                    e.Password);
-                if (respUser.Error)
+            // AI: Call usermanager to create user
+            var respUser = await _userManagerService.CreateAsync(
+                user,
+                e.Password);
+            if (respUser.Error)
+            {
+                response.CopyFrom(respUser);
+                return response;
+            }
+
+            // AI: Add user to user role
+            var respAddRole = await _userManagerService.AddToRoleAsync(
+                respUser.Item.StorageKey,
+                ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
+
+            // AI: Determine if we need to send an email
+            if (e.CreateEmail)
+            {
+                // AI: Generate email confirmation code
+                var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(respUser.Item.StorageKey);
+                if (respCode.Error)
                 {
-                    response.CopyFrom(respUser);
+                    response.CopyFrom(respCode);
                     return response;
                 }
 
-                // AI: Add user to user role
-                var respAddRole = await _userManagerService.AddToRoleAsync(
-                    respUser.Item.StorageKey,
-                    ServiceBricksConstants.SECURITY_ROLE_USER_NAME);
+                // AI: Create the callback URL
+                string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
+                string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
+                string callbackUrl = string.Format(
+                        "{0}/ConfirmEmail?code={1}&userId={2}",
+                        baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
 
-                // Add Claims
-                //var respAddClaim = await _userManagerService.AddClaimAsync(
-                //    respUser.Item.StorageKey,
-                //    new Claim(ClaimTypes.Email, e.Email));
-                //respAddClaim = await _userManagerService.AddClaimAsync(
-                //    respUser.Item.StorageKey,
-                //    new Claim(TimezoneService.CLAIM_TIMEZONE, e.TimezoneName));
-
-                // AI: Determine if we need to send an email
-                if (e.CreateEmail)
-                {
-                    // AI: Generate email confirmation code
-                    var respCode = await _userManagerService.GenerateEmailConfirmationTokenAsync(respUser.Item.StorageKey);
-                    if (respCode.Error)
-                    {
-                        response.CopyFrom(respCode);
-                        return response;
-                    }
-
-                    // AI: Create the callback URL
-                    string encodedConfirmCode = HttpUtility.UrlEncode(respCode.Item);
-                    string baseUrl = _configuration.GetValue<string>(SecurityConstants.APPSETTING_SECURITY_CALLBACKURL);
-                    string callbackUrl = string.Format(
-                            "{0}/ConfirmEmail?code={1}&userId={2}",
-                            baseUrl, encodedConfirmCode, respUser.Item.StorageKey);
-
-                    // AI: Send the confirm email process
-                    SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
-                        respUser.Item, callbackUrl);
-                    var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
-                }
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.REGISTER_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                // AI: Send the confirm email process
+                SendConfirmEmailProcess sendProcess = new SendConfirmEmailProcess(
+                    respUser.Item, callbackUrl);
+                var respSend = await _businessRuleService.ExecuteProcessAsync(sendProcess);
             }
-            catch (Exception ex)
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
-            }
+                AuditType = AuditType.REGISTER_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }

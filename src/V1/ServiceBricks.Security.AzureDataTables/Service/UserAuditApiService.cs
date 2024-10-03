@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 
 namespace ServiceBricks.Security.AzureDataTables
 {

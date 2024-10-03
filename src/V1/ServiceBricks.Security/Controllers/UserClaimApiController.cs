@@ -9,7 +9,7 @@ namespace ServiceBricks.Security
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/UserClaim")]
     [Produces("application/json")]
-    public partial class ApplicationUserClaimApiController : AdminPolicyApiController<UserClaimDto>, IUserClaimApiController
+    public partial class UserClaimApiController : AdminPolicyApiController<UserClaimDto>, IUserClaimApiController
     {
         protected readonly IUserClaimApiService _applicationUserClaimApiService;
 
@@ -18,7 +18,7 @@ namespace ServiceBricks.Security
         /// </summary>
         /// <param name="applicationUserClaimApiService"></param>
         /// <param name="apiOptions"></param>
-        public ApplicationUserClaimApiController(
+        public UserClaimApiController(
             IUserClaimApiService applicationUserClaimApiService,
             IOptions<ApiOptions> apiOptions)
             : base(applicationUserClaimApiService, apiOptions)

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace ServiceBricks.Security
@@ -12,12 +11,10 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="httpClientFactory"></param>
         /// <param name="configuration"></param>
         /// <exception cref="Exception"></exception>
         public AuthenticationApiClient(
-            ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,
             IConfiguration configuration)
             : base(httpClientFactory)
@@ -41,7 +38,8 @@ namespace ServiceBricks.Security
         public virtual IResponseItem<AccessTokenResponse> AuthenticateUser(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource);
-            req.Content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
+            var data = request != null ? JsonConvert.SerializeObject(request) : string.Empty;
+            req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = Send(req);
             return GetAccessTokenAsync(result).GetAwaiter().GetResult();
         }
@@ -54,7 +52,8 @@ namespace ServiceBricks.Security
         public virtual async Task<IResponseItem<AccessTokenResponse>> AuthenticateUserAsync(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + "Async");
-            req.Content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
+            var data = request != null ? JsonConvert.SerializeObject(request) : string.Empty;
+            req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = await SendAsync(req);
             return await GetAccessTokenAsync(result);
         }

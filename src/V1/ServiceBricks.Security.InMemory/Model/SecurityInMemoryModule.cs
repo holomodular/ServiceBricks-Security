@@ -6,8 +6,10 @@ namespace ServiceBricks.Security.InMemory
     /// <summary>
     /// The module definition for the ServiceBricks Security InMemory module.
     /// </summary>
-    public partial class SecurityInMemoryModule : IModule
+    public partial class SecurityInMemoryModule : ServiceBricks.Module
     {
+        public static SecurityInMemoryModule Instance = new SecurityInMemoryModule();
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -22,20 +24,5 @@ namespace ServiceBricks.Security.InMemory
                 new SecurityEntityFrameworkCoreModule()
             };
         }
-
-        /// <summary>
-        /// The list of dependent modules.
-        /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain AutoMapper profiles.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain views.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
     }
 }

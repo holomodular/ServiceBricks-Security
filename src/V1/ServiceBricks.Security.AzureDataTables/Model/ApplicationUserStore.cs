@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Data.Tables;
 using Microsoft.AspNetCore.Identity;
 using ServiceQuery;
 using System.Security.Claims;

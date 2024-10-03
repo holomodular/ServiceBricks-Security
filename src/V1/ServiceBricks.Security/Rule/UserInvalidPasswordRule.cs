@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
@@ -8,7 +7,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserInvalidPasswordRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIpAddressService _iPAddressService;
@@ -16,15 +14,15 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
+        /// <param name="auditUserApiService"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="iPAddressService"></param>
         public UserInvalidPasswordRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IIpAddressService iPAddressService
             )
         {
-            _logger = loggerFactory.CreateLogger<UserInvalidPasswordRule>();
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _iPAddressService = iPAddressService;
@@ -61,33 +59,32 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var uipp = context.Object as UserInvalidPasswordProcess;
-                if (uipp == null)
-                    return response;
-
-                // AI: If user not found, don't log anything
-                if (string.IsNullOrEmpty(uipp.UserStorageKey))
-                    return response;
-
-                // AI: Audit found user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.INVALID_PASSWORD_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = uipp.UserStorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress(),
-                });
-
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
                 return response;
             }
-            catch (Exception ex)
+            var uipp = context.Object as UserInvalidPasswordProcess;
+            if (uipp == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: If user not found, don't log anything to save space
+            if (string.IsNullOrEmpty(uipp.UserStorageKey))
+                return response;
+
+            // AI: Audit found user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = uipp.UserStorageKey,
+                IPAddress = _iPAddressService.GetIPAddress(),
+            });
+
             return response;
         }
 
@@ -100,33 +97,32 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var uipp = context.Object as UserInvalidPasswordProcess;
-                if (uipp == null)
-                    return response;
-
-                // AI: If user not found, don't log anything
-                if (string.IsNullOrEmpty(uipp.UserStorageKey))
-                    return response;
-
-                // AI: Audit found user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.INVALID_PASSWORD_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = uipp.UserStorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress(),
-                });
-
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
                 return response;
             }
-            catch (Exception ex)
+            var uipp = context.Object as UserInvalidPasswordProcess;
+            if (uipp == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: If user not found, don't log anything
+            if (string.IsNullOrEmpty(uipp.UserStorageKey))
+                return response;
+
+            // AI: Audit found user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.INVALID_PASSWORD_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = uipp.UserStorageKey,
+                IPAddress = _iPAddressService.GetIPAddress(),
+            });
+
             return response;
         }
     }

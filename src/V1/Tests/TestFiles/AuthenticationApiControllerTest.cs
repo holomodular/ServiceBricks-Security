@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security;
+using ServiceQuery;
 
 namespace ServiceBricks.Xunit.Integration
 {
@@ -14,6 +15,7 @@ namespace ServiceBricks.Xunit.Integration
 
             var authenticationApiController = SystemManager.ServiceProvider.GetRequiredService<IAuthenticationApiController>();
 
+            // Good request
             AccessTokenRequest request = new AccessTokenRequest();
             request.client_id = this.Email;
             request.client_secret = this.Password;
@@ -46,6 +48,15 @@ namespace ServiceBricks.Xunit.Integration
             }
             else
                 Assert.Fail("");
+
+            //Verify audituser created
+            var auditUserService = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();
+            var queryBuilder = new ServiceQueryRequestBuilder();
+            queryBuilder.IsEqual(nameof(UserAuditDto.AuditType), AuditType.INVALID_PASSWORD_TEXT);
+            queryBuilder.And();
+            queryBuilder.IsEqual(nameof(UserAuditDto.UserStorageKey), UserStorageKey);
+            var respAudit = await auditUserService.QueryAsync(queryBuilder.Build());
+            Assert.True(respAudit != null && respAudit.Item.List.Count > 0);
 
             // Bad email
             request = new AccessTokenRequest();
@@ -88,101 +99,29 @@ namespace ServiceBricks.Xunit.Integration
             else
                 Assert.Fail("");
 
-            // Bad password
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass)
+            // Do 5 Bad password attempts
+            int count = 1;
+            while (count <= 5)
             {
-                Assert.True(badResultPass.Value != null);
-                if (badResultPass.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
+                // Bad password
+                request = new AccessTokenRequest();
+                request.client_id = this.Email;
+                request.client_secret = this.Password + "z";
+                respAuth = await authenticationApiController.AuthenticateUserAsync(request);
+                if (respAuth is BadRequestObjectResult badResultPass)
+                {
+                    Assert.True(badResultPass.Value != null);
+                    if (badResultPass.Value is ProblemDetails problemDetails)
+                        Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
+                    else
+                        Assert.Fail("");
+                }
                 else
                     Assert.Fail("");
-            }
-            else
-                Assert.Fail("");
 
-            // Bad password2
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass2)
-            {
-                Assert.True(badResultPass2.Value != null);
-                if (badResultPass2.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
-                else
-                    Assert.Fail("");
+                // increment count
+                count++;
             }
-            else
-                Assert.Fail("");
-
-            // Bad password3
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass3)
-            {
-                Assert.True(badResultPass3.Value != null);
-                if (badResultPass3.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
-                else
-                    Assert.Fail("");
-            }
-            else
-                Assert.Fail("");
-
-            // Bad password4
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass4)
-            {
-                Assert.True(badResultPass4.Value != null);
-                if (badResultPass4.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
-                else
-                    Assert.Fail("");
-            }
-            else
-                Assert.Fail("");
-
-            // Bad password5
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass5)
-            {
-                Assert.True(badResultPass5.Value != null);
-                if (badResultPass5.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
-                else
-                    Assert.Fail("");
-            }
-            else
-                Assert.Fail("");
-
-            // Bad password6
-            request = new AccessTokenRequest();
-            request.client_id = this.Email;
-            request.client_secret = this.Password + "z";
-            respAuth = await authenticationApiController.AuthenticateUserAsync(request);
-            if (respAuth is BadRequestObjectResult badResultPass6)
-            {
-                Assert.True(badResultPass6.Value != null);
-                if (badResultPass6.Value is ProblemDetails problemDetails)
-                    Assert.True(problemDetails.Title == LocalizationResource.ERROR_SYSTEM);
-                else
-                    Assert.Fail("");
-            }
-            else
-                Assert.Fail("");
 
             // Use a good password, it will fail now
             request = new AccessTokenRequest();

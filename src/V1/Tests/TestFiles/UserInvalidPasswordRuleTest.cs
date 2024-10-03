@@ -71,6 +71,7 @@ namespace ServiceBricks.Xunit.Integration
             var respUser = await userManager.FindByEmailAsync(email);
             Assert.True(respUser.Item != null);
             var user = respUser.Item;
+
             //Execute ApplicationUserInvalidPasswordProcess
             UserInvalidPasswordProcess invalidProcess = new UserInvalidPasswordProcess(
                 user.StorageKey, user.Email);

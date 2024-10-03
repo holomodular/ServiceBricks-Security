@@ -20,6 +20,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
+        protected readonly IBusinessRuleService _businessRuleService;
 
         /// <summary>
         /// Constructor.
@@ -44,7 +45,8 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             IRoleApiService applicationRoleApiService,
             IRoleClaimApiService applicationRoleClaimApiService,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IBusinessRuleService businessRuleService)
         {
             _mapper = mapper;
             _applicationUserApiService = applicationUserApiService;
@@ -56,6 +58,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             _applicationRoleClaimApiService = applicationRoleClaimApiService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _businessRuleService = businessRuleService;
         }
 
         /// <summary>
@@ -707,6 +710,13 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 if (user.LockoutEnabled)
                     await _userManager.AccessFailedAsync(user);
 
+                // User invalid password process
+                UserInvalidPasswordProcess userInvalidPasswordProcess = new UserInvalidPasswordProcess(
+                    user.Id.ToString(),
+                    user.Email);
+                await _businessRuleService.ExecuteProcessAsync(userInvalidPasswordProcess);
+
+                // Return response
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }

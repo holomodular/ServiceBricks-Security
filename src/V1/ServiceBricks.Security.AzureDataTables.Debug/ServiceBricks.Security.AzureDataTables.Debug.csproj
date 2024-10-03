@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -15,7 +15,6 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Domain\UserAudit.cs" Link="UserAudit.cs" />
-	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
@@ -41,6 +40,8 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserRoleQueryRule.cs" Link="ApplicationUserRoleQueryRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserTokenCreateRule.cs" Link="ApplicationUserTokenCreateRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\ApplicationUserTokenQueryRule.cs" Link="ApplicationUserTokenQueryRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\SecurityAzureDataTablesModuleAddRule.cs" Link="SecurityAzureDataTablesModuleAddRule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\SecurityAzureDataTablesModuleStartRule.cs" Link="SecurityAzureDataTablesModuleStartRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\UserAuditCreateRule.cs" Link="UserAuditCreateRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Rule\UserAuditQueryRule.cs" Link="UserAuditQueryRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
@@ -54,11 +55,13 @@
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Service\UserManagerService.cs" Link="UserManagerService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.AzureDataTables\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.1.0-g" />
-	</ItemGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.AzureDataTables" Version="1.1.0-l" />
+	</ItemGroup>
+	
 </Project>

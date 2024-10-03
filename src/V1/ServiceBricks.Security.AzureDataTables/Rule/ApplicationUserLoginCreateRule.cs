@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace ServiceBricks.Security.AzureDataTables
+﻿namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is a business rule for the ApplicationUserLogin object to set the
@@ -8,16 +6,11 @@ namespace ServiceBricks.Security.AzureDataTables
     /// </summary>
     public sealed class ApplicationUserLoginCreateRule : BusinessRule
     {
-        private readonly ILogger _logger;
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        public ApplicationUserLoginCreateRule(
-            ILoggerFactory loggerFactory)
+        public ApplicationUserLoginCreateRule()
         {
-            _logger = loggerFactory.CreateLogger<ApplicationUserLoginCreateRule>();
             Priority = PRIORITY_LOW;
         }
 
@@ -51,21 +44,22 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                if (context.Object is DomainCreateBeforeEvent<ApplicationUserLogin> ei)
-                {
-                    var item = ei.DomainObject;
-                    item.PartitionKey = item.LoginProvider;
-                    item.RowKey = item.ProviderKey;
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var ei = context.Object as DomainCreateBeforeEvent<ApplicationUserLogin>;
+            if (ei == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            var item = ei.DomainObject;
+            item.PartitionKey = item.LoginProvider;
+            item.RowKey = item.ProviderKey;
 
             return response;
         }

@@ -1,6 +1,5 @@
 ﻿using ServiceBricks;
-
-//using ServiceBricks.Logging;
+using ServiceBricks.Logging;
 using ServiceBricks.Security;
 
 namespace WebApp.Extensions
@@ -9,9 +8,9 @@ namespace WebApp.Extensions
     {
         private static IApplicationBuilder RegisterMiddleware(this IApplicationBuilder app)
         {
-            //app.UseMiddleware<CustomLoggerMiddleware>();
-            //app.UseMiddleware<WebRequestMessageMiddleware>();
-            app.UseMiddleware<TrapExceptionResponseMiddleware>();
+            app.UseMiddleware<LogMessageMiddleware>();
+            app.UseMiddleware<WebRequestMessageMiddleware>();
+            app.UseMiddleware<PropogateExceptionResponseMiddleware>();
             return app;
         }
 
@@ -57,22 +56,17 @@ namespace WebApp.Extensions
         {
             using (var scope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var userManager = scope.ServiceProvider.GetRequiredService<IUserManagerService>();
-                var respFind = userManager.FindByEmail("unittest@servicebricks.com");
-                if (respFind.Item == null)
-                {
-                    var testUser = new UserDto()
-                    {
-                        Email = "unittest@servicebricks.com",
-                        UserName = "unittest@servicebricks.com",
-                        PhoneNumber = "1234567890",
-                        EmailConfirmed = true,
-                        PhoneNumberConfirmed = true,
-                    };
-                    var respCreate = userManager.Create(testUser, "UnitTest123!@#");
-                    if (respCreate.Success && respCreate.Item != null)
-                        userManager.AddToRole(respCreate.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
-                }
+                // Create process to register a new admin user
+                UserRegisterAdminProcess registerAdminProcess =
+                    new UserRegisterAdminProcess(
+                        "unittest@servicebricks.com",
+                        "UnitTest123!@#");
+
+                // Get Business Rule Service
+                var businessRuleService = scope.ServiceProvider.GetRequiredService<IBusinessRuleService>();
+
+                // Execute the process
+                var response = businessRuleService.ExecuteProcess(registerAdminProcess);
             }
 
             return builder;

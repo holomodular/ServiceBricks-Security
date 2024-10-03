@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -7,12 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security.InMemory\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\ApplicationRoleStore.cs" Link="ApplicationRoleStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\SecurityInMemoryContext.cs" Link="SecurityInMemoryContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Model\SecurityInMemoryModule.cs" Link="SecurityInMemoryModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.InMemory\Rule\SecurityInMemoryModuleAddRule.cs" Link="SecurityInMemoryModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.InMemory\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.InMemory" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.InMemory" Version="1.1.0-l" />
 	</ItemGroup>
 	
 </Project>

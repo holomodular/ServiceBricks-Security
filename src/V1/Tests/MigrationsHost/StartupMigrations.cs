@@ -25,7 +25,7 @@ namespace ServiceBricks.Xunit
 
             // Remove all background tasks/timers for unit testing
 
-            services.AddServiceBricksComplete();
+            services.AddServiceBricksComplete(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app)

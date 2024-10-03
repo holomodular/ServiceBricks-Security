@@ -1,10 +1,20 @@
 ﻿using ServiceBricks.Security.EntityFrameworkCore;
-using System.Reflection;
 
 namespace ServiceBricks.Security.SqlServer
 {
-    public partial class SecuritySqlServerModule : IModule
+    /// <summary>
+    /// Module
+    /// </summary>
+    public partial class SecuritySqlServerModule : ServiceBricks.Module
     {
+        /// <summary>
+        /// Instance.
+        /// </summary>
+        public static SecuritySqlServerModule Instance = new SecuritySqlServerModule();
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SecuritySqlServerModule()
         {
             DependentModules = new List<IModule>()
@@ -12,10 +22,5 @@ namespace ServiceBricks.Security.SqlServer
                 new SecurityEntityFrameworkCoreModule()
             };
         }
-
-        public List<Assembly> AutomapperAssemblies { get; }
-        public List<Assembly> ViewAssemblies { get; }
-
-        public List<IModule> DependentModules { get; }
     }
 }

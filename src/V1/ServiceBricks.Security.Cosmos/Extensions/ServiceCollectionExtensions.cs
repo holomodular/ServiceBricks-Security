@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Security.EntityFrameworkCore;
 using ServiceBricks.Storage.EntityFrameworkCore;
@@ -20,118 +18,16 @@ namespace ServiceBricks.Security.Cosmos
         /// <returns></returns>
         public static IServiceCollection AddServiceBricksSecurityCosmos(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddServiceBricksSecurityCosmos(configuration, new Action<IdentityOptions>(options => new IdentityOptions()));
-        }
-
-        /// <summary>
-        /// Add the ServiceBricks Security Cosmos module to the service collection.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configuration"></param>
-        /// <param name="identityOptions"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddServiceBricksSecurityCosmos(this IServiceCollection services, IConfiguration configuration, Action<IdentityOptions> identityOptions)
-        {
-            // AI: Add the module to the ModuleRegistry
-            ModuleRegistry.Instance.RegisterItem(typeof(SecurityCosmosModule), new SecurityCosmosModule());
-
-            // AI: Register the database for the module
-            var builder = new DbContextOptionsBuilder<SecurityCosmosContext>();
-            string connectionString = configuration.GetCosmosConnectionString(
-                SecurityCosmosConstants.APPSETTING_CONNECTION_STRING);
-            string database = configuration.GetCosmosDatabase(
-                SecurityCosmosConstants.APPSETTING_DATABASE);
-            builder.UseCosmos(connectionString, database);
-            services.Configure<DbContextOptions<SecurityCosmosContext>>(o => { o = builder.Options; });
-            services.AddSingleton<DbContextOptions<SecurityCosmosContext>>(builder.Options);
-            services.AddDbContext<SecurityCosmosContext>(c => { c = builder; }, ServiceLifetime.Scoped);
-
-            // Register Identity
-            services
-                .AddIdentity<ApplicationUser, ApplicationRole>(identityOptions)
-                .AddEntityFrameworkStores<SecurityCosmosContext>()
-                .AddUserStore<ApplicationUserStore>()
-                .AddRoleStore<ApplicationRoleStore>()
-                .AddDefaultTokenProviders();
-
             // AI: Add the parent module
             services.AddServiceBricksSecurityEntityFrameworkCore(configuration);
 
-            // AI: Storage Services for the module for each domain object
-            services.AddScoped<IStorageRepository<ApplicationRole>, SecurityStorageRepository<Cosmos.ApplicationRole>>();
-            services.AddScoped<IStorageRepository<ApplicationRoleClaim>, SecurityStorageRepository<Cosmos.ApplicationRoleClaim>>();
-            services.AddScoped<IStorageRepository<ApplicationUser>, SecurityStorageRepository<Cosmos.ApplicationUser>>();
-            services.AddScoped<IStorageRepository<ApplicationUserClaim>, SecurityStorageRepository<Cosmos.ApplicationUserClaim>>();
-            services.AddScoped<IStorageRepository<ApplicationUserLogin>, SecurityStorageRepository<Cosmos.ApplicationUserLogin>>();
-            services.AddScoped<IStorageRepository<ApplicationUserRole>, SecurityStorageRepository<ApplicationUserRole>>();
-            services.AddScoped<IStorageRepository<ApplicationUserToken>, SecurityStorageRepository<ApplicationUserToken>>();
-            services.AddScoped<IStorageRepository<UserAudit>, SecurityStorageRepository<UserAudit>>();
+            // AI: Add the module to the ModuleRegistry
+            ModuleRegistry.Instance.Register(SecurityCosmosModule.Instance);
 
-            // AI: Add API services for the module. Each DTO should have two registrations, one for the generic IApiService<> and one for the named interface
-            services.AddScoped<IApiService<UserAuditDto>, UserAuditApiService>();
-            services.AddScoped<IUserAuditApiService, UserAuditApiService>();
-
-            services.AddScoped<IApiService<UserDto>, ApplicationUserApiService>();
-            services.AddScoped<IUserApiService, ApplicationUserApiService>();
-
-            services.AddScoped<IApiService<UserClaimDto>, ApplicationUserClaimApiService>();
-            services.AddScoped<IUserClaimApiService, ApplicationUserClaimApiService>();
-
-            services.AddScoped<IApiService<UserRoleDto>, ApplicationUserRoleApiService>();
-            services.AddScoped<IUserRoleApiService, ApplicationUserRoleApiService>();
-
-            services.AddScoped<IApiService<RoleDto>, ApplicationRoleApiService>();
-            services.AddScoped<IRoleApiService, ApplicationRoleApiService>();
-
-            services.AddScoped<IApiService<UserLoginDto>, ApplicationUserLoginApiService>();
-            services.AddScoped<IUserLoginApiService, ApplicationUserLoginApiService>();
-
-            services.AddScoped<IApiService<RoleClaimDto>, ApplicationRoleClaimApiService>();
-            services.AddScoped<IRoleClaimApiService, ApplicationRoleClaimApiService>();
-
-            services.AddScoped<IApiService<UserTokenDto>, ApplicationUserTokenApiService>();
-            services.AddScoped<IUserTokenApiService, ApplicationUserTokenApiService>();
-
-            services.AddScoped<IUserManagerService, UserManagerService>();
-
-            // AI: Register business rules for the module
-            DomainCreateUpdateDateRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Id");
-
-            DomainCreateDateRule<UserAudit>.Register(BusinessRuleRegistry.Instance);
-            DomainQueryPropertyRenameRule<UserAudit>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Key");
-            DomainQueryPropertyRenameRule<UserAudit>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-
-            DomainQueryPropertyRenameRule<ApplicationUserClaim>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<ApplicationUserClaim>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-            DomainQueryPropertyRenameRule<ApplicationUserClaim>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Key");
-
-            DomainQueryPropertyRenameRule<ApplicationUserLogin>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<ApplicationUserLogin>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-            DomainQueryPropertyRenameRule<ApplicationUserLogin>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Key");
-
-            DomainQueryPropertyRenameRule<ApplicationUserRole>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<ApplicationUserRole>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-            ApplicationUserRoleQueryRule.Register(BusinessRuleRegistry.Instance);
-
-            DomainQueryPropertyRenameRule<ApplicationUserToken>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<ApplicationUserToken>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-            DomainQueryPropertyRenameRule<ApplicationUserToken>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Key");
-
-            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-            DomainQueryPropertyRenameRule<ApplicationRoleClaim>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Key");
-
-            DomainQueryPropertyRenameRule<UserAudit>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "UserId");
-            DomainQueryPropertyRenameRule<UserAudit>.Register(BusinessRuleRegistry.Instance, "RoleStorageKey", "RoleId");
-
-            DomainQueryPropertyRenameRule<ApplicationRole>.Register(BusinessRuleRegistry.Instance, "StorageKey", "Id");
-
-            ApplicationUserLoginQueryRule.Register(BusinessRuleRegistry.Instance);
-
-            ApplicationUserTokenQueryRule.Register(BusinessRuleRegistry.Instance);
-
-            ApplicationUserRoleQueryRule.Register(BusinessRuleRegistry.Instance);
+            // AI: Add module business rules
+            SecurityCosmosModuleAddRule.Register(BusinessRuleRegistry.Instance);
+            EntityFrameworkCoreDatabaseEnsureCreatedRule<SecurityCosmosModule, SecurityCosmosContext>.Register(BusinessRuleRegistry.Instance);
+            ModuleSetStartedRule<SecurityCosmosModule>.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

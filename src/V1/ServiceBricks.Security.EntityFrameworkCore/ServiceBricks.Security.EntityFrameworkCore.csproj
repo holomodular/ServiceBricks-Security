@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-g</Version>
+		<Version>1.1.0-l</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.EntityFrameworkCore</PackageId>
 		<Title>ServiceBricks.Security.EntityFrameworkCore</Title>
@@ -32,11 +32,6 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.1.0-g" />
-		<PackageReference Include="ServiceBricks.Security" Version="1.1.0-g" />
-	</ItemGroup>
-
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.33" />
@@ -48,6 +43,13 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
-	</ItemGroup>	
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Security" Version="1.1.0-l" />
+	</ItemGroup>
 	
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.EntityFrameworkCore" Version="1.1.0-l" />
+	</ItemGroup>
 </Project>

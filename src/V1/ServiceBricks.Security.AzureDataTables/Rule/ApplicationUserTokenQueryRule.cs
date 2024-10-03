@@ -1,20 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
-using ServiceBricks.Storage.AzureDataTables;
+﻿using ServiceBricks.Storage.AzureDataTables;
 using ServiceQuery;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     public sealed class ApplicationUserTokenQueryRule : BusinessRule
     {
-        private readonly ILogger _logger;
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        public ApplicationUserTokenQueryRule(ILoggerFactory loggerFactory)
+        public ApplicationUserTokenQueryRule()
         {
-            _logger = loggerFactory.CreateLogger<ApplicationUserTokenQueryRule>();
             Priority = PRIORITY_NORMAL;
         }
 
@@ -48,49 +43,50 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                if (context.Object is DomainQueryBeforeEvent<ApplicationUserToken> ei)
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+            var ei = context.Object as DomainQueryBeforeEvent<ApplicationUserToken>;
+            if (ei == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            var item = ei.DomainObject;
+            if (ei.ServiceQueryRequest == null || ei.ServiceQueryRequest.Filters == null)
+                return response;
+
+            for (int i = 0; i < ei.ServiceQueryRequest.Filters.Count; i++)
+            {
+                if (ei.ServiceQueryRequest.Filters[i].Properties != null &&
+                    ei.ServiceQueryRequest.Filters[i].Properties.Count > 0)
                 {
-                    var item = ei.DomainObject;
-                    if (ei.ServiceQueryRequest == null || ei.ServiceQueryRequest.Filters == null)
-                        return response;
-
-                    for (int i = 0; i < ei.ServiceQueryRequest.Filters.Count; i++)
+                    bool found = false;
+                    foreach (var prop in ei.ServiceQueryRequest.Filters[i].Properties)
                     {
-                        if (ei.ServiceQueryRequest.Filters[i].Properties != null &&
-                            ei.ServiceQueryRequest.Filters[i].Properties.Count > 0)
-                        {
-                            bool found = false;
-                            foreach (var prop in ei.ServiceQueryRequest.Filters[i].Properties)
-                            {
-                                if (string.Compare(prop, "StorageKey", true) == 0)
-                                    found = true;
-                            }
+                        if (string.Compare(prop, "StorageKey", true) == 0)
+                            found = true;
+                    }
 
-                            if (found)
+                    if (found)
+                    {
+                        if (ei.ServiceQueryRequest.Filters[i].Values != null &&
+                            ei.ServiceQueryRequest.Filters[i].Values.Count >= 1)
+                        {
+                            var q = BuildKeyQuery(ei.ServiceQueryRequest.Filters[i].Values[0]);
+                            if (q != null)
                             {
-                                if (ei.ServiceQueryRequest.Filters[i].Values != null &&
-                                    ei.ServiceQueryRequest.Filters[i].Values.Count >= 1)
-                                {
-                                    var q = BuildKeyQuery(ei.ServiceQueryRequest.Filters[i].Values[0]);
-                                    if (q != null)
-                                    {
-                                        ei.ServiceQueryRequest.Filters.RemoveAt(i);
-                                        ei.ServiceQueryRequest.Filters.InsertRange(i, q.Filters);
-                                        i += q.Filters.Count;
-                                    }
-                                }
+                                ei.ServiceQueryRequest.Filters.RemoveAt(i);
+                                ei.ServiceQueryRequest.Filters.InsertRange(i, q.Filters);
+                                i += q.Filters.Count;
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
             }
 
             return response;

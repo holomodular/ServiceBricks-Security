@@ -1,5 +1,4 @@
 ﻿using Azure.Data.Tables;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBricks.Storage.AzureDataTables;
@@ -7,24 +6,56 @@ using ServiceBricks.Storage.AzureDataTables;
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// Extensions for to start the ServiceBricks.Security.AzureDataTables module.
+    /// This rule is executed when the ServiceBricks module is added.
     /// </summary>
-    public static partial class ApplicationBuilderExtensions
+    public sealed class SecurityAzureDataTablesModuleStartRule : BusinessRule
     {
         /// <summary>
-        /// Flag to indicate if the module has started.
+        /// Register the rule
         /// </summary>
-        public static bool ModuleStarted = false;
+        public static void Register(IBusinessRuleRegistry registry)
+        {
+            registry.Register(
+                typeof(ModuleStartEvent<SecurityAzureDataTablesModule>),
+                typeof(SecurityAzureDataTablesModuleStartRule));
+        }
 
         /// <summary>
-        /// Start the ServiceBricks.Security.AzureDataTables module.
+        /// UnRegister the rule.
         /// </summary>
-        /// <param name="applicationBuilder"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder StartServiceBricksSecurityAzureDataTables(this IApplicationBuilder applicationBuilder)
+        public static void UnRegister(IBusinessRuleRegistry registry)
         {
+            registry.UnRegister(
+                typeof(ModuleStartEvent<SecurityAzureDataTablesModule>),
+                typeof(SecurityAzureDataTablesModuleStartRule));
+        }
+
+        /// <summary>
+        /// Execute the business rule.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override IResponse ExecuteRule(IBusinessRuleContext context)
+        {
+            var response = new Response();
+
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+            var e = context.Object as ModuleStartEvent<SecurityAzureDataTablesModule>;
+            if (e == null || e.DomainObject == null || e.ApplicationBuilder == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Perform logic
+
             // AI: Get the connection string
-            var configuration = applicationBuilder.ApplicationServices.GetRequiredService<IConfiguration>();
+            var configuration = e.ApplicationBuilder.ApplicationServices.GetRequiredService<IConfiguration>();
             var connectionString = configuration.GetAzureDataTablesConnectionString(
                 SecurityAzureDataTablesConstants.APPSETTING_CONNECTION_STRING);
 
@@ -69,13 +100,7 @@ namespace ServiceBricks.Security.AzureDataTables
                 SecurityAzureDataTablesConstants.GetTableName(nameof(UserAudit)));
             tableClient.CreateIfNotExists();
 
-            // AI: Set the module started flag
-            ModuleStarted = true;
-
-            // AI: Start parent module
-            applicationBuilder.StartServiceBricksSecurity();
-
-            return applicationBuilder;
+            return response;
         }
     }
 }

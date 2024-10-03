@@ -19,6 +19,7 @@ namespace ServiceBricks.Security.MongoDb
         protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
         protected readonly UserManager<ApplicationIdentityUser> _userManager;
         protected readonly SignInManager<ApplicationIdentityUser> _signInManager;
+        protected readonly IBusinessRuleService _businessRuleService;
 
         /// <summary>
         /// Constructor.
@@ -43,7 +44,8 @@ namespace ServiceBricks.Security.MongoDb
             IRoleApiService applicationRoleApiService,
             IRoleClaimApiService applicationRoleClaimApiService,
             UserManager<ApplicationIdentityUser> userManager,
-            SignInManager<ApplicationIdentityUser> signInManager)
+            SignInManager<ApplicationIdentityUser> signInManager,
+            IBusinessRuleService businessRuleService)
         {
             _mapper = mapper;
             _applicationUserApiService = applicationUserApiService;
@@ -55,6 +57,7 @@ namespace ServiceBricks.Security.MongoDb
             _applicationRoleClaimApiService = applicationRoleClaimApiService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _businessRuleService = businessRuleService;
         }
 
         /// <summary>
@@ -700,6 +703,13 @@ namespace ServiceBricks.Security.MongoDb
                 if (user.LockoutEnabled)
                     await _userManager.AccessFailedAsync(user);
 
+                // User invalid password process
+                UserInvalidPasswordProcess userInvalidPasswordProcess = new UserInvalidPasswordProcess(
+                    user.Id.ToString(),
+                    user.Email);
+                await _businessRuleService.ExecuteProcessAsync(userInvalidPasswordProcess);
+
+                // Return response
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }

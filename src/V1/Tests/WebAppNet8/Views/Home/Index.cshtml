@@ -10,6 +10,36 @@
     You can modify this application however you like.
     Please visit our website at: <a href="https://ServiceBricks.com" target="_blank">https://ServiceBricks.com</a>.
 </p>
+<h2>Swagger</h2>
+<p>
+    <ol>
+        <li>
+            Copy and paste the code below and add to the <b>AuthenticationApi.AuthenticateUser method</b> and click Execute.
+            <br />
+            <code>
+                {
+                "client_id": "unittest@servicebricks.com",
+                "grant_type": "password",
+                "client_secret": "UnitTest123!@@#"
+                }
+            </code>
+        </li>
+        <li>
+            Copy the "access_token" from the response, you will use this next.
+        </li>
+        <li>
+            At the top of the swagger page, click the Authorize button with the open lock icon. Paste the value from the access_token into the value textbox and click the Authorize button and then the Close button.
+            The button when now display with a closed lock icon.
+        </li>
+        <li>
+            You can now access all methods of the ServiceBricks API as an Admin user.
+        </li>
+    </ol>
+
+</p>
+<p>
+
+</p>
 <p>     
     <a href="/swagger">View Swagger Page</a>
 </p>

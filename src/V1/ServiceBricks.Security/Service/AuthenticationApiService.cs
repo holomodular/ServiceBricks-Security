@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using ServiceQuery;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace ServiceBricks.Security
 {
@@ -23,6 +23,7 @@ namespace ServiceBricks.Security
         protected readonly IRoleClaimApiService _applicationRoleClaimApiService;
         protected readonly IRoleApiService _applicationRoleApiService;
         protected readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly ApiOptions _apiOptions;
 
         /// <summary>
         /// Constructor
@@ -43,7 +44,8 @@ namespace ServiceBricks.Security
             IUserRoleApiService applicationUserRoleApiService,
             IRoleClaimApiService applicationRoleClaimApiService,
             IRoleApiService applicationRoleApiService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<ApiOptions> apiOptions)
         {
             _configuration = configuration;
             _securityOptions = securityOptions.Value;
@@ -53,6 +55,7 @@ namespace ServiceBricks.Security
             _applicationRoleClaimApiService = applicationRoleClaimApiService;
             _applicationRoleApiService = applicationRoleApiService;
             _httpContextAccessor = httpContextAccessor;
+            _apiOptions = apiOptions.Value;
         }
 
         /// <summary>
@@ -74,17 +77,32 @@ namespace ServiceBricks.Security
         {
             var response = new ResponseItem<AccessTokenResponse>();
 
+            // Verify password
             var respAuth = await _userManagerService.VerifyPasswordAsync(request.client_id, request.client_secret);
             if (respAuth.Error)
             {
-                response.CopyFrom(respAuth);
+                // Make sure system errors are not exposed
+                var messages = respAuth.Messages.ToList();
+                if (!_apiOptions.ExposeSystemErrors)
+                    messages = messages.Where(x => x.Severity != ResponseSeverity.ErrorSystemSensitive).ToList();
+                if (messages.Count == 0)
+                    messages.Add(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
+                foreach (var msg in messages)
+                    response.AddMessage(msg);
                 return response;
             }
 
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, respAuth.Item.StorageKey));
-            claims.Add(new Claim(ClaimTypes.Name, respAuth.Item.UserName));
+            // Create default claims
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, respAuth.Item.StorageKey),
+                new Claim(ClaimTypes.Name, respAuth.Item.UserName),
+                new Claim(ClaimTypes.Email, respAuth.Item.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, respAuth.Item.StorageKey),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
+            // Query for data needed
             var qb = ServiceQueryRequestBuilder.New().IsEqual(
                 nameof(UserClaimDto.UserStorageKey), respAuth.Item.StorageKey);
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(qb.Build());
@@ -118,32 +136,16 @@ namespace ServiceBricks.Security
                 }
             }
 
-            // create a new token with token helper and add our claims
-            var token = JwtHelper.GetJwtToken(
-                respAuth.Item.Email,
-                _securityOptions.SecretKey,
-                _securityOptions.ValidIssuer,
-                _securityOptions.ValidAudience,
-                TimeSpan.FromMinutes(_securityOptions.ExpireMinutes),
-                claims.ToArray());
-
-            //if (_httpContextAccessor != null && _httpContextAccessor.HttpContext != null)
-            //{
-            //    // add cookie
-            //    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
-            //    foreach (var c in claims)
-            //        identity.AddClaim(c);
-            //    var principal = new ClaimsPrincipal(identity);
-            //    await _httpContextAccessor.HttpContext.SignInAsync(
-            //        CookieAuthenticationDefaults.AuthenticationScheme,
-            //        principal,
-            //        new AuthenticationProperties
-            //        {
-            //            IsPersistent = true,
-            //            AllowRefresh = true,
-            //            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(_securityOptions.ExpireMinutes)
-            //        });
-            //}
+            // Create the token
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityOptions.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: _securityOptions.ValidIssuer,
+                audience: _securityOptions.ValidAudience,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(_securityOptions.ExpireMinutes)),
+                claims: claims,
+                signingCredentials: creds
+            );
 
             // return the token to API client
             response.Item = new AccessTokenResponse()

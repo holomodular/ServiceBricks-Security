@@ -1,13 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace ServiceBricks.Security
+﻿namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule happens when a user registers as an admin.
     /// </summary>
     public sealed class UserRegisterAdminRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserManagerService _userManagerService;
         private readonly IUserApiService _applicationUserApiService;
         private readonly IBusinessRuleService _businessRuleService;
@@ -15,17 +12,14 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="applicationUserApiService"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="businessRuleService"></param>
         public UserRegisterAdminRule(
-            ILoggerFactory loggerFactory,
             IUserApiService applicationUserApiService,
             IUserManagerService userManagerApiService,
             IBusinessRuleService businessRuleService)
         {
-            _logger = loggerFactory.CreateLogger<UserRegisterAdminRule>();
             _applicationUserApiService = applicationUserApiService;
             _businessRuleService = businessRuleService;
             _userManagerService = userManagerApiService;
@@ -62,35 +56,35 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserRegisterAdminProcess;
-                if (e == null || response.Error)
-                    return response;
-
-                // AI: Call user register Process (no confirmation email)
-                UserRegisterProcess registerProcess = new UserRegisterProcess(
-                    e.Email, e.Password, false, true);
-                var respRegisterUser = _businessRuleService.ExecuteProcess(registerProcess);
-                if (respRegisterUser.Error)
-                {
-                    response.CopyFrom(respRegisterUser);
-                    return response;
-                }
-
-                // AI: Find the user by email
-                var respUser = _userManagerService.FindByEmail(e.Email);
-                if (respUser.Item != null)
-                {
-                    // AI: Add the admin role
-                    var respAdminRole = _userManagerService.AddToRole(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserRegisterAdminProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Call user register Process (no confirmation email)
+            UserRegisterProcess registerProcess = new UserRegisterProcess(
+                e.Email, e.Password, false, true);
+            var respRegisterUser = _businessRuleService.ExecuteProcess(registerProcess);
+            if (respRegisterUser.Error)
+            {
+                response.CopyFrom(respRegisterUser);
+                return response;
+            }
+
+            // AI: Find the user by email
+            var respUser = _userManagerService.FindByEmail(e.Email);
+            if (respUser.Item != null)
+            {
+                // AI: Add the admin role
+                var respAdminRole = _userManagerService.AddToRole(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
             }
 
             return response;
@@ -105,35 +99,35 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserRegisterAdminProcess;
-                if (e == null || response.Error)
-                    return response;
-
-                // AI: Call user register Process (no confirmation email)
-                UserRegisterProcess registerProcess = new UserRegisterProcess(
-                    e.Email, e.Password, false, true);
-                var respRegisterUser = await _businessRuleService.ExecuteProcessAsync(registerProcess);
-                if (respRegisterUser.Error)
-                {
-                    response.CopyFrom(respRegisterUser);
-                    return response;
-                }
-
-                // AI: Find the user by email
-                var respUser = await _userManagerService.FindByEmailAsync(e.Email);
-                if (respUser.Item != null)
-                {
-                    // AI: Add the admin role
-                    var respAdminRole = await _userManagerService.AddToRoleAsync(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserRegisterAdminProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Call user register Process (no confirmation email)
+            UserRegisterProcess registerProcess = new UserRegisterProcess(
+                e.Email, e.Password, false, true);
+            var respRegisterUser = await _businessRuleService.ExecuteProcessAsync(registerProcess);
+            if (respRegisterUser.Error)
+            {
+                response.CopyFrom(respRegisterUser);
+                return response;
+            }
+
+            // AI: Find the user by email
+            var respUser = await _userManagerService.FindByEmailAsync(e.Email);
+            if (respUser.Item != null)
+            {
+                // AI: Add the admin role
+                var respAdminRole = await _userManagerService.AddToRoleAsync(respUser.Item.StorageKey, ServiceBricksConstants.SECURITY_ROLE_ADMIN_NAME);
             }
 
             return response;

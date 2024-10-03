@@ -5,8 +5,13 @@ namespace ServiceBricks.Security.MongoDb
     /// <summary>
     /// The module definition for the ServiceBricks Security MongoDb module.
     /// </summary>
-    public partial class SecurityMongoDbModule : IModule
+    public partial class SecurityMongoDbModule : ServiceBricks.Module
     {
+        /// <summary>
+        /// Instance.
+        /// </summary>
+        public static SecurityMongoDbModule Instance = new SecurityMongoDbModule();
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -21,20 +26,5 @@ namespace ServiceBricks.Security.MongoDb
                 new SecurityModule()
             };
         }
-
-        /// <summary>
-        /// The list of dependent modules.
-        /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain AutoMapper profiles.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain views.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
     }
 }

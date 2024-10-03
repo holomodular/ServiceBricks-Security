@@ -1,32 +1,28 @@
-﻿using System.Reflection;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace ServiceBricks.Security
 {
     /// <summary>
     /// The module definition for the Security API Brick.
     /// </summary>
-    public partial class SecurityModule : IModule
+    public partial class SecurityModule : ServiceBricks.Module
     {
+        /// <summary>
+        /// Instance
+        /// </summary>
+        public static SecurityModule Instance = new SecurityModule();
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public SecurityModule()
         {
+            IdentityOptions = new Action<IdentityOptions>(options => new IdentityOptions());
         }
 
         /// <summary>
-        /// The list of dependent modules.
+        /// Identity Options when starting
         /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of automapper assemblies.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of view assemblies.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
+        public virtual Action<IdentityOptions> IdentityOptions { get; set; }
     }
 }

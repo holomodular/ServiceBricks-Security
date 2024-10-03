@@ -1,25 +1,19 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace ServiceBricks.Security
+﻿namespace ServiceBricks.Security
 {
     /// <summary>
     /// This business rule sends an email to a user to reset their password.
     /// </summary>
     public sealed class SendResetPasswordEmailRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IServiceBus _serviceBus;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="serviceBus"></param>
         public SendResetPasswordEmailRule(
-            ILoggerFactory loggerFactory,
             IServiceBus serviceBus)
         {
-            _logger = loggerFactory.CreateLogger<SendResetPasswordEmailRule>();
             _serviceBus = serviceBus;
             Priority = PRIORITY_NORMAL;
         }
@@ -54,17 +48,23 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                var broadcast = GetEmailBroadcast(context);
-                if (broadcast != null)
-                    _serviceBus.Send(broadcast);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var obj = context.Object as SendResetPasswordEmailProcess;
+            if (obj == null || obj.ApplicationUser == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError("Error sending email"));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            var broadcast = GetEmailBroadcast(obj);
+            if (broadcast != null)
+                _serviceBus.Send(broadcast);
+
             return response;
         }
 
@@ -77,27 +77,28 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                var broadcast = GetEmailBroadcast(context);
-                if (broadcast != null)
-                    await _serviceBus.SendAsync(broadcast);
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var obj = context.Object as SendResetPasswordEmailProcess;
+            if (obj == null || obj.ApplicationUser == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError("Error sending email"));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            var broadcast = GetEmailBroadcast(obj);
+            if (broadcast != null)
+                await _serviceBus.SendAsync(broadcast);
+
             return response;
         }
 
-        private CreateApplicationEmailBroadcast GetEmailBroadcast(IBusinessRuleContext context)
+        private CreateApplicationEmailBroadcast GetEmailBroadcast(SendResetPasswordEmailProcess obj)
         {
-            // AI: Make sure the context object is the correct type
-            var obj = context.Object as SendResetPasswordEmailProcess;
-            if (obj == null)
-                return null;
-
             // AI: Create Email
             var emailHtml = EMAIL_TEMPLATE_HTML.Replace("{0}", obj.CallbackUrl);
             var emailText = EMAIL_TEMPLATE_TEXT.Replace("{0}", obj.CallbackUrl);

@@ -34,14 +34,13 @@ namespace ServiceBricks.Xunit
             services.AddScoped<ITestManager<RoleClaimDto>, RoleClaimTestManager>();
             services.AddScoped<ITestManager<UserAuditDto>, UserAuditTestManagerPostgres>();
 
-            services.AddServiceBricksComplete();
+            services.AddServiceBricksComplete(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app)
         {
             base.CustomConfigure(app);
             app.StartServiceBricks();
-            app.StartServiceBricksSecurityPostgres();
         }
     }
 }

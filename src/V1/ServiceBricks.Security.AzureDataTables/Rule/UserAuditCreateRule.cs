@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using ServiceBricks.Storage.AzureDataTables;
+﻿using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
@@ -8,15 +7,11 @@ namespace ServiceBricks.Security.AzureDataTables
     /// </summary>
     public sealed class UserAuditCreateRule : BusinessRule
     {
-        private readonly ILogger _logger;
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        public UserAuditCreateRule(ILoggerFactory loggerFactory)
+        public UserAuditCreateRule()
         {
-            _logger = loggerFactory.CreateLogger<UserAuditCreateRule>();
             Priority = PRIORITY_LOW;
         }
 
@@ -50,26 +45,27 @@ namespace ServiceBricks.Security.AzureDataTables
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                if (context.Object is DomainCreateBeforeEvent<UserAudit> ei)
-                {
-                    var item = ei.DomainObject;
-                    item.Key = Guid.NewGuid();
-                    item.PartitionKey = item.UserId.ToString();
-                    var reverseDate = DateTimeOffset.MaxValue.Ticks - item.CreateDate.Ticks;
-                    item.RowKey =
-                        reverseDate.ToString("d19") +
-                        StorageAzureDataTablesConstants.KEY_DELIMITER +
-                        item.Key.ToString();
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var ei = context.Object as DomainCreateBeforeEvent<UserAudit>;
+            if (ei == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            var item = ei.DomainObject;
+            item.Key = Guid.NewGuid();
+            item.PartitionKey = item.UserId.ToString();
+            var reverseDate = DateTimeOffset.MaxValue.Ticks - item.CreateDate.Ticks;
+            item.RowKey =
+                reverseDate.ToString("d19") +
+                StorageAzureDataTablesConstants.KEY_DELIMITER +
+                item.Key.ToString();
 
             return response;
         }

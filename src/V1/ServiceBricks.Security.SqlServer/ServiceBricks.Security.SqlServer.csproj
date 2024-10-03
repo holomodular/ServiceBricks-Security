@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-g</Version>
+		<Version>1.1.0-l</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.SqlServer</PackageId>
 		<Title>ServiceBricks.Security.SqlServer</Title>
@@ -34,11 +34,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Security.EntityFrameworkCore" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Security.EntityFrameworkCore" Version="1.1.0-l" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.SqlServer" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.SqlServer" Version="1.1.0-l" />
 	</ItemGroup>
 	
 </Project>

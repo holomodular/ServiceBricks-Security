@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
@@ -8,7 +7,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserProfileChangeRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IUserManagerService _userManagerService;
         private readonly IUserApiService _applicationUserApiService;
@@ -18,21 +16,18 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="iPAddressService"></param>
         /// <param name="applicationUserApiService"></param>
         public UserProfileChangeRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IUserManagerService userManagerApiService,
             IHttpContextAccessor httpContextAccessor,
             IIpAddressService iPAddressService,
             IUserApiService applicationUserApiService)
         {
-            _logger = loggerFactory.CreateLogger<UserProfileChangeRule>();
             _auditUserApiService = auditUserApiService;
             _userManagerService = userManagerApiService;
             _httpContextAccessor = httpContextAccessor;
@@ -71,51 +66,51 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserProfileChangeProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = _userManagerService.FindById(e.UserStorageKey.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
-                    return response;
-                }
-
-                // AI: Change user properties here
-
-                // AI: Update the user
-                var respUpdate = _applicationUserApiService.Update(respUser.Item);
-                if (respUpdate.Error)
-                {
-                    response.CopyFrom(respUpdate);
-                    return response;
-                }
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.PROFILE_CHANGE_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
-
-                // AI: Tell the usermanager to use updated identity
-                if (_httpContextAccessor != null &&
-                    _httpContextAccessor.HttpContext != null)
-                {
-                    _userManagerService.RefreshSignIn(respUser.Item.StorageKey);
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserProfileChangeProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Find the user
+            var respUser = _userManagerService.FindById(e.UserStorageKey.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
+                return response;
+            }
+
+            // AI: Change user properties here
+
+            // AI: Update the user
+            var respUpdate = _applicationUserApiService.Update(respUser.Item);
+            if (respUpdate.Error)
+            {
+                response.CopyFrom(respUpdate);
+                return response;
+            }
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.PROFILE_CHANGE_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
+
+            // AI: Tell the usermanager to use updated identity
+            if (_httpContextAccessor != null &&
+                _httpContextAccessor.HttpContext != null)
+            {
+                _userManagerService.RefreshSignIn(respUser.Item.StorageKey);
             }
 
             return response;
@@ -130,51 +125,51 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserProfileChangeProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Find the user
-                var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
-                    return response;
-                }
-
-                // AI: Change user properties here
-
-                // AI: Update the user
-                var respUpdate = await _applicationUserApiService.UpdateAsync(respUser.Item);
-                if (respUpdate.Error)
-                {
-                    response.CopyFrom(respUpdate);
-                    return response;
-                }
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.PROFILE_CHANGE_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
-
-                // AI: Tell the usermanager to use updated identity
-                if (_httpContextAccessor != null &&
-                    _httpContextAccessor.HttpContext != null)
-                {
-                    await _userManagerService.RefreshSignInAsync(respUser.Item.StorageKey);
-                }
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserProfileChangeProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
+            }
+
+            // AI: Find the user
+            var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
+                return response;
+            }
+
+            // AI: Change user properties here
+
+            // AI: Update the user
+            var respUpdate = await _applicationUserApiService.UpdateAsync(respUser.Item);
+            if (respUpdate.Error)
+            {
+                response.CopyFrom(respUpdate);
+                return response;
+            }
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.PROFILE_CHANGE_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
+
+            // AI: Tell the usermanager to use updated identity
+            if (_httpContextAccessor != null &&
+                _httpContextAccessor.HttpContext != null)
+            {
+                await _userManagerService.RefreshSignInAsync(respUser.Item.StorageKey);
             }
 
             return response;

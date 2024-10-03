@@ -1,25 +1,13 @@
-﻿using System.Reflection;
-
-namespace ServiceBricks.Security.Member
+﻿namespace ServiceBricks.Security.Member
 {
     /// <summary>
     /// The module definition for the ServiceBricks Security Member module.
     /// </summary>
-    public class SecurityMemberModule : IModule
+    public class SecurityMemberModule : ServiceBricks.Module
     {
         /// <summary>
-        /// The list of dependent modules.
+        /// Instance
         /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain AutoMapper profiles.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of assemblies that contain views.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
+        public static SecurityMemberModule Instance = new SecurityMemberModule();
     }
 }

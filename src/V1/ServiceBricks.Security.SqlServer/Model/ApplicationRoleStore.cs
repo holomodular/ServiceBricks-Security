@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using ServiceBricks.Security.EntityFrameworkCore;
-using ServiceQuery;
 
 namespace ServiceBricks.Security.SqlServer
 {

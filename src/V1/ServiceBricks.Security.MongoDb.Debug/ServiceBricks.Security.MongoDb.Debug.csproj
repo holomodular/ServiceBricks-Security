@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -19,7 +19,6 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserRole.cs" Link="ApplicationUserRole.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\ApplicationUserToken.cs" Link="ApplicationUserToken.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Domain\UserAudit.cs" Link="UserAudit.cs" />
-	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleClaimMappingProfile.cs" Link="ApplicationRoleClaimMappingProfile.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Mapping\ApplicationRoleMappingProfile.cs" Link="ApplicationRoleMappingProfile.cs" />
@@ -33,6 +32,7 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\ApplicationUserStore.cs" Link="ApplicationUserStore.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\SecurityMongoDbConstants.cs" Link="SecurityMongoDbConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Model\SecurityMongoDbModule.cs" Link="SecurityMongoDbModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.MongoDb\Rule\SecurityMongoDbModuleAddRule.cs" Link="SecurityMongoDbModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationRoleApiService.cs" Link="ApplicationRoleApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationRoleClaimApiService.cs" Link="ApplicationRoleClaimApiService.cs" />
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Service\ApplicationUserApiService.cs" Link="ApplicationUserApiService.cs" />
@@ -45,10 +45,9 @@
 	  <Compile Include="..\ServiceBricks.Security.MongoDb\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-g" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-l" />
+	</ItemGroup>
 </Project>

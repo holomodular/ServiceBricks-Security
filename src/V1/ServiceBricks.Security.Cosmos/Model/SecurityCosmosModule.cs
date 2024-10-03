@@ -5,8 +5,13 @@ namespace ServiceBricks.Security.Cosmos
     /// <summary>
     /// The module definition for the Security Cosmos module.
     /// </summary>
-    public partial class SecurityCosmosModule : IModule
+    public partial class SecurityCosmosModule : ServiceBricks.Module
     {
+        /// <summary>
+        /// Instance.
+        /// </summary>
+        public static SecurityCosmosModule Instance = new SecurityCosmosModule();
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -21,20 +26,5 @@ namespace ServiceBricks.Security.Cosmos
                 new SecurityModule()
             };
         }
-
-        /// <summary>
-        /// The list of dependent modules.
-        /// </summary>
-        public List<IModule> DependentModules { get; }
-
-        /// <summary>
-        /// The list of Automapper assemblies.
-        /// </summary>
-        public List<Assembly> AutomapperAssemblies { get; }
-
-        /// <summary>
-        /// The list of view assemblies.
-        /// </summary>
-        public List<Assembly> ViewAssemblies { get; }
     }
 }

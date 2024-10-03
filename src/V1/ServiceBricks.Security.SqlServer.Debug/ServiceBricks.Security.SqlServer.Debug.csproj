@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security.SqlServer\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Migrations\20240921072941_SecurityV1.cs" Link="20240921072941_SecurityV1.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Migrations\20240921072941_SecurityV1.Designer.cs" Link="20240921072941_SecurityV1.Designer.cs" />
@@ -17,6 +16,7 @@
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerConstants.cs" Link="SecuritySqlServerConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerContext.cs" Link="SecuritySqlServerContext.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Model\SecuritySqlServerModule.cs" Link="SecuritySqlServerModule.cs" />
+	  <Compile Include="..\ServiceBricks.Security.SqlServer\Rule\SecuritySqlServerModuleAddRule.cs" Link="SecuritySqlServerModuleAddRule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.SqlServer\Storage\SecurityStorageRepository.cs" Link="SecurityStorageRepository.cs" />
 	</ItemGroup>
 
@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.SqlServer" Version="1.1.0-g" />
+		<PackageReference Include="ServiceBricks.Storage.SqlServer" Version="1.1.0-l" />
 	</ItemGroup>
 	
 </Project>

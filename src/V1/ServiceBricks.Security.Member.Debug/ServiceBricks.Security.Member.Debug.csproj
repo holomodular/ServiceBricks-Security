@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -7,15 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\ServiceBricks.Security.Member\Extensions\ApplicationBuilderExtensions.cs" Link="ApplicationBuilderExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Member\Extensions\ServiceCollectionExtensions.cs" Link="ServiceCollectionExtensions.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Member\Model\SecurityMemberConstants.cs" Link="SecurityMemberConstants.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Member\Model\SecurityMemberModule.cs" Link="SecurityMemberModule.cs" />
 	  <Compile Include="..\ServiceBricks.Security.Member\Model\SecurityTokenOptions.cs" Link="SecurityTokenOptions.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.1.0-g" />
+	  <Compile Include="..\ServiceBricks.Security.Member\Rule\SecurityMemberModuleAddRule.cs" Link="SecurityMemberModuleAddRule.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
@@ -28,5 +24,9 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks" Version="1.1.0-l" />
 	</ItemGroup>
 </Project>

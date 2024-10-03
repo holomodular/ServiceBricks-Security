@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace ServiceBricks.Security
 {
@@ -8,7 +7,6 @@ namespace ServiceBricks.Security
     /// </summary>
     public sealed class UserPasswordChangeRule : BusinessRule
     {
-        private readonly ILogger _logger;
         private readonly IUserAuditApiService _auditUserApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserManagerService _userManagerService;
@@ -17,19 +15,16 @@ namespace ServiceBricks.Security
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory"></param>
         /// <param name="auditUserApiService"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="userManagerApiService"></param>
         /// <param name="iPAddressService"></param>
         public UserPasswordChangeRule(
-            ILoggerFactory loggerFactory,
             IUserAuditApiService auditUserApiService,
             IHttpContextAccessor httpContextAccessor,
             IUserManagerService userManagerApiService,
             IIpAddressService iPAddressService)
         {
-            _logger = loggerFactory.CreateLogger<UserPasswordChangeRule>();
             _auditUserApiService = auditUserApiService;
             _httpContextAccessor = httpContextAccessor;
             _userManagerService = userManagerApiService;
@@ -67,43 +62,43 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserPasswordChangeProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Get the user
-                var respUser = _userManagerService.FindById(e.UserStorageKey.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Change the password
-                var result = _userManagerService.ChangePassword(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
-                if (result.Error)
-                {
-                    response.CopyFrom(result);
-                    return response;
-                }
-
-                // AI: Audit user
-                _auditUserApiService.Create(new UserAuditDto()
-                {
-                    AuditType = AuditType.PASSWORD_CHANGE_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserPasswordChangeProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Get the user
+            var respUser = _userManagerService.FindById(e.UserStorageKey.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Change the password
+            var result = _userManagerService.ChangePassword(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
+            if (result.Error)
+            {
+                response.CopyFrom(result);
+                return response;
+            }
+
+            // AI: Audit user
+            _auditUserApiService.Create(new UserAuditDto()
+            {
+                AuditType = AuditType.PASSWORD_CHANGE_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }
@@ -117,43 +112,43 @@ namespace ServiceBricks.Security
         {
             var response = new Response();
 
-            try
+            // AI: Make sure the context object is the correct type
+            if (context == null || context.Object == null)
             {
-                // AI: Make sure the context object is the correct type
-                var e = context.Object as UserPasswordChangeProcess;
-                if (e == null)
-                    return response;
-
-                // AI: Get the user
-                var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
-                if (respUser.Error || respUser.Item == null)
-                {
-                    response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
-                    return response;
-                }
-
-                // AI: Change the password
-                var result = await _userManagerService.ChangePasswordAsync(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
-                if (result.Error)
-                {
-                    response.CopyFrom(result);
-                    return response;
-                }
-
-                // AI: Audit user
-                await _auditUserApiService.CreateAsync(new UserAuditDto()
-                {
-                    AuditType = AuditType.PASSWORD_CHANGE_TEXT,
-                    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                    UserStorageKey = respUser.Item.StorageKey,
-                    IPAddress = _iPAddressService.GetIPAddress()
-                });
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
-            catch (Exception ex)
+            var e = context.Object as UserPasswordChangeProcess;
+            if (e == null)
             {
-                _logger.LogError(ex, ex.Message);
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_BUSINESS_RULE));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
+                return response;
             }
+
+            // AI: Get the user
+            var respUser = await _userManagerService.FindByIdAsync(e.UserStorageKey.ToString());
+            if (respUser.Error || respUser.Item == null)
+            {
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                return response;
+            }
+
+            // AI: Change the password
+            var result = await _userManagerService.ChangePasswordAsync(respUser.Item.StorageKey, e.OldPassword, e.NewPassword);
+            if (result.Error)
+            {
+                response.CopyFrom(result);
+                return response;
+            }
+
+            // AI: Audit user
+            await _auditUserApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.PASSWORD_CHANGE_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respUser.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress()
+            });
 
             return response;
         }
