@@ -32,10 +32,6 @@ namespace ServiceBricks.Xunit
         {
             base.CustomConfigure(app);
             app.StartServiceBricks();
-
-            app.StartServiceBricksSecurityPostgres();
-            app.StartServiceBricksSecuritySqlServer();
-            app.StartServiceBricksSecuritySqlite();
         }
     }
 }
