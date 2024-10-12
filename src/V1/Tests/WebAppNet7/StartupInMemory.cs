@@ -1,6 +1,4 @@
 using ServiceBricks;
-
-//using ServiceBricks.Logging.InMemory;
 using ServiceBricks.Security.InMemory;
 using WebApp.Extensions;
 
@@ -18,10 +16,10 @@ namespace WebApp
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddServiceBricks(Configuration);
-            //services.AddServiceBricksLoggingInMemory(Configuration);
             services.AddServiceBricksSecurityInMemory(Configuration);
-            services.AddCustomWebsite(Configuration);
+            ModuleRegistry.Instance.Register(new WebApp.Model.WebAppModule()); // Just for automapper registration
             services.AddServiceBricksComplete(Configuration);
+            services.AddCustomWebsite(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment webHostEnvironment)

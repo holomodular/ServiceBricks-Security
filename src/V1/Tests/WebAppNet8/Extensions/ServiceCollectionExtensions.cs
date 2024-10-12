@@ -10,9 +10,6 @@ namespace WebApp.Extensions
     {
         public static IServiceCollection AddCustomWebsite(this IServiceCollection services, IConfiguration Configuration)
         {
-            // Add to module registry
-            ModuleRegistry.Instance.Register(new WebAppModule());
-
             services.AddControllers();
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

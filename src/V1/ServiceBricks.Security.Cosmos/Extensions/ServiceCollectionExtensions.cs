@@ -26,8 +26,8 @@ namespace ServiceBricks.Security.Cosmos
 
             // AI: Add module business rules
             SecurityCosmosModuleAddRule.Register(BusinessRuleRegistry.Instance);
-            EntityFrameworkCoreDatabaseEnsureCreatedRule<SecurityCosmosModule, SecurityCosmosContext>.Register(BusinessRuleRegistry.Instance);
             ModuleSetStartedRule<SecurityCosmosModule>.Register(BusinessRuleRegistry.Instance);
+            EntityFrameworkCoreDatabaseEnsureCreatedRule<SecurityModule, SecurityCosmosContext>.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

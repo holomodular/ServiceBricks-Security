@@ -18,6 +18,17 @@ namespace ServiceBricks.Security
         public SecurityModule()
         {
             IdentityOptions = new Action<IdentityOptions>(options => new IdentityOptions());
+            DataTransferObjects = new List<Type>()
+            {
+                typeof(UserDto),
+                typeof(UserAuditDto),
+                typeof(UserClaimDto),
+                typeof(UserLoginDto),
+                typeof(UserRoleDto),
+                typeof(UserTokenDto),
+                typeof(RoleDto),
+                typeof(RoleClaimDto),
+            };
         }
 
         /// <summary>

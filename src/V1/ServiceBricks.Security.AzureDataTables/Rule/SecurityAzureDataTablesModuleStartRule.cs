@@ -11,12 +11,20 @@ namespace ServiceBricks.Security.AzureDataTables
     public sealed class SecurityAzureDataTablesModuleStartRule : BusinessRule
     {
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SecurityAzureDataTablesModuleStartRule()
+        {
+            Priority = PRIORITY_HIGH;
+        }
+
+        /// <summary>
         /// Register the rule
         /// </summary>
         public static void Register(IBusinessRuleRegistry registry)
         {
             registry.Register(
-                typeof(ModuleStartEvent<SecurityAzureDataTablesModule>),
+                typeof(ModuleStartEvent<SecurityModule>),
                 typeof(SecurityAzureDataTablesModuleStartRule));
         }
 
@@ -26,7 +34,7 @@ namespace ServiceBricks.Security.AzureDataTables
         public static void UnRegister(IBusinessRuleRegistry registry)
         {
             registry.UnRegister(
-                typeof(ModuleStartEvent<SecurityAzureDataTablesModule>),
+                typeof(ModuleStartEvent<SecurityModule>),
                 typeof(SecurityAzureDataTablesModuleStartRule));
         }
 
@@ -45,7 +53,7 @@ namespace ServiceBricks.Security.AzureDataTables
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));
                 return response;
             }
-            var e = context.Object as ModuleStartEvent<SecurityAzureDataTablesModule>;
+            var e = context.Object as ModuleStartEvent<SecurityModule>;
             if (e == null || e.DomainObject == null || e.ApplicationBuilder == null)
             {
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.PARAMETER_MISSING, "context"));

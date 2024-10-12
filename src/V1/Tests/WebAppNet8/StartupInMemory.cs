@@ -19,14 +19,14 @@ namespace WebApp
             services.AddServiceBricks(Configuration);
             services.AddServiceBricksLoggingInMemory(Configuration);
             services.AddServiceBricksSecurityInMemory(Configuration);
-            services.AddCustomWebsite(Configuration);
+            ModuleRegistry.Instance.Register(new WebApp.Model.WebAppModule()); // Just for automapper registration
             services.AddServiceBricksComplete(Configuration);
+            services.AddCustomWebsite(Configuration);
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment webHostEnvironment)
         {
             app.StartServiceBricks();
-            app.StartServiceBricksLoggingInMemory();
             app.StartCustomWebsite(webHostEnvironment);
             var logger = app.ApplicationServices.GetRequiredService<ILogger<StartupInMemory>>();
             logger.LogInformation("Application Started");

@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Sqlite
             // AI: Add module business rules
             SecuritySqliteModuleAddRule.Register(BusinessRuleRegistry.Instance);
             ModuleSetStartedRule<SecuritySqliteModule>.Register(BusinessRuleRegistry.Instance);
-            SqliteDatabaseMigrationRule<SecuritySqliteModule, SecuritySqliteContext>.Register(BusinessRuleRegistry.Instance);
+            SqliteDatabaseMigrationRule<SecurityModule, SecuritySqliteContext>.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

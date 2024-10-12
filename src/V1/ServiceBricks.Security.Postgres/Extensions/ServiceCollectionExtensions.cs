@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.Postgres
             // AI: Add module business rules
             SecurityPostgresModuleAddRule.Register(BusinessRuleRegistry.Instance);
             ModuleSetStartedRule<SecurityPostgresModule>.Register(BusinessRuleRegistry.Instance);
-            PostgresDatabaseMigrationRule<SecurityPostgresModule, SecurityPostgresContext>.Register(BusinessRuleRegistry.Instance);
+            PostgresDatabaseMigrationRule<SecurityModule, SecurityPostgresContext>.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }

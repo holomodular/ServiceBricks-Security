@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.InMemory" Version="1.1.0-l" />
+		<PackageReference Include="ServiceBricks.Storage.InMemory" Version="1.1.0-m" />
 	</ItemGroup>
 	
 </Project>

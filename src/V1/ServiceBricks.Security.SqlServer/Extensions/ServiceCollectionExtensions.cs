@@ -27,7 +27,7 @@ namespace ServiceBricks.Security.SqlServer
             // AI: Add module business rules
             SecuritySqlServerModuleAddRule.Register(BusinessRuleRegistry.Instance);
             ModuleSetStartedRule<SecuritySqlServerModule>.Register(BusinessRuleRegistry.Instance);
-            SqlServerDatabaseMigrationRule<SecuritySqlServerModule, SecuritySqlServerContext>.Register(BusinessRuleRegistry.Instance);
+            SqlServerDatabaseMigrationRule<SecurityModule, SecuritySqlServerContext>.Register(BusinessRuleRegistry.Instance);
 
             return services;
         }
