@@ -49,7 +49,7 @@ namespace ServiceBricks.Security.Postgres
         /// <summary>
         /// Audit users.
         /// </summary>
-        public virtual DbSet<UserAudit> UserAudits { get; set; }
+        public virtual DbSet<UserAudit> UserAudit { get; set; }
 
         /// <summary>
         /// OnModelCreating.

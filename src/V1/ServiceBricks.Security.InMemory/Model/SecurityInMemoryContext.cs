@@ -40,7 +40,7 @@ namespace ServiceBricks.Security.InMemory
         /// <summary>
         /// The audit users.
         /// </summary>
-        public virtual DbSet<UserAudit> UserAudits { get; set; }
+        public virtual DbSet<UserAudit> UserAudit { get; set; }
 
         /// <summary>
         /// OnModelCreating.

@@ -48,6 +48,6 @@
 	  <ProjectReference Include="..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-m" />
+		<PackageReference Include="ServiceBricks.Storage.MongoDb" Version="1.1.0-n" />
 	</ItemGroup>
 </Project>

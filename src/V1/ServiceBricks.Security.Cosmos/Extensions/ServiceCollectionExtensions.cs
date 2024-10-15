@@ -21,6 +21,9 @@ namespace ServiceBricks.Security.Cosmos
             // AI: Add the parent module
             services.AddServiceBricksSecurityEntityFrameworkCore(configuration);
 
+            // AI: Remove the EFC rule since we are using a different models
+            SecurityEntityFrameworkCoreModuleAddRule.UnRegister(BusinessRuleRegistry.Instance);
+
             // AI: Add the module to the ModuleRegistry
             ModuleRegistry.Instance.Register(SecurityCosmosModule.Instance);
 
