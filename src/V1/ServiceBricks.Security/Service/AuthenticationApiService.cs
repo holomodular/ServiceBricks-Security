@@ -24,9 +24,11 @@ namespace ServiceBricks.Security
         protected readonly IRoleApiService _applicationRoleApiService;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly ApiOptions _apiOptions;
+        protected readonly IUserAuditApiService _userAuditApiService;
+        protected readonly IIpAddressService _iPAddressService;
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="securityOptions"></param>
         /// <param name="configuration"></param>
@@ -36,6 +38,9 @@ namespace ServiceBricks.Security
         /// <param name="applicationRoleClaimApiService"></param>
         /// <param name="applicationRoleApiService"></param>
         /// <param name="httpContextAccessor"></param>
+        /// <param name="apiOptions"></param>
+        /// <param name="userAuditApiService"></param>
+        /// <param name="iPAddressService"></param>
         public AuthenticationApiService(
             IOptions<SecurityTokenOptions> securityOptions,
             IConfiguration configuration,
@@ -45,7 +50,9 @@ namespace ServiceBricks.Security
             IRoleClaimApiService applicationRoleClaimApiService,
             IRoleApiService applicationRoleApiService,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<ApiOptions> apiOptions)
+            IOptions<ApiOptions> apiOptions,
+            IUserAuditApiService userAuditApiService,
+            IIpAddressService iPAddressService)
         {
             _configuration = configuration;
             _securityOptions = securityOptions.Value;
@@ -56,6 +63,8 @@ namespace ServiceBricks.Security
             _applicationRoleApiService = applicationRoleApiService;
             _httpContextAccessor = httpContextAccessor;
             _apiOptions = apiOptions.Value;
+            _userAuditApiService = userAuditApiService;
+            _iPAddressService = iPAddressService;
         }
 
         /// <summary>
@@ -81,7 +90,8 @@ namespace ServiceBricks.Security
             var respAuth = await _userManagerService.VerifyPasswordAsync(request.client_id, request.client_secret);
             if (respAuth.Error)
             {
-                // Make sure system errors are not exposed
+                // Make sure system errors are not exposed.
+                // TODO: This should be the controllers responsibility. Also create a scrubbing function in core.
                 var messages = respAuth.Messages.ToList();
                 if (!_apiOptions.ExposeSystemErrors)
                     messages = messages.Where(x => x.Severity != ResponseSeverity.ErrorSystemSensitive).ToList();
@@ -135,6 +145,15 @@ namespace ServiceBricks.Security
                         claims.Add(new Claim(ClaimTypes.Role, r.Name));
                 }
             }
+
+            // AI: Audit user authentication, different from login
+            await _userAuditApiService.CreateAsync(new UserAuditDto()
+            {
+                AuditType = AuditType.AUTHENTICATE_TEXT,
+                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+                UserStorageKey = respAuth.Item.StorageKey,
+                IPAddress = _iPAddressService.GetIPAddress(),
+            });
 
             // Create the token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityOptions.SecretKey));

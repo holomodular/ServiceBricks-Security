@@ -61,10 +61,11 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Xunit" Version="1.1.0-m" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.Debug\ServiceBricks.Security.Debug.csproj" />
+		<PackageReference Include="ServiceBricks.Xunit" Version="1.1.0-o" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\..\ServiceBricks.Security\ServiceBricks.Security.csproj" />
+	</ItemGroup>
+	
 </Project>

@@ -59,8 +59,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.Sqlite.Debug\ServiceBricks.Security.Sqlite.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Sqlite\ServiceBricks.Security.Sqlite.csproj" />
 	</ItemGroup>
 
 </Project>

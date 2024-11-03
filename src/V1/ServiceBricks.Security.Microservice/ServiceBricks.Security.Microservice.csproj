@@ -1,0 +1,101 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Version>1.1.0-o</Version>
+		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
+		<PackageId>ServiceBricks.Security.Microservice</PackageId>
+		<Title>ServiceBricks.Security.Microservice</Title>
+		<AssemblyTitle>ServiceBricks.Security.Microservice</AssemblyTitle>
+		<Authors>holomodular</Authors>
+		<Company>HoloModular LLC</Company>
+		<Product>ServiceBricks</Product>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<Copyright>Copyright © 2024 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
+		<PackageProjectUrl>https://ServiceBricks.com</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>servicebricks;security;microservice</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>Resource\ServiceBricks.Security.Microservice.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks-Security</RepositoryUrl>
+		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+		<IsPackable>True</IsPackable>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="Resource\readme.md" Pack="True" PackagePath="\" />
+		<None Include="Resource\logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.35" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks.Core" Version="1.1.0-o" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ServiceBricks.Security\ServiceBricks.Security.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.AzureDataTables\ServiceBricks.Security.AzureDataTables.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.AzureDataTables.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.Cosmos\ServiceBricks.Security.Cosmos.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.Cosmos.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore\ServiceBricks.Security.EntityFrameworkCore.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.EntityFrameworkCore.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.InMemory\ServiceBricks.Security.InMemory.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.InMemory.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.MongoDb\ServiceBricks.Security.MongoDb.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.MongoDb.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.Postgres\ServiceBricks.Security.Postgres.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.Postgres.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.Sqlite\ServiceBricks.Security.Sqlite.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.Sqlite.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.SqlServer\ServiceBricks.Security.SqlServer.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.SqlServer.dll</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\ServiceBricks.Security.Member\ServiceBricks.Security.Member.csproj" PrivateAssets="All">
+			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+			<IncludeAssets>ServiceBricks.Security.Member.dll</IncludeAssets>
+		</ProjectReference>
+	</ItemGroup>
+	<Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
+		<ItemGroup>
+			<BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
+		</ItemGroup>
+	</Target>
+</Project>

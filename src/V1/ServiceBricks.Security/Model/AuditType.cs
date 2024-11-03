@@ -26,6 +26,11 @@
         public const string LOGIN_TEXT = "LOGIN";
 
         /// <summary>
+        /// LOGIN
+        /// </summary>
+        public const string AUTHENTICATE_TEXT = "AUTHENTICATE";
+
+        /// <summary>
         /// FORGOT_PASSWORD
         /// </summary>
         public const string FORGOT_PASSWORD_TEXT = "FORGOT PASSWORD";
@@ -82,6 +87,7 @@
                 new AuditType(){ Key = REGISTER_TEXT, Name = REGISTER_TEXT },
                 new AuditType(){ Key = CONFIRM_EMAIL_TEXT, Name = CONFIRM_EMAIL_TEXT },
                 new AuditType(){ Key = LOGIN_TEXT, Name = LOGIN_TEXT },
+                new AuditType(){ Key = AUTHENTICATE_TEXT, Name = AUTHENTICATE_TEXT },
                 new AuditType(){ Key = FORGOT_PASSWORD_TEXT, Name = FORGOT_PASSWORD_TEXT },
                 new AuditType(){ Key = PASSWORD_RESET_TEXT, Name = PASSWORD_RESET_TEXT },
                 new AuditType(){ Key = MFA_START_TEXT, Name = MFA_START_TEXT },

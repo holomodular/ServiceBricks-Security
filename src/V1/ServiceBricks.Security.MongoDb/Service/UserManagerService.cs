@@ -687,7 +687,7 @@ namespace ServiceBricks.Security.MongoDb
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }
 

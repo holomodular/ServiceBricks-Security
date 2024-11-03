@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-n</Version>
+		<Version>1.1.0-o</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Postgres</PackageId>
 		<Title>ServiceBricks.Security.Postgres</Title>
@@ -22,8 +22,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/holomodular/ServiceBricks</RepositoryUrl>
-		<IsPackable>True</IsPackable>
+		<RepositoryUrl>https://github.com/holomodular/ServiceBricks-Security</RepositoryUrl>
+		<IsPackable>False</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="Resource\readme.md" Pack="True" PackagePath="\" />
@@ -32,13 +32,11 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Security.EntityFrameworkCore" Version="1.1.0-n" />
+		<ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore\ServiceBricks.Security.EntityFrameworkCore.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Storage.Postgres" Version="1.1.0-n" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.1.0-o" />
 	</ItemGroup>
 	
 </Project>

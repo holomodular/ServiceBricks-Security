@@ -61,8 +61,8 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.MongoDb.Debug\ServiceBricks.Security.MongoDb.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet6\ServiceBricks.Security.XunitNet6.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.MongoDb\ServiceBricks.Security.MongoDb.csproj" />
 	</ItemGroup>
 
 </Project>

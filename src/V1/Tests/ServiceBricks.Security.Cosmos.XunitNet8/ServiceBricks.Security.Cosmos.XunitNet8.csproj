@@ -59,8 +59,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.Cosmos.Debug\ServiceBricks.Security.Cosmos.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Cosmos\ServiceBricks.Security.Cosmos.csproj" />
 	</ItemGroup>
 
 </Project>

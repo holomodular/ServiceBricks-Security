@@ -62,8 +62,8 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.InMemory.Debug\ServiceBricks.Security.InMemory.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet6\ServiceBricks.Security.XunitNet6.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.InMemory\ServiceBricks.Security.InMemory.csproj" />
 	</ItemGroup>
 
 </Project>

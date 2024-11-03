@@ -61,8 +61,8 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.Postgres.Debug\ServiceBricks.Security.Postgres.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet6\ServiceBricks.Security.XunitNet6.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Postgres\ServiceBricks.Security.Postgres.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -59,8 +59,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\ServiceBricks.Security.AzureDataTables.Debug\ServiceBricks.Security.AzureDataTables.Debug.csproj" />
 	  <ProjectReference Include="..\ServiceBricks.Security.XunitNet8\ServiceBricks.Security.XunitNet8.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.AzureDataTables\ServiceBricks.Security.AzureDataTables.csproj" />
 	</ItemGroup>
 
 </Project>
