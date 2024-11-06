@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-o</Version>
+		<Version>1.1.0-p</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Microservice</PackageId>
 		<Title>ServiceBricks.Security.Microservice</Title>
@@ -39,17 +39,20 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.35" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.35" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.20" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.1.0-o" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.1.0-p" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ServiceBricks.Security\ServiceBricks.Security.csproj" PrivateAssets="All">

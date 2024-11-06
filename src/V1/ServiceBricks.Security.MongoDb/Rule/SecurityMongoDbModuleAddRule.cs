@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
 
 namespace ServiceBricks.Security.MongoDb
 {
@@ -53,6 +56,8 @@ namespace ServiceBricks.Security.MongoDb
             // AI: Perform logic
             var services = e.ServiceCollection;
             //var configuration = e.Configuration;
+
+            BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
             // AI: Register requirements
             services
