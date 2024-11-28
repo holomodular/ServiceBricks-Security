@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.0-p</Version>
+		<Version>1.1.0</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Cosmos</PackageId>
 		<Title>ServiceBricks.Security.Cosmos</Title>
@@ -36,7 +36,7 @@
 		<ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore\ServiceBricks.Security.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.1.0-p" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.1.0" />
 	</ItemGroup>
 
 	

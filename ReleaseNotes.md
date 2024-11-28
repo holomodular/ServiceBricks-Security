@@ -1,3 +1,6 @@
+# 1.1.0
+- Official Production Release
+
 # 1.0.11
 - Update all package references to latest version
 - UserManagerService.VerifyPasswordAsync: Add lockout protection for multiple failed password attempts.
