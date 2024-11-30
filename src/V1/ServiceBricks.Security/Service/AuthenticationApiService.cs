@@ -146,14 +146,15 @@ namespace ServiceBricks.Security
                 }
             }
 
+            // This should be option-based
             // AI: Audit user authentication, different from login
-            await _userAuditApiService.CreateAsync(new UserAuditDto()
-            {
-                AuditType = AuditType.AUTHENTICATE_TEXT,
-                RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
-                UserStorageKey = respAuth.Item.StorageKey,
-                IPAddress = _iPAddressService.GetIPAddress(),
-            });
+            //await _userAuditApiService.CreateAsync(new UserAuditDto()
+            //{
+            //    AuditType = AuditType.AUTHENTICATE_TEXT,
+            //    RequestHeaders = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetData(),
+            //    UserStorageKey = respAuth.Item.StorageKey,
+            //    IPAddress = _iPAddressService.GetIPAddress(),
+            //});
 
             // Create the token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityOptions.SecretKey));
