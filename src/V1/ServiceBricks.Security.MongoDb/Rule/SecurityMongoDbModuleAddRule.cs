@@ -57,8 +57,6 @@ namespace ServiceBricks.Security.MongoDb
             var services = e.ServiceCollection;
             //var configuration = e.Configuration;
 
-            BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-
             // AI: Register requirements
             services
                 .AddIdentity<ApplicationIdentityUser, ApplicationIdentityRole>(SecurityModule.Instance.IdentityOptions)
