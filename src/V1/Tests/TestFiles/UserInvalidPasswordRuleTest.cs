@@ -5,7 +5,7 @@ using ServiceQuery;
 namespace ServiceBricks.Xunit.Integration
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public abstract partial class UserInvalidPasswordRuleTestBase : IDisposable
+    public abstract partial class UserInvalidPasswordRuleTestBase : IAsyncDisposable
     {
         public UserInvalidPasswordRuleTestBase()
         {
@@ -13,32 +13,32 @@ namespace ServiceBricks.Xunit.Integration
 
         public ISystemManager SystemManager { get; set; }
 
-        public virtual void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            CleanupDependencies();
+            await CleanupDependencies();
         }
 
-        protected virtual void CleanupDependencies()
+        protected virtual async Task CleanupDependencies()
         {
             string userstoragekey = UserStorageKey;
 
             // Cleanup Audits
             var audituserservice = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();
             var auditquery = new ServiceQueryRequestBuilder().IsEqual(nameof(UserAuditDto.UserStorageKey), userstoragekey).Build();
-            var respAudits = audituserservice.Query(auditquery);
+            var respAudits = await audituserservice.QueryAsync(auditquery);
             foreach (var item in respAudits.Item.List)
-                audituserservice.Delete(item.StorageKey);
+                await audituserservice.DeleteAsync(item.StorageKey);
 
             // Cleanup UserRoles
             var userroleservice = SystemManager.ServiceProvider.GetRequiredService<IApiService<UserRoleDto>>();
             var roleq = new ServiceQueryRequestBuilder().IsEqual(nameof(UserRoleDto.UserStorageKey), userstoragekey).Build();
-            var respUserRoles = userroleservice.Query(roleq);
+            var respUserRoles = await userroleservice.QueryAsync(roleq);
             foreach (var item in respUserRoles.Item.List)
-                userroleservice.Delete(item.StorageKey);
+                await userroleservice.DeleteAsync(item.StorageKey);
 
             // Cleanup User
             var userservice = SystemManager.ServiceProvider.GetRequiredService<IApiService<UserDto>>();
-            userservice.Delete(userstoragekey);
+            await userservice.DeleteAsync(userstoragekey);
         }
 
         public virtual string UserStorageKey { get; set; }

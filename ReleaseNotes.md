@@ -1,3 +1,17 @@
+# 1.2.0
+- Upgrade ServiceBricks Version and all related packages to latest version
+- Fix for Cosmos to remove indexes from modelbuilder
+- Remove resources folder from webapp projects
+
+# 1.1.3
+- Upgrade ServiceBricks Version
+
+# 1.1.2
+- Upgrade ServiceBricks Version
+
+# 1.1.1
+- Upgrade ServiceBricks Version
+
 # 1.1.0
 - Official Production Release
 

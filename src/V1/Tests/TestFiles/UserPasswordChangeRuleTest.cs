@@ -8,15 +8,6 @@ namespace ServiceBricks.Xunit.Integration
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
     public abstract partial class UserPasswordChangeRuleTestBase : UserConfirmEmailRuleTestBase
     {
-        protected override void CleanupDependencies()
-        {
-            //var audituserservice = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();
-            //audituserservice.Delete(PasswordChangedAuditStorageKey);
-            //audituserservice.Delete(LoginAuditStorageKey);
-
-            base.CleanupDependencies();
-        }
-
         public string LoginAuditStorageKey { get; set; }
         public string PasswordChangedAuditStorageKey { get; set; }
 

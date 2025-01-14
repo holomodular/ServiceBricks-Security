@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.1.3</Version>
+		<Version>1.2.0</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Postgres</PackageId>
 		<Title>ServiceBricks.Security.Postgres</Title>
@@ -9,9 +9,9 @@
 		<Authors>holomodular</Authors>
 		<Company>HoloModular LLC</Company>
 		<Product>ServiceBricks</Product>
-		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
-		<Copyright>Copyright © 2024 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
+		<Copyright>Copyright © 2025 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
 		<PackageProjectUrl>https://ServiceBricks.com</PackageProjectUrl>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageTags>servicebricks;security;postgres;postgresql</PackageTags>
@@ -36,7 +36,7 @@
 		<ProjectReference Include="..\ServiceBricks.Security.EntityFrameworkCore\ServiceBricks.Security.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.1.3" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.2.0" />
 	</ItemGroup>
 	
 </Project>

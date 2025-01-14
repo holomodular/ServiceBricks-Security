@@ -7,14 +7,6 @@ namespace ServiceBricks.Xunit.Integration
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
     public abstract partial class UserProfileChangeRuleTestBase : UserConfirmEmailRuleTestBase
     {
-        protected override void CleanupDependencies()
-        {
-            //var audituserservice = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();
-            //audituserservice.Delete(ProfileChangeAuditStorageKey);
-
-            base.CleanupDependencies();
-        }
-
         public string ProfileChangeAuditStorageKey { get; set; }
 
         [Fact]

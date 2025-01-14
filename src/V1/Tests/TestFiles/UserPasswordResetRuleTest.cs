@@ -7,14 +7,6 @@ namespace ServiceBricks.Xunit.Integration
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
     public abstract partial class UserPasswordResetRuleTestBase : UserForgotPasswordRuleTestBase
     {
-        protected override void CleanupDependencies()
-        {
-            //var audituserservice = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();
-            //audituserservice.Delete(PasswordResetAuditStorageKey);
-
-            base.CleanupDependencies();
-        }
-
         public string PasswordResetAuditStorageKey { get; set; }
 
         [Fact]

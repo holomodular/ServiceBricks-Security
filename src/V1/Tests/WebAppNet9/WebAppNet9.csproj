@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <IsPackable>False</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.0" />	  
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+	<ItemGroup>
+		<Content Include="..\TestFiles\webapp\appsettings.json" Link="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="Pages\Shared\_FooterPartial.cshtml" />
+	  <None Include="Pages\Shared\_HeaderPartial.cshtml" />
+	  <None Include="Pages\Shared\_Layout.cshtml" />
+	  <None Include="Pages\_ViewImports.cshtml" />
+	  <None Include="Pages\_ViewStart.cshtml" />
+	  <None Include="Views\Home\Error.cshtml" />
+	  <None Include="Views\Home\Index.cshtml" />
+	  <None Include="Views\_ViewStart.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ServiceBricks.Security.AzureDataTables\ServiceBricks.Security.AzureDataTables.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Cosmos\ServiceBricks.Security.Cosmos.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.InMemory\ServiceBricks.Security.InMemory.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.MongoDb\ServiceBricks.Security.MongoDb.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Postgres\ServiceBricks.Security.Postgres.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.Sqlite\ServiceBricks.Security.Sqlite.csproj" />
+		<ProjectReference Include="..\..\ServiceBricks.Security.SqlServer\ServiceBricks.Security.SqlServer.csproj" />
+	</ItemGroup>
+</Project>

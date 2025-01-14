@@ -22,7 +22,7 @@ namespace ServiceBricks.Security
             {
                 if (!string.IsNullOrEmpty(output))
                     output += Environment.NewLine;
-                output += $"{item.Key}: {string.Join(",", item.Value)}";
+                output += $"{item.Key}: {string.Join(",", item.Value.ToArray())}";
             }
             return output;
         }
