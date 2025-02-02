@@ -63,5 +63,41 @@ namespace ServiceBricks.Security
             services.AddScoped<IAuthenticationApiClient, AuthenticationApiClient>();
             return services;
         }
+
+        /// <summary>
+        /// Add the ServiceBricks Security clients to the service collection for the API Service references
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddServiceBricksSecurityClientForService(this IServiceCollection services, IConfiguration configuration)
+        {
+            // AI: Add clients for the API Services
+            services.AddScoped<IApiService<UserDto>, UserApiClient>();
+            services.AddScoped<IUserApiService, UserApiClient>();
+
+            services.AddScoped<IApiService<UserClaimDto>, UserClaimApiClient>();
+            services.AddScoped<IUserClaimApiService, UserClaimApiClient>();
+
+            services.AddScoped<IApiService<UserRoleDto>, UserRoleApiClient>();
+            services.AddScoped<IUserRoleApiService, UserRoleApiClient>();
+
+            services.AddScoped<IApiService<UserTokenDto>, UserTokenApiClient>();
+            services.AddScoped<IUserTokenApiService, UserTokenApiClient>();
+
+            services.AddScoped<IApiService<UserLoginDto>, UserLoginApiClient>();
+            services.AddScoped<IUserLoginApiService, UserLoginApiClient>();
+
+            services.AddScoped<IApiService<RoleDto>, RoleApiClient>();
+            services.AddScoped<IRoleApiService, RoleApiClient>();
+
+            services.AddScoped<IApiService<RoleClaimDto>, RoleClaimApiClient>();
+            services.AddScoped<IRoleClaimApiService, RoleClaimApiClient>();
+
+            services.AddScoped<IApiService<UserAuditDto>, UserAuditApiClient>();
+            services.AddScoped<IUserAuditApiService, UserAuditApiClient>();
+
+            return services;
+        }
     }
 }

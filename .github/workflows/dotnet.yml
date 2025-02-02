@@ -19,20 +19,26 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: | 
+          6.0.x
+          7.0.x
+          8.0.x
+          9.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter "FullyQualifiedName!~ServiceBricks.Xunit.Integration" -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --verbosity normal --filter "FullyQualifiedName!~ServiceBricks.Xunit.Integration" -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=\"json,opencover\"
+    - name: Merge Test Results to Get Overall Code Coverage
+      run: dotnet test src/V1/Tests/ServiceBricks.Security.InMemory.XunitNet9 --no-build --verbosity normal --filter "FullyQualifiedName!~ServiceBricks.Xunit.Integration" -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=\"json,opencover\" -p:MergeWith="../ServiceBricks.Security.XunitNet9/TestResults/coverage.json"
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
       with:
         label: Unit Test Coverage
         color: purple
-        path: src/V1/Tests/ServiceBricks.Security.InMemory.XunitNet8/TestResults/coverage.opencover.xml
+        path: src/V1/Tests/ServiceBricks.Security.InMemory.XunitNet9/TestResults/coverage.opencover.xml
         gist-filename: servicebrickssecurity-codecoverage.json
         gist-id: 0f40e020ebb5096a51bc7ccd02a6e06e
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }} 

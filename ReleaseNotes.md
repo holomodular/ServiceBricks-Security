@@ -1,3 +1,6 @@
+# 1.3.0-a prerelease
+- Update all nuget package references
+
 # 1.2.0
 - Upgrade ServiceBricks Version and all related packages to latest version
 - Fix for Cosmos to remove indexes from modelbuilder
