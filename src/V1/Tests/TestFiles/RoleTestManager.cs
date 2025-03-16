@@ -20,6 +20,16 @@ namespace ServiceBricks.Xunit
 
     public class RoleTestManager : TestManager<RoleDto>
     {
+        public override RoleDto GetMinimumDataObject()
+        {
+            var model = new RoleDto()
+            {
+                Name = Guid.NewGuid().ToString(),
+                NormalizedName = Guid.NewGuid().ToString()
+            };
+            return model;
+        }
+
         public override RoleDto GetMaximumDataObject()
         {
             var model = new RoleDto()

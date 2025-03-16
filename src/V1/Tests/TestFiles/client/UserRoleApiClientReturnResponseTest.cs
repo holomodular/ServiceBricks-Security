@@ -17,18 +17,20 @@ namespace ServiceBricks.Xunit.Integration
         protected virtual void CreateDependencies()
         {
             var appUserTest = new ApplicationUserApiClientTest();
+            appUserTest.SystemManager = this.SystemManager;
             var user = appUserTest.TestManager.GetMinimumDataObject();
             ((UserRoleTestManager)TestManager).ApplicationUser =
                 appUserTest.CreateBase(user);
 
             var appRoleTest = new ApplicationRoleApiClientTest();
+            appRoleTest.SystemManager = this.SystemManager;
             var role = appRoleTest.TestManager.GetMinimumDataObject();
             ((UserRoleTestManager)TestManager).ApplicationRole =
                 appRoleTest.CreateBase(role);
 
             var role2 = appRoleTest.TestManager.GetMaximumDataObject();
             ((UserRoleTestManager)TestManager).ApplicationRole2 =
-                appRoleTest.CreateBase(role);
+                appRoleTest.CreateBase(role2);
         }
     }
 }

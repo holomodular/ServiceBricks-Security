@@ -28,7 +28,7 @@ namespace ServiceBricks.Xunit.Integration
 
             var role2 = appRoleTest.TestManager.GetMaximumDataObject();
             ((UserRoleTestManager)TestManager).ApplicationRole2 =
-                appRoleTest.CreateBase(role);
+                appRoleTest.CreateBase(role2);
         }
     }
 }

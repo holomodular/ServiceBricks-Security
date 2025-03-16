@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.3.0-a</Version>
+		<Version>1.3.0-c</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.MongoDb</PackageId>
 		<Title>ServiceBricks.Security.MongoDb</Title>
@@ -36,6 +36,6 @@
 		<ProjectReference Include="..\ServiceBricks.Security\ServiceBricks.Security.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.3.0-a" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.3.0-c" />
 	</ItemGroup>
 </Project>

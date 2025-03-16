@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace ServiceBricks.Security
 {
@@ -38,7 +37,7 @@ namespace ServiceBricks.Security
         public virtual IResponseItem<AccessTokenResponse> AuthenticateUser(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource);
-            var data = request != null ? JsonConvert.SerializeObject(request) : string.Empty;
+            var data = request != null ? JsonSerializer.Instance.SerializeObject(request) : string.Empty;
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = Send(req);
             return GetAccessTokenAsync(result).GetAwaiter().GetResult();
@@ -52,7 +51,7 @@ namespace ServiceBricks.Security
         public virtual async Task<IResponseItem<AccessTokenResponse>> AuthenticateUserAsync(AccessTokenRequest request)
         {
             HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + "Async");
-            var data = request != null ? JsonConvert.SerializeObject(request) : string.Empty;
+            var data = request != null ? JsonSerializer.Instance.SerializeObject(request) : string.Empty;
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = await SendAsync(req);
             return await GetAccessTokenAsync(result);
@@ -70,7 +69,7 @@ namespace ServiceBricks.Security
             {
                 var content = await result.Content.ReadAsStringAsync();
                 if (!string.IsNullOrEmpty(content))
-                    resp.Item = JsonConvert.DeserializeObject<AccessTokenResponse>(content);
+                    resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
                 return resp;
             }
             else
