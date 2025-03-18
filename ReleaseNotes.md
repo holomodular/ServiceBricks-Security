@@ -1,3 +1,6 @@
+# 1.3.0
+- Rollup quarterly release. See previous release notes.
+
 # 1.3.0-c prerelease
 - Update all nuget package references
 - Minor changes
