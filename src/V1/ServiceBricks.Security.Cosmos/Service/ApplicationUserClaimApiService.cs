@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.Cosmos
+﻿namespace ServiceBricks.Security.Cosmos
 {
     /// <summary>
     /// This is a API service for the ApplicationUserClaim domain object.

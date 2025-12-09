@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using ServiceBricks;
 using WebApp.Model;
 
@@ -24,6 +23,7 @@ namespace WebApp.Extensions
 
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
         {
+            // Reference https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/v10.0.0/docs/configure-and-customize-swaggergen.md#add-security-definitions-and-requirements
             services.AddEndpointsApiExplorer();
             var apiVersioningBuilder = services.AddApiVersioning(options =>
             {
@@ -39,13 +39,19 @@ namespace WebApp.Extensions
             });
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
                 {
-                    Name = "Authorization",
                     Description = "JWT token must be provided",
-                    In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                options.AddSecurityRequirement(doc =>
+                {
+                    return new OpenApiSecurityRequirement()
+                    {
+                        {  new OpenApiSecuritySchemeReference("bearer"), new List<string>() }
+                    };
                 });
                 options.ResolveConflictingActions(descriptions =>
                 {

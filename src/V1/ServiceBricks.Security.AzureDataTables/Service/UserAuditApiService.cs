@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.AzureDataTables
+﻿namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is an API service for the AuditUser domain object.

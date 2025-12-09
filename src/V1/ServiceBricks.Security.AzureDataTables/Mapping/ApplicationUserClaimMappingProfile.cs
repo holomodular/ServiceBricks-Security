@@ -1,31 +1,58 @@
-﻿using AutoMapper;
-
+﻿using Azure.Messaging.ServiceBus;
 using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserClaim domain object.
+    /// This is a mapper profile for the ApplicationUserClaim domain object.
     /// </summary>
-    public partial class ApplicationUserClaimMappingProfile : Profile
+    public partial class ApplicationUserClaimMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserClaimMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserClaimDto, ApplicationUserClaim>()
-                .ForMember(x => x.PartitionKey, y => y.MapFrom<PartitionKeyResolver>())
-                .ForMember(x => x.RowKey, y => y.MapFrom<RowKeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.ETag, y => y.Ignore())
-                .ForMember(x => x.Timestamp, y => y.Ignore())
-                .ForMember(x => x.Key, y => y.Ignore())
-                .ForMember(x => x.Id, y => y.Ignore());
+            registry.Register<ApplicationUserClaim, UserClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.StorageKey =
+                        s.UserId.ToString() +
+                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
+                        s.Key.ToString();
+                    d.UserStorageKey = s.UserId.ToString();
+                });
 
-            CreateMap<ApplicationUserClaim, UserClaimDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom<StorageKeyResolver>())
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserClaimDto, ApplicationUserClaim>(
+                (s, d) =>
+                {
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                        {
+                            Guid tempUser;
+                            if (Guid.TryParse(split[0], out tempUser))
+                                d.UserId = tempUser;
+                        }
+                        if (split.Length >= 2)
+                        {
+                            Guid tempKey;
+                            if (Guid.TryParse(split[1], out tempKey))
+                                d.Key = tempKey;
+                        }
+                    }
+
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    Guid tempUserId;
+                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                        d.UserId = tempUserId;
+                    d.PartitionKey = d.UserId.ToString();
+                    d.RowKey = d.Key.ToString();
+                });
         }
     }
 }

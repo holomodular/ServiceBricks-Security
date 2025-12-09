@@ -1,34 +1,68 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationRole domain object.
+    /// This is a mapper profile for the ApplicationRole domain object.
     /// </summary>
-    public partial class ApplicationRoleMappingProfile : Profile
+    public partial class ApplicationRoleMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationRoleMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<RoleDto, ApplicationIdentityRole>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
+            registry.Register<ApplicationRole, RoleDto>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.StorageKey = s.Id;
+                });
 
-            CreateMap<ApplicationIdentityRole, ApplicationRole>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
+            registry.Register<ApplicationRole, ApplicationIdentityRole>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.Id = s.Id;
+                });
 
-            CreateMap<RoleDto, ApplicationRole>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey));
+            registry.Register<ApplicationIdentityRole, RoleDto>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.StorageKey = s.Id;
+                });
 
-            CreateMap<ApplicationRole, ApplicationIdentityRole>()
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id));
+            registry.Register<RoleDto, ApplicationRole>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.Id = s.StorageKey;
+                });
 
-            CreateMap<ApplicationIdentityRole, RoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
+            registry.Register<ApplicationIdentityRole, ApplicationRole>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.Id = s.Id;
+                });
 
-            CreateMap<ApplicationRole, RoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
+            registry.Register<RoleDto, ApplicationIdentityRole>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.Id = s.StorageKey;
+                });
         }
     }
 }

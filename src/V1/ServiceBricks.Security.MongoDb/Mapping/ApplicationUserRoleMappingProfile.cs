@@ -1,26 +1,30 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserRole domain object.
+    /// This is a mapper profile for the ApplicationUserRole domain object.
     /// </summary>
-    public partial class ApplicationUserRoleMappingProfile : Profile
+    public partial class ApplicationUserRoleMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserRoleMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserRoleDto, ApplicationUserRole>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey));
+            registry.Register<ApplicationUserRole, UserRoleDto>(
+                (s, d) =>
+                {
+                    d.RoleStorageKey = s.RoleId;
+                    d.StorageKey = s.Key;
+                    d.UserStorageKey = s.UserId;
+                });
 
-            CreateMap<ApplicationUserRole, UserRoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId))
-                .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
+            registry.Register<UserRoleDto, ApplicationUserRole>(
+                (s, d) =>
+                {
+                    d.Key = s.StorageKey;
+                    d.RoleId = s.RoleStorageKey;
+                    d.UserId = s.UserStorageKey;
+                });
         }
     }
 }

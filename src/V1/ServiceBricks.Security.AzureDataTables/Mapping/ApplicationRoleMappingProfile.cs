@@ -1,26 +1,36 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.AzureDataTables
+﻿namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationRole domain object.
+    /// This is a mapper profile for the ApplicationRole domain object.
     /// </summary>
-    public partial class ApplicationRoleMappingProfile : Profile
+    public partial class ApplicationRoleMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationRoleMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<RoleDto, ApplicationRole>()
-                .ForMember(x => x.PartitionKey, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.Id, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.ETag, y => y.Ignore())
-                .ForMember(x => x.Timestamp, y => y.Ignore())
-                .ForMember(x => x.RowKey, y => y.Ignore());
+            registry.Register<ApplicationRole, RoleDto>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    d.StorageKey = s.Id.ToString();
+                });
 
-            CreateMap<ApplicationRole, RoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
+            registry.Register<RoleDto, ApplicationRole>(
+                (s, d) =>
+                {
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.Name = s.Name;
+                    d.NormalizedName = s.NormalizedName;
+                    Guid tempId;
+                    if (Guid.TryParse(s.StorageKey, out tempId))
+                        d.Id = tempId;
+                    d.PartitionKey = s.StorageKey;
+                    d.RowKey = string.Empty;
+                });
         }
     }
 }

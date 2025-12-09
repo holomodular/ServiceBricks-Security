@@ -1,74 +1,38 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.Cosmos
+﻿namespace ServiceBricks.Security.Cosmos
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserToken domain object.
+    /// This is a mapper profile for the ApplicationUserToken domain object.
     /// </summary>
-    public partial class ApplicationUserTokenMappingProfile : Profile
+    public partial class ApplicationUserTokenMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserTokenMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserTokenDto, ApplicationUserToken>()
-                .ForMember(x => x.Key, y => y.MapFrom<KeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>());
+            registry.Register<ApplicationUserToken, UserTokenDto>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.Name = s.Name;
+                    d.StorageKey = s.Key.ToString();
+                    d.UserStorageKey = s.UserId.ToString();
+                    d.Value = s.Value;
+                });
 
-            CreateMap<ApplicationUserToken, UserTokenDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
-        }
-
-        /// <summary>
-        /// Resolve the key from the storage key.
-        /// </summary>
-        public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the key from the storage key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return Guid.Empty;
-
-                Guid tempKey;
-                if (Guid.TryParse(source.StorageKey, out tempKey))
-                    return tempKey;
-                return Guid.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Resolve the user id from the user storage key.
-        /// </summary>
-        public class UserIdResolver : IValueResolver<UserTokenDto, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the user id from the user storage key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(UserTokenDto source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (string.IsNullOrEmpty(source.UserStorageKey))
-                    return Guid.Empty;
-
-                Guid tempKey;
-                if (Guid.TryParse(source.UserStorageKey, out tempKey))
-                    return tempKey;
-                return Guid.Empty;
-            }
+            registry.Register<UserTokenDto, ApplicationUserToken>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.Name = s.Name;
+                    Guid tempKey;
+                    if (Guid.TryParse(s.StorageKey, out tempKey))
+                        d.Key = tempKey;
+                    Guid tempUser;
+                    if (Guid.TryParse(s.UserStorageKey, out tempUser))
+                        d.UserId = tempUser;
+                    d.Value = s.Value;
+                });
         }
     }
 }

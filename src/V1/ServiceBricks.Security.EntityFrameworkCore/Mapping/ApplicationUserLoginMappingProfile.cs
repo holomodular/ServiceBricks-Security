@@ -1,109 +1,57 @@
-﻿using AutoMapper;
-
-using ServiceBricks.Storage.EntityFrameworkCore;
+﻿using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.EntityFrameworkCore
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserLogin domain object.
+    /// This is a mapper profile for the ApplicationUserLogin domain object.
     /// </summary>
-    public partial class ApplicationUserLoginMappingProfile : Profile
+    public partial class ApplicationUserLoginMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserLoginMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserLoginDto, ApplicationUserLogin>()
-                .ForMember(x => x.LoginProvider, y => y.MapFrom<LoginProviderResolver>())
-                .ForMember(x => x.ProviderKey, y => y.MapFrom<ProviderKeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>());
+            registry.Register<ApplicationUserLogin, UserLoginDto>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    d.ProviderKey = s.ProviderKey;
+                    d.StorageKey =
+                        s.LoginProvider +
+                        StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER +
+                        s.ProviderKey;
+                    d.UserStorageKey = s.UserId.ToString();
+                });
 
-            CreateMap<ApplicationUserLogin, UserLoginDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z =>
-                    z.LoginProvider +
-                    StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER +
-                    z.ProviderKey))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
-        }
-
-        /// <summary>
-        /// Resolve the login provider.
-        /// </summary>
-        public class LoginProviderResolver : IValueResolver<UserLoginDto, object, string>
-        {
-            /// <summary>
-            /// Resolve the login provider.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public string Resolve(UserLoginDto source, object destination, string sourceMember, ResolutionContext context)
-            {
-                if (!string.IsNullOrEmpty(source.LoginProvider))
-                    return source.LoginProvider;
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return string.Empty;
-
-                string[] split = source.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
-                if (split.Length >= 1)
-                    return split[0];
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Resolve the provider key.
-        /// </summary>
-        public class ProviderKeyResolver : IValueResolver<UserLoginDto, object, string>
-        {
-            /// <summary>
-            /// Resolve the provider key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public string Resolve(UserLoginDto source, object destination, string sourceMember, ResolutionContext context)
-            {
-                if (!string.IsNullOrEmpty(source.ProviderKey))
-                    return source.ProviderKey;
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return string.Empty;
-
-                string[] split = source.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
-                if (split.Length >= 2)
-                    return split[1];
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Resolve the user id.
-        /// </summary>
-        public class UserIdResolver : IValueResolver<UserLoginDto, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the user id.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(UserLoginDto source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (string.IsNullOrEmpty(source.UserStorageKey))
-                    return Guid.Empty;
-
-                Guid tempKey;
-                if (Guid.TryParse(source.UserStorageKey, out tempKey))
-                    return tempKey;
-                return Guid.Empty;
-            }
+            registry.Register<UserLoginDto, ApplicationUserLogin>(
+                (s, d) =>
+                {
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                            d.LoginProvider = split[0];
+                        else
+                            d.LoginProvider = string.Empty;
+                        if (split.Length >= 2)
+                            d.ProviderKey = split[1];
+                        else
+                            d.ProviderKey = string.Empty;
+                    }
+                    else
+                    {
+                        d.LoginProvider = s.LoginProvider;
+                        d.ProviderKey = s.ProviderKey;
+                    }
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    Guid tempUserId;
+                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                        d.UserId = tempUserId;
+                    else
+                        d.UserId = Guid.Empty;
+                });
         }
     }
 }

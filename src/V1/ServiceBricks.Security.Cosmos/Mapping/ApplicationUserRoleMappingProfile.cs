@@ -1,100 +1,70 @@
-﻿using AutoMapper;
-using ServiceBricks.Storage.EntityFrameworkCore;
+﻿using ServiceBricks.Storage.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Cosmos
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserRole domain object.
+    /// This is a mapper profile for the ApplicationUserRole domain object.
     /// </summary>
-    public partial class ApplicationUserRoleMappingProfile : Profile
+    public partial class ApplicationUserRoleMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserRoleMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserRoleDto, ApplicationUserRole>()
-                .ForMember(x => x.UserId, y => y.MapFrom<UserIdResolver>())
-                .ForMember(x => x.RoleId, y => y.MapFrom<RoleIdResolver>())
-                .ForMember(x => x.User, y => y.Ignore())
-                .ForMember(x => x.Role, y => y.Ignore());
-
-            CreateMap<ApplicationUserRole, UserRoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.UserId +
-                StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER +
-                z.RoleId))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId))
-                .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
-        }
-
-        /// <summary>
-        /// Resolve the user id from the user storage key.
-        /// </summary>
-        public class UserIdResolver : IValueResolver<UserRoleDto, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the user id from the user storage key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(UserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (!string.IsNullOrEmpty(source.UserStorageKey))
+            registry.Register<ApplicationUserRole, UserRoleDto>(
+                (s, d) =>
                 {
-                    Guid tempGuid;
-                    if (Guid.TryParse(source.UserStorageKey, out tempGuid))
-                        return tempGuid;
-                }
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return Guid.Empty;
+                    d.RoleStorageKey = s.RoleId.ToString();
+                    d.StorageKey =
+                        s.UserId.ToString() +
+                        StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER +
+                        s.RoleId.ToString();
+                    d.UserStorageKey = s.UserId.ToString();
+                });
 
-                string[] split = source.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
-                if (split.Length >= 1)
+            registry.Register<UserRoleDto, ApplicationUserRole>(
+                (s, d) =>
                 {
-                    Guid tempGuid;
-                    if (Guid.TryParse(split[0], out tempGuid))
-                        return tempGuid;
-                }
-                return Guid.Empty;
-            }
-        }
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                        {
+                            Guid tempUserId;
+                            if (Guid.TryParse(split[0], out tempUserId))
+                                d.UserId = tempUserId;
+                            else
+                                d.UserId = Guid.Empty;
+                        }
+                        else
+                            d.UserId = Guid.Empty;
+                        if (split.Length >= 2)
+                        {
+                            Guid tempRoleId;
+                            if (Guid.TryParse(split[1], out tempRoleId))
+                                d.RoleId = tempRoleId;
+                            else
+                                d.RoleId = Guid.Empty;
+                        }
+                        else
+                            d.RoleId = Guid.Empty;
+                    }
+                    else
+                    {
+                        Guid tempRoleId;
+                        if (Guid.TryParse(s.RoleStorageKey, out tempRoleId))
+                            d.RoleId = tempRoleId;
+                        else
+                            d.RoleId = Guid.Empty;
 
-        /// <summary>
-        /// Resolve the role id from the role storage key.
-        /// </summary>
-        public class RoleIdResolver : IValueResolver<UserRoleDto, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the role id from the role storage key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(UserRoleDto source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (!string.IsNullOrEmpty(source.RoleStorageKey))
-                {
-                    Guid tempGuid;
-                    if (Guid.TryParse(source.RoleStorageKey, out tempGuid))
-                        return tempGuid;
-                }
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return Guid.Empty;
-
-                string[] split = source.StorageKey.Split(StorageEntityFrameworkCoreConstants.STORAGEKEY_DELIMITER);
-                if (split.Length >= 2)
-                {
-                    Guid tempGuid;
-                    if (Guid.TryParse(split[1], out tempGuid))
-                        return tempGuid;
-                }
-                return Guid.Empty;
-            }
+                        Guid tempUserId;
+                        if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                            d.UserId = tempUserId;
+                        else
+                            d.UserId = Guid.Empty;
+                    }
+                });
         }
     }
 }

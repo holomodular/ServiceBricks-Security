@@ -98,6 +98,16 @@ namespace ServiceBricks.Security.AzureDataTables
 
             services.AddScoped<IUserManagerService, UserManagerService>();
 
+            // AI: Register mappings
+            ApplicationRoleClaimMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationRoleMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationUserClaimMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationUserLoginMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationUserMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationUserRoleMappingProfile.Register(MapperRegistry.Instance);
+            ApplicationUserTokenMappingProfile.Register(MapperRegistry.Instance);
+            UserAuditMappingProfile.Register(MapperRegistry.Instance);
+
             // AI: Register business rules for the module
             DomainCreateUpdateDateRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance);
             DomainQueryPropertyRenameRule<ApplicationUser>.Register(BusinessRuleRegistry.Instance, "UserStorageKey", "PartitionKey");

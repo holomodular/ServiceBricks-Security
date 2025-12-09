@@ -18,10 +18,6 @@ namespace ServiceBricks.Security.Sqlite
         /// </summary>
         public SecuritySqliteModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecuritySqliteModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityEntityFrameworkCoreModule()

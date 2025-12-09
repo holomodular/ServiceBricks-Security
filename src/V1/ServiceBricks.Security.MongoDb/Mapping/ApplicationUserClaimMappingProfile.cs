@@ -1,42 +1,68 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserClaim domain object.
+    /// This is a mapper profile for the ApplicationUserClaim domain object.
     /// </summary>
-    public partial class ApplicationUserClaimMappingProfile : Profile
+    public partial class ApplicationUserClaimMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserClaimMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserClaimDto, ApplicationIdentityUserClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.Id, y => y.Ignore());
+            registry.Register<ApplicationUserClaim, UserClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.StorageKey = s.Key;
+                    d.UserStorageKey = s.UserId;
+                });
 
-            CreateMap<ApplicationIdentityUserClaim, ApplicationUserClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId));
+            registry.Register<ApplicationUserClaim, ApplicationIdentityUserClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.Key = s.Key;
+                    d.UserId = s.UserId;
+                });
 
-            CreateMap<UserClaimDto, ApplicationUserClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey));
+            registry.Register<ApplicationIdentityUserClaim, UserClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.StorageKey = s.Key;
+                    d.UserStorageKey = s.UserId;
+                });
 
-            CreateMap<ApplicationUserClaim, ApplicationIdentityUserClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserId))
-                .ForMember(x => x.Id, y => y.Ignore());
+            registry.Register<UserClaimDto, ApplicationUserClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.UserId = s.UserStorageKey;
+                    d.Key = s.StorageKey;
+                });
 
-            CreateMap<ApplicationIdentityUserClaim, UserClaimDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<ApplicationIdentityUserClaim, ApplicationUserClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.Key = s.Key;
+                    d.UserId = s.UserId;
+                });
 
-            CreateMap<ApplicationUserClaim, UserClaimDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserClaimDto, ApplicationIdentityUserClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.UserId = s.UserStorageKey;
+                    d.Key = s.StorageKey;
+                });
         }
     }
 }

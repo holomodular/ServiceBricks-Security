@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
+
+//using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,7 +44,7 @@ namespace ServiceBricks.Xunit
 
         public IServiceProvider ServiceProvider { get; set; }
         public IConfiguration Configuration { get; set; }
-        public TestServer TestServer { get; set; }
+        //public TestServer TestServer { get; set; }
 
         private CancellationTokenSource CancellationTokenSource;
         private SemaphoreSlim _signal = new SemaphoreSlim(0);
@@ -73,7 +74,7 @@ namespace ServiceBricks.Xunit
         public virtual void StopSystem()
         {
             CancellationTokenSource?.Cancel();
-            TestServer.Dispose();
+            //TestServer.Dispose();
         }
 
         public virtual void StartSystem(Type startupType)

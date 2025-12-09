@@ -17,10 +17,6 @@ namespace ServiceBricks.Security.MongoDb
         /// </summary>
         public SecurityMongoDbModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecurityMongoDbModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityModule()

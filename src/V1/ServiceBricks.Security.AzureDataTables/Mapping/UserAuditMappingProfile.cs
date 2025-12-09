@@ -1,31 +1,93 @@
-﻿using AutoMapper;
-
-using ServiceBricks.Storage.AzureDataTables;
+﻿using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is an automapper profile for the AuditUser domain object.
+    /// This is a mapper profile for the AuditUser domain object.
     /// </summary>
-    public partial class UserAuditMappingProfile : Profile
+    public partial class UserAuditMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public UserAuditMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserAuditDto, UserAudit>()
-                .ForMember(x => x.CreateDate, y => y.Ignore())
-                .ForMember(x => x.PartitionKey, y => y.MapFrom<PartitionKeyResolver>())
-                .ForMember(x => x.RowKey, y => y.MapFrom<RowKeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.ETag, y => y.Ignore())
-                .ForMember(x => x.Timestamp, y => y.Ignore())
-                .ForMember(x => x.Key, y => y.Ignore());
+            registry.Register<UserAudit, UserAuditDto>(
+                (s, d) =>
+                {
+                    d.AuditType = s.AuditType;
+                    d.CreateDate = s.CreateDate;
+                    if (d.CreateDate < StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE)
+                        d.CreateDate = StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE;
+                    d.Data = s.Data;
+                    d.IPAddress = s.IPAddress;
+                    d.RequestHeaders = s.RequestHeaders;
+                    d.UserStorageKey = s.UserId.ToString();
+                    var reverseDate = DateTimeOffset.MaxValue.Ticks - d.CreateDate.Ticks;
+                    d.StorageKey =
+                        s.UserId.ToString() +
+                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
+                        reverseDate.ToString("d19") +
+                        StorageAzureDataTablesConstants.KEY_DELIMITER +
+                        s.Key.ToString();
+                });
 
-            CreateMap<UserAudit, UserAuditDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom<StorageKeyResolver>())
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserAuditDto, UserAudit>(
+                (s, d) =>
+                {
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                        {
+                            Guid tempUserId;
+                            if (Guid.TryParse(split[0], out tempUserId))
+                                d.UserId = tempUserId;
+                        }
+                        if (split.Length >= 2)
+                        {
+                            string[] splitRowKey = split[1].Split(StorageAzureDataTablesConstants.KEY_DELIMITER);
+                            if (splitRowKey.Length >= 1)
+                            {
+                                long tempReverseTicks;
+                                if (long.TryParse(splitRowKey[0], out tempReverseTicks))
+                                {
+                                    long originalTicks = DateTimeOffset.MaxValue.Ticks - tempReverseTicks;
+                                    d.CreateDate = new DateTimeOffset(originalTicks, TimeSpan.Zero);
+                                }
+                            }
+                            if (splitRowKey.Length >= 2)
+                            {
+                                Guid tempKey;
+                                if (Guid.TryParse(splitRowKey[1], out tempKey))
+                                    d.Key = tempKey;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Guid tempUserId;
+                        if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                            d.UserId = tempUserId;
+                        d.CreateDate = s.CreateDate;
+                        if (d.CreateDate < StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE)
+                            d.CreateDate = StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE;
+                    }
+                    if (d.CreateDate < StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE)
+                        d.CreateDate = StorageAzureDataTablesConstants.DATETIMEOFFSET_MINDATE;
+
+                    d.AuditType = s.AuditType;
+                    //d.CreateDate ignore
+                    d.Data = s.Data;
+                    d.IPAddress = s.IPAddress;
+                    d.RequestHeaders = s.RequestHeaders;
+                    d.PartitionKey = d.UserId.ToString();
+                    var reverseDate = DateTimeOffset.MaxValue.Ticks - d.CreateDate.Ticks;
+                    d.RowKey =
+                        reverseDate.ToString("d19") +
+                        StorageAzureDataTablesConstants.KEY_DELIMITER +
+                        d.Key.ToString();
+                });
         }
     }
 }

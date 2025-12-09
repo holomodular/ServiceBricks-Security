@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.EntityFrameworkCore
+﻿namespace ServiceBricks.Security.EntityFrameworkCore
 {
     /// <summary>
     /// This is an API service for the AuditUser domain object.

@@ -47,7 +47,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.ToTable("UserAudit");
                 b.HasKey(key => key.Key);
                 b.Property(key => key.Key).ValueGeneratedOnAdd();
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.UserId);
 #endif
@@ -60,7 +60,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.HasKey(key => new { key.UserId, key.RoleId });
                 b.Property<Guid>("UserId");
                 b.Property<Guid>("RoleId");
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.UserId);
 #endif
@@ -72,7 +72,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.ToTable("UserClaim");
                 b.HasKey(x => x.Key);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.UserId);
 #endif
@@ -84,7 +84,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.ToTable("UserLogin");
                 b.HasKey(key => key.Key);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.UserId);
 #endif
@@ -96,7 +96,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.ToTable("RoleClaim");
                 b.HasKey(key => key.Key);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.RoleId);
 #endif
@@ -108,7 +108,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.ToTable("UserToken");
                 b.HasKey(key => key.Key);
                 b.Property(x => x.Key).ValueGeneratedOnAdd();
-#if NET9_0
+#if NET8_0_OR_GREATER
 #else
                 b.HasPartitionKey(x => x.UserId);
 #endif
@@ -121,7 +121,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.HasKey(x => x.Id);
                 b.Property(key => key.Id).ValueGeneratedOnAdd();
                 b.Property(x => x.ConcurrencyStamp).IsETagConcurrency();
-#if NET9_0
+#if NET8_0_OR_GREATER
                 var indexmeta = b.HasIndex(x => x.NormalizedUserName).Metadata;
                 b.Metadata.RemoveIndex(indexmeta);
                 indexmeta = b.HasIndex(x => x.NormalizedEmail).Metadata;
@@ -140,7 +140,7 @@ namespace ServiceBricks.Security.Cosmos
                 b.Property(key => key.Id).ValueGeneratedOnAdd();
                 b.Property(x => x.ConcurrencyStamp).IsETagConcurrency();
 
-#if NET9_0
+#if NET8_0_OR_GREATER
                 var indexmeta = b.HasIndex(x => x.NormalizedName).Metadata;
                 b.Metadata.RemoveIndex(indexmeta);
 #else
@@ -155,7 +155,7 @@ namespace ServiceBricks.Security.Cosmos
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-#if NET9_0
+#if NET8_0_OR_GREATER
             optionsBuilder.ConfigureWarnings(w => w.Ignore(CosmosEventId.SyncNotSupported));
 #endif
 

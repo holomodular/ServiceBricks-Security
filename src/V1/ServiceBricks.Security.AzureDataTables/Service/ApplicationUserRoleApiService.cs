@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.AzureDataTables
+﻿namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
     /// This is a API service for the ApplicationUserRole domain object.

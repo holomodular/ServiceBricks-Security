@@ -17,10 +17,6 @@ namespace ServiceBricks.Security.Cosmos
         /// </summary>
         public SecurityCosmosModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecurityCosmosModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityModule()

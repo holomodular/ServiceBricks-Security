@@ -1,42 +1,79 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationRoleClaim domain object.
+    /// This is a mapper profile for the ApplicationRoleClaim domain object.
     /// </summary>
-    public partial class ApplicationRoleClaimMappingProfile : Profile
+    public partial class ApplicationRoleClaimMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationRoleClaimMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<ApplicationRoleClaim, ApplicationIdentityRoleClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleId))
-                .ForMember(x => x.Id, y => y.Ignore());
+            registry.Register<ApplicationRoleClaim, RoleClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleStorageKey = s.RoleId;
+                    d.StorageKey = s.Key;
+                });
 
-            CreateMap<ApplicationIdentityRoleClaim, RoleClaimDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id))
-                .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
+            registry.Register<ApplicationRoleClaim, ApplicationIdentityRoleClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleId = s.RoleId;
+                    int tempId = 0;
+                    if (int.TryParse(s.Key, out tempId))
+                        d.Id = tempId;
+                });
 
-            CreateMap<ApplicationRoleClaim, RoleClaimDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
+            registry.Register<ApplicationIdentityRoleClaim, RoleClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleStorageKey = s.RoleId;
+                    d.StorageKey = s.Id.ToString();
+                });
 
-            CreateMap<RoleClaimDto, ApplicationIdentityRoleClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey))
-                .ForMember(x => x.Id, y => y.Ignore());
+            registry.Register<ApplicationRoleClaim, RoleClaimDto>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleStorageKey = s.RoleId;
+                    d.StorageKey = s.Key;
+                });
 
-            CreateMap<ApplicationIdentityRoleClaim, ApplicationRoleClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleId));
+            registry.Register<RoleClaimDto, ApplicationRoleClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleId = s.RoleStorageKey;
+                    d.Key = s.StorageKey;
+                });
 
-            CreateMap<RoleClaimDto, ApplicationRoleClaim>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey));
+            registry.Register<RoleClaimDto, ApplicationIdentityRoleClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleId = s.RoleStorageKey;
+                    d.Key = s.StorageKey;
+                });
+
+            registry.Register<ApplicationIdentityRoleClaim, ApplicationRoleClaim>(
+                (s, d) =>
+                {
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;
+                    d.RoleId = s.RoleId;
+                    d.Key = s.Key;
+                });
         }
     }
 }

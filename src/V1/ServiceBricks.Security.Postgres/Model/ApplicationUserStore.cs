@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using ServiceBricks.Security.EntityFrameworkCore;
 
 namespace ServiceBricks.Security.Postgres

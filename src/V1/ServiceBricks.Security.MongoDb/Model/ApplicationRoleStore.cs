@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
 using ServiceQuery;
 using System.Security.Claims;

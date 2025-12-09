@@ -1,25 +1,38 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the AuditUser domain object.
+    /// This is a mapper profile for the AuditUser domain object.
     /// </summary>
-    public partial class UserAuditMappingProfile : Profile
+    public partial class UserAuditMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public UserAuditMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserAuditDto, UserAudit>()
-                .ForMember(x => x.CreateDate, y => y.Ignore())
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey));
+            registry.Register<UserAudit, UserAuditDto>(
+                (s, d) =>
+                {
+                    d.AuditType = s.AuditType;
+                    d.CreateDate = s.CreateDate;
+                    d.Data = s.Data;
+                    d.IPAddress = s.IPAddress;
+                    d.RequestHeaders = s.RequestHeaders;
+                    d.StorageKey = s.Key;
+                    d.UserStorageKey = s.UserId;
+                });
 
-            CreateMap<UserAudit, UserAuditDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserAuditDto, UserAudit>(
+                (s, d) =>
+                {
+                    d.AuditType = s.AuditType;
+                    //d.CreateDate ignore
+                    d.Data = s.Data;
+                    d.IPAddress = s.IPAddress;
+                    d.RequestHeaders = s.RequestHeaders;
+                    d.Key = s.StorageKey;
+                    d.UserId = s.UserStorageKey;
+                });
         }
     }
 }

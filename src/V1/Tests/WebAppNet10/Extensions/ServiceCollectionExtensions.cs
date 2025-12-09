@@ -1,0 +1,73 @@
+﻿using Asp.Versioning;
+using Microsoft.OpenApi;
+using WebApp.Model;
+
+namespace WebApp.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddCustomWebsite(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddControllers();
+            services.AddRazorPages();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddCors();
+            services.AddMvc();
+
+            services.AddCustomSwagger(Configuration);
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Reference https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/v10.0.0/docs/configure-and-customize-swaggergen.md#add-security-definitions-and-requirements
+            services.AddEndpointsApiExplorer();
+            var apiVersioningBuilder = services.AddApiVersioning(options =>
+            {
+                options.ApiVersionReader = new MediaTypeApiVersionReader();
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            });
+            apiVersioningBuilder.AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+            services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT token must be provided",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                options.AddSecurityRequirement(doc =>
+                {
+                    return new OpenApiSecurityRequirement()
+                    {
+                        {  new OpenApiSecuritySchemeReference("bearer"), new List<string>() }
+                    };
+                });
+                options.ResolveConflictingActions(descriptions =>
+                {
+                    return descriptions.First();
+                });
+                options.CustomSchemaIds(x => x.FullName);
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "API v1", Version = "1.0" });
+                options.SwaggerDoc("v2", new OpenApiInfo { Title = "API v2", Version = "2.0" });
+                options.OperationFilter<SwaggerRemoveVersionOperationFilter>();
+                options.OperationFilter<SwaggerApplySecurityOperationFilter>();
+                options.DocumentFilter<SwaggerReplaceVersionDocumentFilter>();
+                options.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    return docName == apiDesc.GroupName;
+                });
+            });
+
+            return services;
+        }
+    }
+}

@@ -15,10 +15,6 @@ namespace ServiceBricks.Security.InMemory
         /// </summary>
         public SecurityInMemoryModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecurityInMemoryModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityEntityFrameworkCoreModule()

@@ -28,7 +28,6 @@ namespace ServiceBricks.Xunit
             SecurityModule module = new SecurityModule();
 
             var dep = module.DependentModules;
-            var au = module.AutomapperAssemblies;
             var vi = module.ViewAssemblies;
 
             return Task.CompletedTask;

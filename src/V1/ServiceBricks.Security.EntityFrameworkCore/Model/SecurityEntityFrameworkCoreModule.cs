@@ -17,10 +17,6 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// </summary>
         public SecurityEntityFrameworkCoreModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecurityEntityFrameworkCoreModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityModule()

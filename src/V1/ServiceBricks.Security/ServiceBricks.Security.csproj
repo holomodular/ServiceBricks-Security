@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.3.0</Version>
+		<Version>1.4.0-a</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security</PackageId>
 		<Title>ServiceBricks.Security</Title>
@@ -9,7 +9,7 @@
 		<Authors>holomodular</Authors>
 		<Company>HoloModular LLC</Company>
 		<Product>ServiceBricks</Product>
-		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
 		<Nullable>disable</Nullable>
 		<Copyright>Copyright © 2025 HoloModular LLC. All Rights Reserved. Visit https://HoloModular.com to learn more.</Copyright>
 		<PackageProjectUrl>https://ServiceBricks.com</PackageProjectUrl>
@@ -24,6 +24,7 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/holomodular/ServiceBricks-Security</RepositoryUrl>
 		<IsPackable>False</IsPackable>
+		<OpenApiGenerateDocuments>true</OpenApiGenerateDocuments>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="Resource\readme.md" Pack="True" PackagePath="\" />
@@ -37,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.3.0" />
+		<PackageReference Include="ServiceBricks" Version="1.4.0-a" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
@@ -49,11 +50,15 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
 	</ItemGroup>
 
 </Project>

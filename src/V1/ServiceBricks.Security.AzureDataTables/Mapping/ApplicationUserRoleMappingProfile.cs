@@ -1,31 +1,77 @@
-﻿using AutoMapper;
-
-using ServiceBricks.Storage.AzureDataTables;
+﻿using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserRole domain object.
+    /// This is a mapper profile for the ApplicationUserRole domain object.
     /// </summary>
-    public partial class ApplicationUserRoleMappingProfile : Profile
+    public partial class ApplicationUserRoleMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserRoleMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserRoleDto, ApplicationUserRole>()
-                .ForMember(x => x.PartitionKey, y => y.MapFrom<PartitionKeyResolver>())
-                .ForMember(x => x.RowKey, y => y.MapFrom<RowKeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.RoleId, y => y.MapFrom(z => z.RoleStorageKey))
-                .ForMember(x => x.ETag, y => y.Ignore())
-                .ForMember(x => x.Timestamp, y => y.Ignore());
+            registry.Register<ApplicationUserRole, UserRoleDto>(
+                (s, d) =>
+                {
+                    d.RoleStorageKey = s.RoleId.ToString();
+                    d.StorageKey =
+                        s.UserId.ToString() +
+                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
+                        s.RoleId.ToString();
+                    d.UserStorageKey = s.UserId.ToString();
+                });
 
-            CreateMap<ApplicationUserRole, UserRoleDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom<StorageKeyResolver>())
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId))
-                .ForMember(x => x.RoleStorageKey, y => y.MapFrom(z => z.RoleId));
+            registry.Register<UserRoleDto, ApplicationUserRole>(
+                (s, d) =>
+                {
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                        {
+                            Guid tempUserId;
+                            if (Guid.TryParse(split[0], out tempUserId))
+                                d.UserId = tempUserId;
+                            else
+                                d.UserId = Guid.Empty;
+                        }
+                        else
+                            d.UserId = Guid.Empty;
+                        if (split.Length >= 2)
+                        {
+                            Guid tempRoleId;
+                            if (Guid.TryParse(split[1], out tempRoleId))
+                                d.RoleId = tempRoleId;
+                            else
+                                d.RoleId = Guid.Empty;
+                        }
+                        else
+                            d.RoleId = Guid.Empty;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(s.UserStorageKey))
+                        {
+                            Guid tempUserId;
+                            if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                                d.UserId = tempUserId;
+                            else
+                                d.UserId = Guid.Empty;
+                        }
+                        if (!string.IsNullOrEmpty(s.RoleStorageKey))
+                        {
+                            Guid tempRoleId;
+                            if (Guid.TryParse(s.RoleStorageKey, out tempRoleId))
+                                d.RoleId = tempRoleId;
+                            else
+                                d.RoleId = Guid.Empty;
+                        }
+                    }
+                    d.PartitionKey = d.UserId.ToString();
+                    d.RowKey = d.RoleId.ToString();
+                });
         }
     }
 }

@@ -17,10 +17,6 @@ namespace ServiceBricks.Security.AzureDataTables
         /// </summary>
         public SecurityAzureDataTablesModule()
         {
-            AutomapperAssemblies = new List<Assembly>()
-            {
-                typeof(SecurityAzureDataTablesModule).Assembly
-            };
             DependentModules = new List<IModule>()
             {
                 new SecurityModule()

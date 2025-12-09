@@ -21,6 +21,16 @@ namespace WebApp.Extensions
             if (!env.IsDevelopment())
                 app.UseHsts();
 
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(x =>
+                {
+                    x.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+                    x.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
+                });
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
@@ -37,16 +47,6 @@ namespace WebApp.Extensions
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });
-
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(x =>
-                {
-                    x.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-                    x.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
-                });
-            }
 
             // Create a default test user account
             app.CreateTestUserAccount();

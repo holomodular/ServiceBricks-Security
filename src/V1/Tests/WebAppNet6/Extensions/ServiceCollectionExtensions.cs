@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using ServiceBricks;
 using WebApp.Model;
@@ -10,14 +9,10 @@ namespace WebApp.Extensions
     {
         public static IServiceCollection AddCustomWebsite(this IServiceCollection services, IConfiguration Configuration)
         {
-            // Add to module registry
-            ModuleRegistry.Instance.Register(new WebAppModule());
-
             services.AddControllers();
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddCors();
-
             services.AddMvc();
 
             services.AddCustomSwagger(Configuration);
@@ -42,13 +37,13 @@ namespace WebApp.Extensions
             });
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Description = "JWT token must be provided",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                    Scheme = "Bearer"
                 });
                 options.ResolveConflictingActions(descriptions =>
                 {

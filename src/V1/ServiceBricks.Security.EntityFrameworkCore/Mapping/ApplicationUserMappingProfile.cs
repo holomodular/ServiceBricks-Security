@@ -1,49 +1,60 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.EntityFrameworkCore
+﻿namespace ServiceBricks.Security.EntityFrameworkCore
 {
     /// <summary>
     /// This is an automapper profile for the ApplicationUser domain object.
     /// </summary>
-    public partial class ApplicationUserMappingProfile : Profile
+    public partial class ApplicationUserMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserDto, ApplicationUser>()
-                .ForMember(x => x.CreateDate, y => y.Ignore())
-                .ForMember(x => x.Id, y => y.MapFrom<KeyResolver>())
-                .ForMember(x => x.ApplicationUserRoles, y => y.Ignore());
+            registry.Register<ApplicationUser, UserDto>(
+                (s, d) =>
+                {
+                    d.AccessFailedCount = s.AccessFailedCount;
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    d.CreateDate = s.CreateDate;
+                    d.Email = s.Email;
+                    d.EmailConfirmed = s.EmailConfirmed;
+                    d.LockoutEnabled = s.LockoutEnabled;
+                    d.LockoutEnd = s.LockoutEnd;
+                    d.NormalizedEmail = s.NormalizedEmail;
+                    d.NormalizedUserName = s.NormalizedUserName;
+                    d.PasswordHash = s.PasswordHash;
+                    d.PhoneNumber = s.PhoneNumber;
+                    d.PhoneNumberConfirmed = s.PhoneNumberConfirmed;
+                    d.SecurityStamp = s.SecurityStamp;
+                    d.StorageKey = s.Id.ToString();
+                    d.TwoFactorEnabled = s.TwoFactorEnabled;
+                    d.UpdateDate = s.UpdateDate;
+                    d.UserName = s.UserName;
+                });
 
-            CreateMap<ApplicationUser, UserDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Id));
-        }
-
-        /// <summary>
-        /// Resolve the key.
-        /// </summary>
-        public class KeyResolver : IValueResolver<DataTransferObject, object, Guid>
-        {
-            /// <summary>
-            /// Resolve the key.
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="destination"></param>
-            /// <param name="sourceMember"></param>
-            /// <param name="context"></param>
-            /// <returns></returns>
-            public Guid Resolve(DataTransferObject source, object destination, Guid sourceMember, ResolutionContext context)
-            {
-                if (string.IsNullOrEmpty(source.StorageKey))
-                    return Guid.Empty;
-
-                Guid tempKey;
-                if (Guid.TryParse(source.StorageKey, out tempKey))
-                    return tempKey;
-                return Guid.Empty;
-            }
+            registry.Register<UserDto, ApplicationUser>(
+                (s, d) =>
+                {
+                    d.AccessFailedCount = s.AccessFailedCount;
+                    d.ConcurrencyStamp = s.ConcurrencyStamp;
+                    //d.CreateDate ignore
+                    d.Email = s.Email;
+                    d.EmailConfirmed = s.EmailConfirmed;
+                    d.LockoutEnabled = s.LockoutEnabled;
+                    d.LockoutEnd = s.LockoutEnd;
+                    d.NormalizedEmail = s.NormalizedEmail;
+                    d.NormalizedUserName = s.NormalizedUserName;
+                    d.PasswordHash = s.PasswordHash;
+                    d.PhoneNumber = s.PhoneNumber;
+                    d.PhoneNumberConfirmed = s.PhoneNumberConfirmed;
+                    d.SecurityStamp = s.SecurityStamp;
+                    Guid tempId;
+                    if (Guid.TryParse(s.StorageKey, out tempId))
+                        d.Id = tempId;
+                    d.TwoFactorEnabled = s.TwoFactorEnabled;
+                    d.UpdateDate = s.UpdateDate;
+                    d.UserName = s.UserName;
+                });
         }
     }
 }

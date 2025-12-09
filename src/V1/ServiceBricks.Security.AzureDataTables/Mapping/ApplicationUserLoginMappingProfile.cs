@@ -1,29 +1,62 @@
-﻿using AutoMapper;
-
-using ServiceBricks.Storage.AzureDataTables;
+﻿using ServiceBricks.Storage.AzureDataTables;
 
 namespace ServiceBricks.Security.AzureDataTables
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserLogin domain object.
+    /// This is a mapper profile for the ApplicationUserLogin domain object.
     /// </summary>
-    public partial class ApplicationUserLoginMappingProfile : Profile
+    public partial class ApplicationUserLoginMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserLoginMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserLoginDto, ApplicationUserLogin>()
-                .ForMember(x => x.PartitionKey, y => y.MapFrom<PartitionKeyResolver>())
-                .ForMember(x => x.RowKey, y => y.MapFrom<RowKeyResolver>())
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey))
-                .ForMember(x => x.ETag, y => y.Ignore())
-                .ForMember(x => x.Timestamp, y => y.Ignore());
+            registry.Register<ApplicationUserLogin, UserLoginDto>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    d.ProviderKey = s.ProviderKey;
+                    d.StorageKey =
+                        s.PartitionKey +
+                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
+                        s.RowKey;
+                    d.UserStorageKey = s.UserId.ToString();
+                });
 
-            CreateMap<ApplicationUserLogin, UserLoginDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom<StorageKeyResolver>())
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserLoginDto, ApplicationUserLogin>(
+                (s, d) =>
+                {
+                    if (!string.IsNullOrEmpty(s.StorageKey))
+                    {
+                        string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
+                        if (split.Length >= 1)
+                            d.LoginProvider = split[0];
+                        else
+                            d.LoginProvider = string.Empty;
+                        if (split.Length >= 2)
+                            d.ProviderKey = split[1];
+                        else
+                            d.ProviderKey = string.Empty;
+                    }
+                    else
+                    {
+                        d.LoginProvider = s.LoginProvider;
+                        d.ProviderKey = s.ProviderKey;
+                    }
+
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+
+                    Guid tempUserId;
+                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                        d.UserId = tempUserId;
+                    else
+                        d.UserId = Guid.Empty;
+
+                    d.PartitionKey = d.LoginProvider;
+                    d.RowKey = d.ProviderKey;
+                });
         }
     }
 }

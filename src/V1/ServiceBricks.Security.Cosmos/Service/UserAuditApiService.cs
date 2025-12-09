@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.Cosmos
+﻿namespace ServiceBricks.Security.Cosmos
 {
     /// <summary>
     /// This is an API service for the AuditUser domain object.

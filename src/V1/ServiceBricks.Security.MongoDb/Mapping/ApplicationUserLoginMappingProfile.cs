@@ -1,24 +1,34 @@
-﻿using AutoMapper;
-
-namespace ServiceBricks.Security.MongoDb
+﻿namespace ServiceBricks.Security.MongoDb
 {
     /// <summary>
-    /// This is an automapper profile for the ApplicationUserLogin domain object.
+    /// This is a mapper profile for the ApplicationUserLogin domain object.
     /// </summary>
-    public partial class ApplicationUserLoginMappingProfile : Profile
+    public partial class ApplicationUserLoginMappingProfile
     {
         /// <summary>
-        /// Constructor.
+        /// Register the mapping
         /// </summary>
-        public ApplicationUserLoginMappingProfile()
+        public static void Register(IMapperRegistry registry)
         {
-            CreateMap<UserLoginDto, ApplicationUserLogin>()
-                .ForMember(x => x.Key, y => y.MapFrom(z => z.StorageKey))
-                .ForMember(x => x.UserId, y => y.MapFrom(z => z.UserStorageKey));
+            registry.Register<ApplicationUserLogin, UserLoginDto>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    d.ProviderKey = s.ProviderKey;
+                    d.StorageKey = s.Key;
+                    d.UserStorageKey = s.UserId;
+                });
 
-            CreateMap<ApplicationUserLogin, UserLoginDto>()
-                .ForMember(x => x.StorageKey, y => y.MapFrom(z => z.Key))
-                .ForMember(x => x.UserStorageKey, y => y.MapFrom(z => z.UserId));
+            registry.Register<UserLoginDto, ApplicationUserLogin>(
+                (s, d) =>
+                {
+                    d.LoginProvider = s.LoginProvider;
+                    d.ProviderKey = s.ProviderKey;
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    d.UserId = s.UserStorageKey;
+                    d.Key = s.StorageKey;
+                });
         }
     }
 }
