@@ -14,24 +14,22 @@
                 (s, d) =>
                 {
                     d.LoginProvider = s.LoginProvider;
-                    d.Name = s.Name;
-                    d.StorageKey = s.Key.ToString();
+                    d.Name = s.Name;                    
                     d.UserStorageKey = s.UserId.ToString();
                     d.Value = s.Value;
+                    d.StorageKey = s.Key.ToString();
                 });
 
             registry.Register<UserTokenDto, ApplicationUserToken>(
                 (s, d) =>
                 {
                     d.LoginProvider = s.LoginProvider;
-                    d.Name = s.Name;
-                    Guid tempKey;
-                    if (Guid.TryParse(s.StorageKey, out tempKey))
-                        d.Key = tempKey;
-                    Guid tempUser;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUser))
+                    d.Name = s.Name;                    
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUser))
                         d.UserId = tempUser;
                     d.Value = s.Value;
+                    if (Guid.TryParse(s.StorageKey, out var tempKey))
+                        d.Key = tempKey;
                 });
         }
     }

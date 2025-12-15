@@ -17,45 +17,37 @@ namespace ServiceBricks.Security.AzureDataTables
                 {
                     d.LoginProvider = s.LoginProvider;
                     d.ProviderDisplayName = s.ProviderDisplayName;
-                    d.ProviderKey = s.ProviderKey;
-                    d.StorageKey =
-                        s.PartitionKey +
-                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
-                        s.RowKey;
+                    d.ProviderKey = s.ProviderKey;                    
                     d.UserStorageKey = s.UserId.ToString();
+                    d.StorageKey =
+                        s.LoginProvider +
+                        StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
+                        s.ProviderKey;
                 });
 
             registry.Register<UserLoginDto, ApplicationUserLogin>(
                 (s, d) =>
                 {
+                    d.ProviderDisplayName = s.ProviderDisplayName;
+                    d.LoginProvider = s.LoginProvider;
+                    d.ProviderKey = s.ProviderKey;
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUserId))
+                        d.UserId = tempUserId;
+                    
                     if (!string.IsNullOrEmpty(s.StorageKey))
                     {
                         string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
                         if (split.Length >= 1)
-                            d.LoginProvider = split[0];
-                        else
-                            d.LoginProvider = string.Empty;
+                        {
+                            d.PartitionKey = split[0];
+                            d.LoginProvider = split[0];                            
+                        }
                         if (split.Length >= 2)
-                            d.ProviderKey = split[1];
-                        else
-                            d.ProviderKey = string.Empty;
-                    }
-                    else
-                    {
-                        d.LoginProvider = s.LoginProvider;
-                        d.ProviderKey = s.ProviderKey;
-                    }
-
-                    d.ProviderDisplayName = s.ProviderDisplayName;
-
-                    Guid tempUserId;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
-                        d.UserId = tempUserId;
-                    else
-                        d.UserId = Guid.Empty;
-
-                    d.PartitionKey = d.LoginProvider;
-                    d.RowKey = d.ProviderKey;
+                        {
+                            d.RowKey = split[1];
+                            d.ProviderKey = split[1];                            
+                        }
+                    }                    
                 });
         }
     }

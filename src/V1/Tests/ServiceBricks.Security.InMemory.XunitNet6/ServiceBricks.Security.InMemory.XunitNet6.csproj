@@ -34,6 +34,15 @@
 		<Compile Include="..\TestFiles\SecurityTestConstants.cs" Link="SecurityTestConstants.cs" />
 		<Compile Include="..\TestFiles\ObjectTests.cs" Link="ObjectTests.cs" />
 		<Compile Include="..\TestFiles\StartupInMemory.cs" Link="StartupInMemory.cs" />
+
+		<Compile Include="..\TestFiles\InMemory\RoleStubApiClientTests.cs" Link="RoleStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\RoleClaimStubApiClientTests.cs" Link="RoleClaimStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserStubApiClientTests.cs" Link="UserStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserClaimStubApiClientTests.cs" Link="UserClaimStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginStubApiClientTests.cs" Link="UserLoginStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRoleStubApiClientTests.cs" Link="UserRoleStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserTokenStubApiClientTests.cs" Link="UserTokenStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserAuditStubApiClientTests.cs" Link="UserAuditStubApiClientTests.cs" />
 	</ItemGroup>
 
   <ItemGroup>

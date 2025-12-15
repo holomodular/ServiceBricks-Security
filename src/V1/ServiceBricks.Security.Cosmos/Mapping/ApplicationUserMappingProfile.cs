@@ -48,8 +48,7 @@
                     d.PhoneNumber = s.PhoneNumber;
                     d.PhoneNumberConfirmed = s.PhoneNumberConfirmed;
                     d.SecurityStamp = s.SecurityStamp;
-                    Guid tempId;
-                    if (Guid.TryParse(s.StorageKey, out tempId))
+                    if (Guid.TryParse(s.StorageKey, out var tempId))
                         d.Id = tempId;
                     d.TwoFactorEnabled = s.TwoFactorEnabled;
                     d.UpdateDate = s.UpdateDate;

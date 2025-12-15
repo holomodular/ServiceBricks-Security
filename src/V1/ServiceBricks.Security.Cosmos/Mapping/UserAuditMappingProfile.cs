@@ -17,9 +17,9 @@
                     d.CreateDate = s.CreateDate;
                     d.Data = s.Data;
                     d.IPAddress = s.IPAddress;
-                    d.RequestHeaders = s.RequestHeaders;
-                    d.StorageKey = s.Key.ToString();
+                    d.RequestHeaders = s.RequestHeaders;                    
                     d.UserStorageKey = s.UserId.ToString();
+                    d.StorageKey = s.Key.ToString();
                 });
 
             registry.Register<UserAuditDto, UserAudit>(
@@ -29,13 +29,11 @@
                     //d.CreateDate ignore
                     d.Data = s.Data;
                     d.IPAddress = s.IPAddress;
-                    d.RequestHeaders = s.RequestHeaders;
-                    Guid tempStorageKey;
-                    if (Guid.TryParse(s.StorageKey, out tempStorageKey))
-                        d.Key = tempStorageKey;
-                    Guid tempUserId;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                    d.RequestHeaders = s.RequestHeaders;                                                            
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUserId))
                         d.UserId = tempUserId;
+                    if (Guid.TryParse(s.StorageKey, out var tempStorageKey))
+                        d.Key = tempStorageKey;
                 });
         }
     }

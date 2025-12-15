@@ -1,3 +1,7 @@
+# 1.4.0-c
+- Create new ServiceBricks.Security.Model package and include DTOs, clients and contracts
+- Unit text fixes
+
 # 1.4.0-a
 - Net10 support and update nuget packages
 - Upgrade mapping profiles

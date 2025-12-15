@@ -5,9 +5,9 @@ using ServiceBricks.Xunit.Integration;
 namespace ServiceBricks.Xunit
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationUserClaimApiControllerTest : Integration.UserClaimApiControllerTestBase
+    public class UserClaimApiControllerTest : Integration.UserClaimApiControllerTestBase
     {
-        public ApplicationUserClaimApiControllerTest() : base()
+        public UserClaimApiControllerTest() : base()
         {
             SystemManager = ServiceBricksSystemManager.GetSystemManager(typeof(StartupInMemory));
             TestManager = SystemManager.ServiceProvider.GetRequiredService<ITestManager<UserClaimDto>>();

@@ -18,7 +18,7 @@ namespace ServiceBricks.Security
             IConfiguration configuration)
             : base(httpClientFactory)
         {
-            var config = configuration.GetApiConfig(SecurityConstants.APPSETTING_CLIENT_APICONFIG);
+            var config = configuration.GetApiConfig(SecurityModelConstants.APPSETTING_CLIENT_APICONFIG);
             if (config == null)
                 throw new Exception("ApiConfig not found");
             ApiResource = config.BaseServiceUrl + @"Security/Authentication";
@@ -40,7 +40,7 @@ namespace ServiceBricks.Security
             var data = request != null ? JsonSerializer.Instance.SerializeObject(request) : string.Empty;
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = Send(req);
-            return GetAccessTokenAsync(result).GetAwaiter().GetResult();
+            return GetAccessToken(result);
         }
 
         /// <summary>
@@ -55,6 +55,37 @@ namespace ServiceBricks.Security
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = await SendAsync(req);
             return await GetAccessTokenAsync(result);
+        }
+
+        /// <summary>
+        /// Get the access token
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        protected virtual ResponseItem<AccessTokenResponse> GetAccessToken(HttpResponseMessage result)
+        {
+            ResponseItem<AccessTokenResponse> resp = new ResponseItem<AccessTokenResponse>();
+            string content = string.Empty;
+            if (result.Content != null)
+            {
+                using (var stream = result.Content.ReadAsStream())
+                using (var reader = new StreamReader(stream))
+                        content = reader.ReadToEnd();                                    
+            }
+            if (result.IsSuccessStatusCode)
+            {
+                if (!string.IsNullOrEmpty(content))
+                    resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
+                return resp;
+            }
+            else
+            {                
+                if (!string.IsNullOrEmpty(content))
+                    resp.AddMessage(ResponseMessage.CreateError(new Exception(content), LocalizationResource.ERROR_REST_CLIENT));
+                else
+                    resp.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_REST_CLIENT));
+                return resp;
+            }
         }
 
         /// <summary>

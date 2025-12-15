@@ -27,7 +27,7 @@ namespace ServiceBricks.Xunit
             // Register TestManagers
             services.AddScoped<ITestManager<UserDto>, MongoDbUserTestManager>();
             services.AddScoped<ITestManager<UserRoleDto>, MongoDbUserRoleTestManager>();
-            services.AddScoped<ITestManager<UserClaimDto>, MongoDbApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, MongoDbUserClaimTestManager>();
             services.AddScoped<ITestManager<UserTokenDto>, MongoDbUserTokenTestManager>();
             services.AddScoped<ITestManager<UserLoginDto>, MongoDbUserLoginTestManager>();
             services.AddScoped<ITestManager<RoleDto>, MongoDbRoleTestManager>();

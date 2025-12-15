@@ -25,8 +25,7 @@
                     d.ClaimType = s.ClaimType;
                     d.ClaimValue = s.ClaimValue;
                     d.RoleId = s.RoleId;
-                    int tempId = 0;
-                    if (int.TryParse(s.Key, out tempId))
+                    if (int.TryParse(s.Key, out var tempId))
                         d.Id = tempId;
                 });
 

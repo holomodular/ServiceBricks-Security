@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 namespace ServiceBricks.Security
 {
     /// <summary>
-    /// This is a REST API client for the ApplicationUserToken entity.
+    /// This is a REST API client for the ApplicationUserRole entity.
     /// </summary>
-    public partial class UserTokenApiClient : ApiClient<UserTokenDto>, IUserTokenApiClient
+    public partial class UserRoleApiClient : ApiClient<UserRoleDto>, IUserRoleApiClient
     {
         /// <summary>
         /// Constructor
@@ -14,13 +14,13 @@ namespace ServiceBricks.Security
         /// <param name="loggerFactory"></param>
         /// <param name="httpClientFactory"></param>
         /// <param name="configuration"></param>
-        public UserTokenApiClient(
+        public UserRoleApiClient(
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,
             IConfiguration configuration)
-            : base(loggerFactory, httpClientFactory, configuration.GetApiConfig(SecurityConstants.APPSETTING_CLIENT_APICONFIG))
+            : base(loggerFactory, httpClientFactory, configuration.GetApiConfig(SecurityModelConstants.APPSETTING_CLIENT_APICONFIG))
         {
-            ApiResource = @"Security/UserToken";
+            ApiResource = @"Security/UserRole";
         }
     }
 }

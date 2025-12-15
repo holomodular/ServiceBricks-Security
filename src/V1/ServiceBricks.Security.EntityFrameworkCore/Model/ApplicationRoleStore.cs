@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ServiceQuery;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ServiceBricks.Security.EntityFrameworkCore
@@ -49,7 +50,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             if (role.Id == Guid.Empty)
                 role.Id = Guid.NewGuid();
-            var roleDto = _mapper.Map<RoleDto>(role);
+            var roleDto = _mapper.Map<ApplicationRole, RoleDto>(role);
             var resp = await _applicationRoleApiService.CreateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -62,7 +63,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<RoleDto>(role);
+            var roleDto = _mapper.Map<ApplicationRole, RoleDto>(role);
             var resp = await _applicationRoleApiService.DeleteAsync(roleDto.StorageKey);
             return resp.GetIdentityResult();
         }
@@ -75,7 +76,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var roleDto = _mapper.Map<RoleDto>(role);
+            var roleDto = _mapper.Map<ApplicationRole, RoleDto>(role);
             var resp = await _applicationRoleApiService.UpdateAsync(roleDto);
             return resp.GetIdentityResult();
         }
@@ -113,7 +114,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 RoleStorageKey = role.Id.ToString()
             };
             var resp = _applicationRoleClaimApiService.Create(item);
-            return _mapper.Map<ApplicationRoleClaim>(item);
+            return _mapper.Map<RoleClaimDto, ApplicationRoleClaim>(item);
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             var respRole = await _applicationRoleApiService.GetAsync(id);
             if (respRole.Item != null)
-                return _mapper.Map<ApplicationRole>(respRole.Item);
+                return _mapper.Map<RoleDto, ApplicationRole>(respRole.Item);
             return null;
         }
 
@@ -142,7 +143,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationRole>(respQuery.Item.List[0]);
+                return _mapper.Map<RoleDto, ApplicationRole>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -159,7 +160,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
             var respQuery = await _applicationRoleClaimApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
             {
-                var roleClaims = _mapper.Map<List<ApplicationRoleClaim>>(respQuery.Item.List);
+                var roleClaims = _mapper.Map< List < RoleClaimDto > , List <ApplicationRoleClaim>>(respQuery.Item.List);
                 return roleClaims.Select(x => x.ToClaim()).ToList();
             }
             return new List<Claim>();

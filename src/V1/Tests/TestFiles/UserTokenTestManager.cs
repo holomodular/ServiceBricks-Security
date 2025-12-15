@@ -58,18 +58,36 @@ namespace ServiceBricks.Xunit
 
         public override IApiClient<UserTokenDto> GetClient(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "false" },
+                })
+                .Build();
+
             return new UserTokenApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiClient<UserTokenDto> GetClientReturnResponse(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "true" },
+                })
+                .Build();
+
             return new UserTokenApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiService<UserTokenDto> GetService(IServiceProvider serviceProvider)

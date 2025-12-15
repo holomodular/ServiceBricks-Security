@@ -26,10 +26,9 @@
                     d.Name = s.Name;
                     d.NormalizedName = s.NormalizedName;
                     Guid tempId;
-                    if (Guid.TryParse(s.StorageKey, out tempId))
-                        d.Id = tempId;
                     d.PartitionKey = s.StorageKey;
-                    d.RowKey = string.Empty;
+                    if (Guid.TryParse(s.StorageKey, out tempId))
+                        d.Id = tempId;                    
                 });
         }
     }

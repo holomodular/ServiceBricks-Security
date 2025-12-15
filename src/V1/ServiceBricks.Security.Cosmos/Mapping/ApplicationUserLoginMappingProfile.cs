@@ -26,11 +26,9 @@
                     d.LoginProvider = s.LoginProvider;
                     d.ProviderDisplayName = s.ProviderDisplayName;
                     d.ProviderKey = s.ProviderKey;
-                    Guid tempKey;
-                    if (Guid.TryParse(s.StorageKey, out tempKey))
+                    if (Guid.TryParse(s.StorageKey, out var tempKey))
                         d.Key = tempKey;
-                    Guid tempUser;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUser))
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUser))
                         d.UserId = tempUser;
                 });
         }

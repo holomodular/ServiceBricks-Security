@@ -57,18 +57,36 @@ namespace ServiceBricks.Xunit
 
         public override IApiClient<UserRoleDto> GetClient(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "false" },
+                })
+                .Build();
+
             return new UserRoleApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiClient<UserRoleDto> GetClientReturnResponse(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "true" },
+                })
+                .Build();
+
             return new UserRoleApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiService<UserRoleDto> GetService(IServiceProvider serviceProvider)

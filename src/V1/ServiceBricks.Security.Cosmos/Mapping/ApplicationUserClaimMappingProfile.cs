@@ -24,11 +24,9 @@
                 {
                     d.ClaimType = s.ClaimType;
                     d.ClaimValue = s.ClaimValue;
-                    Guid tempKey;
-                    if (Guid.TryParse(s.StorageKey, out tempKey))
+                    if (Guid.TryParse(s.StorageKey, out var tempKey))
                         d.Key = tempKey;
-                    Guid tempUserId;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUserId))
                         d.UserId = tempUserId;
                 });
         }

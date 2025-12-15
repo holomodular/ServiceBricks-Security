@@ -19,7 +19,7 @@ namespace ServiceBricks.Xunit.Integration
             var appUserTest = new ApplicationUserApiClientTest();
             appUserTest.SystemManager = this.SystemManager;
             var user = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserClaimTestManager)TestManager).ApplicationUser =
+            ((UserClaimTestManager)TestManager).ApplicationUser =
                 appUserTest.CreateBase(user);
         }
     }

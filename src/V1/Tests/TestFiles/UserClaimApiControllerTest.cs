@@ -23,13 +23,13 @@ namespace ServiceBricks.Xunit.Integration
             var appUserTest = GetAppUserTest();
             appUserTest.SystemManager = this.SystemManager;
             var user = appUserTest.TestManager.GetMinimumDataObject();
-            ((ApplicationUserClaimTestManager)TestManager).ApplicationUser =
+            ((UserClaimTestManager)TestManager).ApplicationUser =
                 appUserTest.CreateBase(user);
         }
 
         protected virtual void CleanupDependencies()
         {
-            string userstoragekey = ((ApplicationUserClaimTestManager)TestManager).ApplicationUser.StorageKey;
+            string userstoragekey = ((UserClaimTestManager)TestManager).ApplicationUser.StorageKey;
 
             // Cleanup Audits
             var audituserservice = SystemManager.ServiceProvider.GetRequiredService<IUserAuditApiService>();

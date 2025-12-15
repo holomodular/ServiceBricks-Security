@@ -5,9 +5,9 @@ using ServiceBricks.Xunit.Integration;
 namespace ServiceBricks.Xunit
 {
     [Collection(ServiceBricks.Xunit.Constants.SERVICEBRICKS_COLLECTION_NAME)]
-    public class ApplicationRoleClaimApiControllerTest : Integration.RoleClaimApiControllerTestBase
+    public class RoleClaimApiControllerTest : Integration.RoleClaimApiControllerTestBase
     {
-        public ApplicationRoleClaimApiControllerTest() : base()
+        public RoleClaimApiControllerTest() : base()
         {
             SystemManager = ServiceBricksSystemManager.GetSystemManager(typeof(StartupInMemory));
             TestManager = SystemManager.ServiceProvider.GetRequiredService<ITestManager<RoleClaimDto>>();

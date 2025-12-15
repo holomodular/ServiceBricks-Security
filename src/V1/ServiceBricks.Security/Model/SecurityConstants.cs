@@ -16,11 +16,6 @@
         public const string APPSETTING_SECURITY_CALLBACKURL = "ServiceBricks:Security:CallbackUrl";
 
         /// <summary>
-        /// AppSetting key for the client api configuration.
-        /// </summary>
-        public const string APPSETTING_CLIENT_APICONFIG = @"ServiceBricks:Security:Client:Api";
-
-        /// <summary>
         /// The authentication scheme for the ServiceBricks.Security module.
         /// </summary>
         public const string SERVICEBRICKS_AUTHENTICATION_SCHEME = "SERVICEBRICKS_AUTH";

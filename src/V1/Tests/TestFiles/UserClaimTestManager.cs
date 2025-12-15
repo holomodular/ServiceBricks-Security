@@ -7,7 +7,7 @@ using ServiceQuery;
 
 namespace ServiceBricks.Xunit
 {
-    public class MongoDbApplicationUserClaimTestManager : ApplicationUserClaimTestManager
+    public class MongoDbUserClaimTestManager : UserClaimTestManager
     {
         public override UserClaimDto GetObjectNotFound()
         {
@@ -18,7 +18,7 @@ namespace ServiceBricks.Xunit
         }
     }
 
-    public class ApplicationUserClaimTestManager : TestManager<UserClaimDto>
+    public class UserClaimTestManager : TestManager<UserClaimDto>
     {
         public virtual UserDto ApplicationUser { get; set; }
 
@@ -55,18 +55,36 @@ namespace ServiceBricks.Xunit
 
         public override IApiClient<UserClaimDto> GetClient(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "false" },
+                })
+                .Build();
+
             return new UserClaimApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiClient<UserClaimDto> GetClientReturnResponse(IServiceProvider serviceProvider)
         {
+            var appconfig = serviceProvider.GetRequiredService<IConfiguration>();
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(appconfig)
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    { ServiceBricksConstants.APPSETTING_CLIENT_APIOPTIONS + ":ReturnResponseObject", "true" },
+                })
+                .Build();
+
             return new UserClaimApiClient(
                 serviceProvider.GetRequiredService<ILoggerFactory>(),
                 serviceProvider.GetRequiredService<IHttpClientFactory>(),
-                serviceProvider.GetRequiredService<IConfiguration>());
+                config);
         }
 
         public override IApiService<UserClaimDto> GetService(IServiceProvider serviceProvider)

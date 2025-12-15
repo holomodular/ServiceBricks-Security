@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.4.0-a</Version>
+		<Version>1.4.0-c</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Member</PackageId>
 		<Title>ServiceBricks.Security.Member</Title>
@@ -23,7 +23,7 @@
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/holomodular/ServiceBricks-Security</RepositoryUrl>
-		<IsPackable>False</IsPackable>
+		<IsPackable>True</IsPackable>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="Resource\readme.md" Pack="True" PackagePath="\" />
@@ -50,10 +50,10 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
 	</ItemGroup>
 		
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.4.0-a" />
+		<PackageReference Include="ServiceBricks" Version="1.4.0-c" />
 	</ItemGroup>
 </Project>

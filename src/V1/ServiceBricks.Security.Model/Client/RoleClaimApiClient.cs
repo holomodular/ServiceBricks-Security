@@ -18,7 +18,7 @@ namespace ServiceBricks.Security
             ILoggerFactory loggerFactory,
             IHttpClientFactory httpClientFactory,
             IConfiguration configuration)
-            : base(loggerFactory, httpClientFactory, configuration.GetApiConfig(SecurityConstants.APPSETTING_CLIENT_APICONFIG))
+            : base(loggerFactory, httpClientFactory, configuration.GetApiConfig(SecurityModelConstants.APPSETTING_CLIENT_APICONFIG))
         {
             ApiResource = @"Security/RoleClaim";
         }

@@ -37,9 +37,6 @@ namespace ServiceBricks.Security.Cosmos
         {
             base.OnModelCreating(builder);
 
-            // AI: Set the default container name
-            //builder.Model.SetDefaultContainer(SecurityCosmosConstants.CONTAINER_PREFIX);
-
             // AI: Create the model for each table
             builder.Entity<UserAudit>(b =>
             {

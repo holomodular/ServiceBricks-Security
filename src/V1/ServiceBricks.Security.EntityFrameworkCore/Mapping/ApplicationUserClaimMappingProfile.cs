@@ -12,24 +12,22 @@
         {
             registry.Register<ApplicationUserClaim, UserClaimDto>(
                 (s, d) =>
-                {
+                {                    
                     d.ClaimType = s.ClaimType;
-                    d.ClaimValue = s.ClaimValue;
-                    d.StorageKey = s.Id.ToString();
+                    d.ClaimValue = s.ClaimValue;                    
                     d.UserStorageKey = s.UserId.ToString();
+                    d.StorageKey = s.Id.ToString();
                 });
 
             registry.Register<UserClaimDto, ApplicationUserClaim>(
                 (s, d) =>
                 {
                     d.ClaimType = s.ClaimType;
-                    d.ClaimValue = s.ClaimValue;
-                    int tempId;
-                    if (int.TryParse(s.StorageKey, out tempId))
-                        d.Id = tempId;
-                    Guid tempUserId;
-                    if (Guid.TryParse(s.UserStorageKey, out tempUserId))
+                    d.ClaimValue = s.ClaimValue;                                        
+                    if (Guid.TryParse(s.UserStorageKey, out var tempUserId))
                         d.UserId = tempUserId;
+                    if (int.TryParse(s.StorageKey, out var tempId))
+                        d.Id = tempId;
                 });
         }
     }

@@ -25,8 +25,7 @@
                     d.ConcurrencyStamp = s.ConcurrencyStamp;
                     d.Name = s.Name;
                     d.NormalizedName = s.NormalizedName;
-                    Guid tempId;
-                    if (Guid.TryParse(s.StorageKey, out tempId))
+                    if (Guid.TryParse(s.StorageKey, out var tempId))
                         d.Id = tempId;
                 });
         }

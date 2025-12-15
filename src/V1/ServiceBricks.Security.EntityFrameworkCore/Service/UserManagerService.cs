@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ServiceQuery;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ServiceBricks.Security.EntityFrameworkCore
@@ -318,7 +319,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
                 return response;
             }
-            response.Item = _mapper.Map<UserDto>(user);
+            response.Item = _mapper.Map<ApplicationUser, UserDto>(user);
             return response;
         }
 
@@ -409,12 +410,12 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         public virtual async Task<IResponseItem<UserDto>> CreateAsync(UserDto user, string password)
         {
             var response = new ResponseItem<UserDto>();
-            var appUser = _mapper.Map<ApplicationUser>(user);
+            var appUser = _mapper.Map<UserDto, ApplicationUser>(user);
             //appUser.SecurityStamp = Guid.NewGuid().ToString();
             var respUser = await _userManager.CreateAsync(appUser, password);
             response.CopyFrom(respUser);
             if (response.Success)
-                response.Item = _mapper.Map<UserDto>(appUser);
+                response.Item = _mapper.Map<ApplicationUser, UserDto>(appUser);
             return response;
         }
 
@@ -523,7 +524,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
         {
             var users = await _userManager.GetUsersInRoleAsync(roleName);
             var response = new ResponseList<UserDto>();
-            response.List = _mapper.Map<List<UserDto>>(users);
+            response.List = _mapper.Map< List < ApplicationUser > , List <UserDto>>(users.ToList());
             return response;
         }
 
@@ -589,7 +590,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 return response;
             }
 
-            response.Item.User = _mapper.Map<UserDto>(user);
+            response.Item.User = _mapper.Map<ApplicationUser, UserDto>(user);
             response.Item.SignInResult = await _signInManager.PasswordSignInAsync(
                 email,
                 password,
@@ -719,7 +720,7 @@ namespace ServiceBricks.Security.EntityFrameworkCore
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }
-            response.Item = _mapper.Map<UserDto>(user);
+            response.Item = _mapper.Map<ApplicationUser, UserDto>(user);
             return response;
         }
     }

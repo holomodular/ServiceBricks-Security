@@ -14,6 +14,7 @@ namespace ServiceBricks.Security.AzureDataTables
         /// </summary>
         public ApplicationUser()
         {
+            PartitionKey = string.Empty;
             RowKey = string.Empty;
         }
 

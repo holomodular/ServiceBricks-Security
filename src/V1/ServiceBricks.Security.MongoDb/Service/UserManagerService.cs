@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ServiceBricks.Security.MongoDb
@@ -82,7 +83,7 @@ namespace ServiceBricks.Security.MongoDb
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user != null)
-                response.Item = _mapper.Map<UserDto>(user);
+                response.Item = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
 
             return response;
         }
@@ -110,7 +111,7 @@ namespace ServiceBricks.Security.MongoDb
 
             var user = await _userManager.FindByIdAsync(userStorageKey);
             if (user != null)
-                response.Item = _mapper.Map<UserDto>(user);
+                response.Item = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
 
             return response;
         }
@@ -311,7 +312,7 @@ namespace ServiceBricks.Security.MongoDb
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_ITEM_NOT_FOUND));
                 return response;
             }
-            response.Item = _mapper.Map<UserDto>(user);
+            response.Item = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             return response;
         }
 
@@ -402,12 +403,12 @@ namespace ServiceBricks.Security.MongoDb
         public virtual async Task<IResponseItem<UserDto>> CreateAsync(UserDto user, string password)
         {
             var response = new ResponseItem<UserDto>();
-            var appUser = _mapper.Map<ApplicationIdentityUser>(user);
+            var appUser = _mapper.Map<UserDto, ApplicationIdentityUser>(user);
             var respUser = await _userManager.CreateAsync(appUser, password);
             appUser.SecurityStamp = Guid.NewGuid().ToString();
             response.CopyFrom(respUser);
             if (response.Success)
-                response.Item = _mapper.Map<UserDto>(appUser);
+                response.Item = _mapper.Map<ApplicationIdentityUser, UserDto>(appUser);
             return response;
         }
 
@@ -516,7 +517,7 @@ namespace ServiceBricks.Security.MongoDb
         {
             var users = await _userManager.GetUsersInRoleAsync(roleName);
             var response = new ResponseList<UserDto>();
-            response.List = _mapper.Map<List<UserDto>>(users);
+            response.List = _mapper.Map< List < ApplicationIdentityUser > , List <UserDto>>(users.ToList());
             return response;
         }
 
@@ -582,7 +583,7 @@ namespace ServiceBricks.Security.MongoDb
                 return response;
             }
 
-            response.Item.User = _mapper.Map<UserDto>(user);
+            response.Item.User = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             response.Item.SignInResult = await _signInManager.PasswordSignInAsync(
                 email,
                 password,
@@ -712,7 +713,7 @@ namespace ServiceBricks.Security.MongoDb
                 response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_SECURITY));
                 return response;
             }
-            response.Item = _mapper.Map<UserDto>(user);
+            response.Item = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             return response;
         }
     }

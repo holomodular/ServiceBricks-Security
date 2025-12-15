@@ -25,11 +25,11 @@
                     d.PasswordHash = s.PasswordHash;
                     d.PhoneNumber = s.PhoneNumber;
                     d.PhoneNumberConfirmed = s.PhoneNumberConfirmed;
-                    d.SecurityStamp = s.SecurityStamp;
-                    d.StorageKey = s.Id.ToString();
+                    d.SecurityStamp = s.SecurityStamp;                    
                     d.TwoFactorEnabled = s.TwoFactorEnabled;
                     d.UpdateDate = s.UpdateDate;
                     d.UserName = s.UserName;
+                    d.StorageKey = s.Id.ToString();
                 });
 
             registry.Register<UserDto, ApplicationUser>(
@@ -47,13 +47,12 @@
                     d.PasswordHash = s.PasswordHash;
                     d.PhoneNumber = s.PhoneNumber;
                     d.PhoneNumberConfirmed = s.PhoneNumberConfirmed;
-                    d.SecurityStamp = s.SecurityStamp;
-                    Guid tempId;
-                    if (Guid.TryParse(s.StorageKey, out tempId))
-                        d.Id = tempId;
+                    d.SecurityStamp = s.SecurityStamp;                    
                     d.TwoFactorEnabled = s.TwoFactorEnabled;
                     d.UpdateDate = s.UpdateDate;
                     d.UserName = s.UserName;
+                    if (Guid.TryParse(s.StorageKey, out var tempId))
+                        d.Id = tempId;
                 });
         }
     }

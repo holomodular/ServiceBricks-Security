@@ -22,7 +22,7 @@ namespace ServiceBricks.Security.Client.Xunit
 
             // Register TestManagers
             services.AddScoped<ITestManager<UserDto>, UserTestManager>();
-            services.AddScoped<ITestManager<UserClaimDto>, ApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, UserClaimTestManager>();
             services.AddScoped<ITestManager<UserRoleDto>, UserRoleTestManager>();
             services.AddScoped<ITestManager<UserTokenDto>, UserTokenTestManager>();
             services.AddScoped<ITestManager<UserLoginDto>, UserLoginTestManager>();

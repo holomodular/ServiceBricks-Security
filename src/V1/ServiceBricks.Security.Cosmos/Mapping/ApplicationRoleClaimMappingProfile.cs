@@ -23,12 +23,10 @@
                 (s, d) =>
                 {
                     d.ClaimType = s.ClaimType;
-                    d.ClaimValue = s.ClaimValue;
-                    Guid tempRoleId;
-                    if (Guid.TryParse(s.RoleStorageKey, out tempRoleId))
-                        d.RoleId = tempRoleId;
-                    Guid tempKey;
-                    if (Guid.TryParse(s.StorageKey, out tempKey))
+                    d.ClaimValue = s.ClaimValue;                    
+                    if (Guid.TryParse(s.RoleStorageKey, out var tempRoleId))
+                        d.RoleId = tempRoleId;                    
+                    if (Guid.TryParse(s.StorageKey, out var tempKey))
                         d.Key = tempKey;
                 });
         }

@@ -16,34 +16,37 @@ namespace ServiceBricks.Security.AzureDataTables
                 (s, d) =>
                 {
                     d.ClaimType = s.ClaimType;
-                    d.ClaimValue = s.ClaimValue;
+                    d.ClaimValue = s.ClaimValue;                    
                     d.RoleStorageKey = s.RoleId.ToString();
                     d.StorageKey =
-                        s.PartitionKey +
+                        s.RoleId.ToString() +
                         StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER +
-                        s.RowKey;
+                        s.Key.ToString();
                 });
 
             registry.Register<RoleClaimDto, ApplicationRoleClaim>(
                 (s, d) =>
-                {
+                {                    
+                    d.ClaimType = s.ClaimType;
+                    d.ClaimValue = s.ClaimValue;                    
+                    if (Guid.TryParse(s.RoleStorageKey, out var tempRoleId))
+                        d.RoleId = tempRoleId;                    
                     if (!string.IsNullOrEmpty(s.StorageKey))
                     {
                         string[] split = s.StorageKey.Split(StorageAzureDataTablesConstants.STORAGEKEY_DELIMITER);
                         if (split.Length >= 1)
+                        {
                             d.PartitionKey = split[0];
-                        else
-                            d.PartitionKey = string.Empty;
+                            if (Guid.TryParse(split[0], out var tempRoleId2))
+                                d.RoleId = tempRoleId2;
+                        }
                         if (split.Length >= 2)
+                        {
                             d.RowKey = split[1];
-                        else
-                            d.RowKey = string.Empty;
+                            if (Guid.TryParse(split[1], out var tempKey))
+                                d.Key = tempKey;
+                        }
                     }
-                    d.ClaimType = s.ClaimType;
-                    d.ClaimValue = s.ClaimValue;
-                    Guid tempRoleId;
-                    if (Guid.TryParse(s.RoleStorageKey, out tempRoleId))
-                        d.RoleId = tempRoleId;
                 });
         }
     }

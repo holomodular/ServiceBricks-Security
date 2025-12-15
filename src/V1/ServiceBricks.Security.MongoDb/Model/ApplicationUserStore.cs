@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
 using ServiceQuery;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ServiceBricks.Security.MongoDb
@@ -63,7 +64,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> CreateAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             var resp = await _applicationUserApiService.CreateAsync(userDto);
             if (resp.Success)
                 _mapper.Map<UserDto, ApplicationIdentityUser>(resp.Item, user);
@@ -78,7 +79,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> UpdateAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             var resp = await _applicationUserApiService.UpdateAsync(userDto);
             return resp.GetIdentityResult();
         }
@@ -91,7 +92,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<IdentityResult> DeleteAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             var resp = await _applicationUserApiService.DeleteAsync(userDto.StorageKey);
             return resp.GetIdentityResult();
         }
@@ -129,7 +130,7 @@ namespace ServiceBricks.Security.MongoDb
             uc.UserStorageKey = user.Id.ToString();
             var resp = _applicationUserClaimApiService.Create(uc);
             if (resp.Success)
-                return _mapper.Map<ApplicationIdentityUserClaim>(uc);
+                return _mapper.Map<UserClaimDto, ApplicationIdentityUserClaim>(uc);
             return null;
         }
 
@@ -141,13 +142,13 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<Claim>> GetClaimsAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
             var respUserClaims = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
             if (respUserClaims.Success && respUserClaims.Item.List.Count > 0)
             {
-                var userClaims = _mapper.Map<List<ApplicationIdentityUserClaim>>(respUserClaims.Item.List);
+                var userClaims = _mapper.Map <List< UserClaimDto>, List<ApplicationIdentityUserClaim>>(respUserClaims.Item.List);
                 return userClaims.Select(x => x.ToClaim()).ToList();
             }
             return new List<Claim>();
@@ -187,7 +188,7 @@ namespace ServiceBricks.Security.MongoDb
         {
             var respUser = await _applicationUserApiService.GetAsync(userId);
             if (respUser.Item != null)
-                return _mapper.Map<ApplicationIdentityUser>(respUser.Item);
+                return _mapper.Map<UserDto, ApplicationIdentityUser>(respUser.Item);
             return null;
         }
 
@@ -203,7 +204,7 @@ namespace ServiceBricks.Security.MongoDb
             queryBuilder.IsEqual(nameof(UserDto.NormalizedEmail), normalizedEmail.ToUpper());
             var respQuery = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationIdentityUser>(respQuery.Item.List[0]);
+                return _mapper.Map<UserDto, ApplicationIdentityUser>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -218,7 +219,7 @@ namespace ServiceBricks.Security.MongoDb
         {
             if (claims != null && claims.Count() > 0)
             {
-                var userDto = _mapper.Map<UserDto>(user);
+                var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
                 ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
                 queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
                 var respQuery = await _applicationUserClaimApiService.QueryAsync(queryBuilder.Build());
@@ -251,7 +252,7 @@ namespace ServiceBricks.Security.MongoDb
             queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder.IsInSet(nameof(UserDto.StorageKey), respUserClaims.Item.List.Select(x => x.UserStorageKey).ToArray());
             var respUsers = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
-            var users = _mapper.Map<List<ApplicationIdentityUser>>(respUsers.Item.List);
+            var users = _mapper.Map< List < UserDto > ,List <ApplicationIdentityUser>>(respUsers.Item.List);
             return users;
         }
 
@@ -265,7 +266,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task ReplaceClaimAsync(ApplicationIdentityUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder.IsEqual(nameof(UserClaimDto.UserStorageKey), userDto.StorageKey);
             queryBuilder.And();
@@ -294,7 +295,7 @@ namespace ServiceBricks.Security.MongoDb
                 RoleStorageKey = role.Id.ToString()
             };
             var resp = _applicationUserRoleApiService.Create(item);
-            return _mapper.Map<ApplicationUserRole>(item);
+            return _mapper.Map<UserRoleDto, ApplicationUserRole>(item);
         }
 
         /// <summary>
@@ -309,7 +310,7 @@ namespace ServiceBricks.Security.MongoDb
             queryBuilder.IsEqual(nameof(RoleDto.NormalizedName), normalizedRoleName);
             var respQuery = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.Count > 0)
-                return _mapper.Map<ApplicationIdentityRole>(respQuery.Item.List[0]);
+                return _mapper.Map<RoleDto, ApplicationIdentityRole>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -328,7 +329,7 @@ namespace ServiceBricks.Security.MongoDb
             queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), roleId);
             var respQuery = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationUserRole>(respQuery.Item.List[0]);
+                return _mapper.Map<UserRoleDto, ApplicationUserRole>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -340,7 +341,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         public override async Task<System.Collections.Generic.IList<string>> GetRolesAsync(ApplicationIdentityUser user, CancellationToken cancellationToken = default)
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
             ServiceQueryRequestBuilder queryBuilder = new ServiceQueryRequestBuilder();
             queryBuilder.IsEqual(nameof(UserRoleDto.UserStorageKey), userDto.StorageKey);
             var respQuery = await _applicationUserRoleApiService.QueryAsync(queryBuilder.Build());
@@ -380,7 +381,7 @@ namespace ServiceBricks.Security.MongoDb
                     queryBuilder.IsInSet(nameof(UserDto.StorageKey), userIds);
                     var respUsers = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
                     if (respUsers.Success && respUsers.Item.List.Count > 0)
-                        return _mapper.Map<List<ApplicationIdentityUser>>(respUsers.Item.List);
+                        return _mapper.Map<List<UserDto>, List<ApplicationIdentityUser>>(respUsers.Item.List);
                 }
             }
             return new List<ApplicationIdentityUser>();
@@ -400,7 +401,7 @@ namespace ServiceBricks.Security.MongoDb
             var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRoles.Success && respRoles.Item.List.Count > 0)
             {
-                var userDto = _mapper.Map<UserDto>(user);
+                var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
                 var role = respRoles.Item.List[0];
                 queryBuilder = new ServiceQueryRequestBuilder();
                 queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), role.StorageKey);
@@ -427,7 +428,7 @@ namespace ServiceBricks.Security.MongoDb
             var respRoles = await _applicationRoleApiService.QueryAsync(queryBuilder.Build());
             if (respRoles.Success && respRoles.Item.List.Count > 0)
             {
-                var userDto = _mapper.Map<UserDto>(user);
+                var userDto = _mapper.Map<ApplicationIdentityUser, UserDto>(user);
                 var role = respRoles.Item.List[0];
                 queryBuilder = new ServiceQueryRequestBuilder();
                 queryBuilder.IsEqual(nameof(UserRoleDto.RoleStorageKey), role.StorageKey);
@@ -451,7 +452,7 @@ namespace ServiceBricks.Security.MongoDb
             queryBuilder.IsEqual(nameof(UserDto.NormalizedUserName), normalizedUserName);
             var respQuery = await _applicationUserApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationIdentityUser>(respQuery.Item.List[0]);
+                return _mapper.Map<UserDto, ApplicationIdentityUser>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -464,7 +465,7 @@ namespace ServiceBricks.Security.MongoDb
         protected override async Task<ApplicationIdentityUser> FindUserAsync(string userId, CancellationToken cancellationToken)
         {
             var respUser = await _applicationUserApiService.GetAsync(userId);
-            return _mapper.Map<ApplicationIdentityUser>(respUser.Item);
+            return _mapper.Map<UserDto, ApplicationIdentityUser>(respUser.Item);
         }
 
         /// <summary>
@@ -484,7 +485,7 @@ namespace ServiceBricks.Security.MongoDb
             };
             var resp = _applicationUserLoginApiService.Create(ul);
             if (resp.Success)
-                return _mapper.Map<ApplicationUserLogin>(resp.Item);
+                return _mapper.Map<UserLoginDto, ApplicationUserLogin>(resp.Item);
             return null;
         }
 
@@ -507,7 +508,7 @@ namespace ServiceBricks.Security.MongoDb
             };
             var resp = _applicationUserTokenApiService.Create(ut);
             if (resp.Success)
-                return _mapper.Map<ApplicationUserToken>(ut);
+                return _mapper.Map<UserTokenDto, ApplicationUserToken>(ut);
             return null;
         }
 
@@ -530,7 +531,7 @@ namespace ServiceBricks.Security.MongoDb
                 .IsEqual(nameof(UserLoginDto.ProviderKey), providerKey);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationUserLogin>(respQuery.Item.List[0]);
+                return _mapper.Map<UserLoginDto, ApplicationUserLogin>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -550,7 +551,7 @@ namespace ServiceBricks.Security.MongoDb
                 .IsEqual(nameof(UserLoginDto.ProviderKey), providerKey);
             var respQuery = await _applicationUserLoginApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationUserLogin>(respQuery.Item.List[0]);
+                return _mapper.Map<UserLoginDto, ApplicationUserLogin>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -634,7 +635,7 @@ namespace ServiceBricks.Security.MongoDb
                 .IsEqual(nameof(UserTokenDto.Name), name);
             var respQuery = await _applicationUserTokenApiService.QueryAsync(queryBuilder.Build());
             if (respQuery.Success && respQuery.Item.List.Count > 0)
-                return _mapper.Map<ApplicationUserToken>(respQuery.Item.List[0]);
+                return _mapper.Map<UserTokenDto, ApplicationUserToken>(respQuery.Item.List[0]);
             return null;
         }
 
@@ -645,7 +646,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         protected override async Task AddUserTokenAsync(ApplicationUserToken token)
         {
-            var dto = _mapper.Map<UserTokenDto>(token);
+            var dto = _mapper.Map<ApplicationUserToken, UserTokenDto>(token);
             await _applicationUserTokenApiService.CreateAsync(dto);
         }
 
@@ -656,7 +657,7 @@ namespace ServiceBricks.Security.MongoDb
         /// <returns></returns>
         protected override async Task RemoveUserTokenAsync(ApplicationUserToken token)
         {
-            var dto = _mapper.Map<UserTokenDto>(token);
+            var dto = _mapper.Map<ApplicationUserToken, UserTokenDto>(token);
             await _applicationUserTokenApiService.DeleteAsync(dto.StorageKey);
         }
 

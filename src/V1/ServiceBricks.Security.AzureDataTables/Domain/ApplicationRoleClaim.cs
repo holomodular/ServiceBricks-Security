@@ -10,6 +10,15 @@ namespace ServiceBricks.Security.AzureDataTables
     public partial class ApplicationRoleClaim : IdentityRoleClaim<Guid>, IAzureDataTablesDomainObject<ApplicationRoleClaim>
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApplicationRoleClaim() 
+        {
+            PartitionKey = string.Empty;
+            RowKey = string.Empty;
+        }
+
+        /// <summary>
         ///     The partition key is a unique identifier for the partition within a given table
         ///     and forms the first part of an entity's primary key.
         /// </summary>

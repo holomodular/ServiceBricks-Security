@@ -9,6 +9,16 @@ namespace ServiceBricks.Security.AzureDataTables
     /// </summary>
     public partial class ApplicationUserRole : IdentityUserRole<Guid>, IAzureDataTablesDomainObject<ApplicationUserRole>
     {
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApplicationUserRole()
+        {
+            PartitionKey = string.Empty;
+            RowKey = string.Empty;
+        }
+
         /// <summary>
         ///     The partition key is a unique identifier for the partition within a given table
         ///     and forms the first part of an entity's primary key.

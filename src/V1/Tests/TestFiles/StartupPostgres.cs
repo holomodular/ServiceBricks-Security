@@ -27,7 +27,7 @@ namespace ServiceBricks.Xunit
             // Register TestManagers
             services.AddScoped<ITestManager<UserDto>, UserTestManagerPostgres>();
             services.AddScoped<ITestManager<UserRoleDto>, UserRoleTestManager>();
-            services.AddScoped<ITestManager<UserClaimDto>, ApplicationUserClaimTestManager>();
+            services.AddScoped<ITestManager<UserClaimDto>, UserClaimTestManager>();
             services.AddScoped<ITestManager<UserTokenDto>, UserTokenTestManager>();
             services.AddScoped<ITestManager<UserLoginDto>, UserLoginTestManager>();
             services.AddScoped<ITestManager<RoleDto>, RoleTestManager>();

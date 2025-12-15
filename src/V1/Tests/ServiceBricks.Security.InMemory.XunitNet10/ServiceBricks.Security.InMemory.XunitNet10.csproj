@@ -33,6 +33,16 @@
 		<Compile Include="..\TestFiles\InMemory\MappingTest.cs" Link="MappingTest.cs" />
 		<Compile Include="..\TestFiles\ObjectTests.cs" Link="ObjectTests.cs" />
 		<Compile Include="..\TestFiles\StartupInMemory.cs" Link="StartupInMemory.cs" />
+
+		<Compile Include="..\TestFiles\InMemory\RoleStubApiClientTests.cs" Link="RoleStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\RoleClaimStubApiClientTests.cs" Link="RoleClaimStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserStubApiClientTests.cs" Link="UserStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserClaimStubApiClientTests.cs" Link="UserClaimStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserLoginStubApiClientTests.cs" Link="UserLoginStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserRoleStubApiClientTests.cs" Link="UserRoleStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserTokenStubApiClientTests.cs" Link="UserTokenStubApiClientTests.cs" />
+		<Compile Include="..\TestFiles\InMemory\UserAuditStubApiClientTests.cs" Link="UserAuditStubApiClientTests.cs" />
+		
 	</ItemGroup>
 
   <ItemGroup>
@@ -42,7 +52,7 @@
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.1" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
 		<PackageReference Include="xunit" Version="2.9.3" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">

@@ -10,6 +10,15 @@ namespace ServiceBricks.Security.AzureDataTables
     public partial class ApplicationUserClaim : IdentityUserClaim<Guid>, IAzureDataTablesDomainObject<ApplicationUserClaim>
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApplicationUserClaim()
+        {
+            PartitionKey = string.Empty;
+            RowKey = string.Empty;
+        }
+
+        /// <summary>
         /// Internal primary key.
         /// </summary>
         public virtual Guid Key { get; set; }
