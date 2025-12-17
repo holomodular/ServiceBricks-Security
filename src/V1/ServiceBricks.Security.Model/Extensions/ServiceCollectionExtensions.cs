@@ -79,6 +79,8 @@ namespace ServiceBricks.Security
             services.AddScoped<IApiService<UserAuditDto>, UserAuditApiClient>();
             services.AddScoped<IUserAuditApiService, UserAuditApiClient>();
 
+            services.AddScoped<IAuthenticationApiService, AuthenticationApiClient>();
+
             return services;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+using Microsoft.Extensions.Options;
 
 namespace ServiceBricks.Security
 {
@@ -10,7 +10,7 @@ namespace ServiceBricks.Security
     [ApiController]
     [Route("api/v{version:apiVersion}/Security/Authentication")]
     [Produces("application/json")]
-    public partial class AuthenticationApiController : ControllerBase, IAuthenticationApiController
+    public partial class AuthenticationApiController : ApiControllerBase, IAuthenticationApiController
     {
         protected readonly IAuthenticationApiService _authenticationApiService;
 
@@ -19,7 +19,8 @@ namespace ServiceBricks.Security
         /// </summary>
         /// <param name="authenticationApiService"></param>
         public AuthenticationApiController(
-            IAuthenticationApiService authenticationApiService)
+            IAuthenticationApiService authenticationApiService,
+            IOptions<ApiOptions> apiOptions) : base(apiOptions)
         {
             _authenticationApiService = authenticationApiService;
         }
@@ -29,33 +30,36 @@ namespace ServiceBricks.Security
         [Route("AuthenticateUser")]
         public ActionResult AuthenticateUser([FromBody] AccessTokenRequest request)
         {
+            if (_apiOptions.DisableSyncMethods)
+            {
+                Response response = new Response();
+                response.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_API_SYNC_DISABLED));
+                return GetErrorResponse(response);
+            }
+
             var resp = _authenticationApiService.AuthenticateUser(request);
             if (resp.Error)
                 return GetErrorResponse(resp);
-            return Ok(resp.Item);
+
+            if (UseModernResponse())
+                return Ok(resp);
+            else
+                return Ok(resp.Item);
         }
 
         [AllowAnonymous]
         [HttpPost]
         [Route("AuthenticateUserAsync")]
-        public async Task<ActionResult> AuthenticateUserAsync([FromBody] AccessTokenRequest request)
+        public async Task<ActionResult> AuthenticateUserAsync([FromBody] AccessTokenRequest request, CancellationToken cancellationToken = default)
         {
             var resp = await _authenticationApiService.AuthenticateUserAsync(request);
             if (resp.Error)
                 return GetErrorResponse(resp);
-            return Ok(resp.Item);
-        }
 
-        [NonAction]
-        public virtual ActionResult GetErrorResponse(IResponse response)
-        {
-            var details = new ProblemDetails()
-            {
-                Title = LocalizationResource.ERROR_SYSTEM,
-                Status = (int)HttpStatusCode.BadRequest,
-                Detail = response.GetMessage(Environment.NewLine)
-            };
-            return BadRequest(details);
+            if (UseModernResponse())
+                return Ok(resp);
+            else
+                return Ok(resp.Item);
         }
     }
 }

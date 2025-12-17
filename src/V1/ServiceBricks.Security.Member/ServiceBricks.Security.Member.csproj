@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.4.0-c</Version>
+		<Version>1.4.0-d</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Member</PackageId>
 		<Title>ServiceBricks.Security.Member</Title>
@@ -33,6 +33,10 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="ServiceBricks" Version="1.4.0-d" />
+	</ItemGroup>
+	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
 	</ItemGroup>
@@ -52,8 +56,5 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
 	</ItemGroup>
-		
-	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.4.0-c" />
-	</ItemGroup>
+
 </Project>

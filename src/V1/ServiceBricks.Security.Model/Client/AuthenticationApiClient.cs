@@ -21,7 +21,11 @@ namespace ServiceBricks.Security
             var config = configuration.GetApiConfig(SecurityModelConstants.APPSETTING_CLIENT_APICONFIG);
             if (config == null)
                 throw new Exception("ApiConfig not found");
-            ApiResource = config.BaseServiceUrl + @"Security/Authentication";
+            ApiResource = config.BaseServiceUrl + @"/Security/Authentication/AuthenticateUser";
+            if (config.ReturnResponseObject)
+                ApiResponseFormat = ApiResponseFormat.modern;
+            else
+                ApiResponseFormat = ApiResponseFormat.classic;
         }
 
         /// <summary>
@@ -30,13 +34,36 @@ namespace ServiceBricks.Security
         public virtual string ApiResource { get; set; }
 
         /// <summary>
+        /// The response format
+        /// </summary>
+        public virtual ApiResponseFormat ApiResponseFormat { get; set; }
+
+
+        /// <summary>
+        /// Get the response format
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetResponseFormat()
+        {
+            switch (ApiResponseFormat)
+            {
+                default:
+                case ApiResponseFormat.modern:
+                    return "modern";
+
+                case ApiResponseFormat.classic:
+                    return "classic";
+            }
+        }
+
+        /// <summary>
         /// Authenticate the user
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public virtual IResponseItem<AccessTokenResponse> AuthenticateUser(AccessTokenRequest request)
         {
-            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource);
+            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + $"?format={GetResponseFormat()}");
             var data = request != null ? JsonSerializer.Instance.SerializeObject(request) : string.Empty;
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = Send(req);
@@ -50,7 +77,7 @@ namespace ServiceBricks.Security
         /// <returns></returns>
         public virtual async Task<IResponseItem<AccessTokenResponse>> AuthenticateUserAsync(AccessTokenRequest request)
         {
-            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + "Async");
+            HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, ApiResource + $"Async?format={GetResponseFormat()}");
             var data = request != null ? JsonSerializer.Instance.SerializeObject(request) : string.Empty;
             req.Content = new StringContent(data, System.Text.Encoding.UTF8, CONTENTTYPE_APPLICATIONJSON);
             var result = await SendAsync(req);
@@ -75,15 +102,21 @@ namespace ServiceBricks.Security
             if (result.IsSuccessStatusCode)
             {
                 if (!string.IsNullOrEmpty(content))
-                    resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
+                {
+                    if(ApiResponseFormat == ApiResponseFormat.modern)
+                        resp = JsonSerializer.Instance.DeserializeObject<ResponseItem<AccessTokenResponse>>(content);
+                    else
+                        resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
+                }
+                    
                 return resp;
             }
             else
-            {                
+            {
+                resp.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_REST_CLIENT));
                 if (!string.IsNullOrEmpty(content))
                     resp.AddMessage(ResponseMessage.CreateError(new Exception(content), LocalizationResource.ERROR_REST_CLIENT));
-                else
-                    resp.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_REST_CLIENT));
+                
                 return resp;
             }
         }
@@ -96,20 +129,25 @@ namespace ServiceBricks.Security
         protected virtual async Task<ResponseItem<AccessTokenResponse>> GetAccessTokenAsync(HttpResponseMessage result)
         {
             ResponseItem<AccessTokenResponse> resp = new ResponseItem<AccessTokenResponse>();
+            string content = string.Empty;
+            if(result.Content != null)
+                content = await result.Content.ReadAsStringAsync();
             if (result.IsSuccessStatusCode)
-            {
-                var content = await result.Content.ReadAsStringAsync();
+            {                
                 if (!string.IsNullOrEmpty(content))
-                    resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
+                {
+                    if (ApiResponseFormat == ApiResponseFormat.modern)
+                        resp = JsonSerializer.Instance.DeserializeObject<ResponseItem<AccessTokenResponse>>(content);
+                    else
+                        resp.Item = JsonSerializer.Instance.DeserializeObject<AccessTokenResponse>(content);
+                }
                 return resp;
             }
             else
             {
-                var content = await result.Content.ReadAsStringAsync();
+                resp.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_REST_CLIENT));
                 if (!string.IsNullOrEmpty(content))
                     resp.AddMessage(ResponseMessage.CreateError(new Exception(content), LocalizationResource.ERROR_REST_CLIENT));
-                else
-                    resp.AddMessage(ResponseMessage.CreateError(LocalizationResource.ERROR_REST_CLIENT));
                 return resp;
             }
         }

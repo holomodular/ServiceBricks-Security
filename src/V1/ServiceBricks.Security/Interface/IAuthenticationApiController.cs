@@ -19,6 +19,6 @@ namespace ServiceBricks.Security
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ActionResult> AuthenticateUserAsync([FromBody] AccessTokenRequest request);
+        Task<ActionResult> AuthenticateUserAsync([FromBody] AccessTokenRequest request, CancellationToken cancellationToken = default);
     }
 }

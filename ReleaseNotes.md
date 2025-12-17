@@ -1,3 +1,8 @@
+# 1.4.0-d
+- Unit test fixes (Should dispose/cleanup all objects)
+- Authentication API now supports formatting
+- Verified all tests run successfully for all providers and versions
+
 # 1.4.0-c
 - Create new ServiceBricks.Security.Model package and include DTOs, clients and contracts
 - Unit text fixes

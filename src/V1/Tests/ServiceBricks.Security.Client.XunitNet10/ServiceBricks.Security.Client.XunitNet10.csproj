@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\TestFiles\client\AuthenticationApiClientReturnResponseTest.cs" Link="AuthenticationApiClientReturnResponseTest.cs" />
+    <Compile Include="..\TestFiles\client\AuthenticationApiClientTest.cs" Link="AuthenticationApiClientTest.cs" />
     <Compile Include="..\TestFiles\client\RoleApiClientReturnResponseTest.cs" Link="RoleApiClientReturnResponseTest.cs" />
     <Compile Include="..\TestFiles\client\RoleApiClientTest.cs" Link="RoleApiClientTest.cs" />
     <Compile Include="..\TestFiles\client\RoleClaimApiClientReturnResponseTest.cs" Link="RoleClaimApiClientReturnResponseTest.cs" />

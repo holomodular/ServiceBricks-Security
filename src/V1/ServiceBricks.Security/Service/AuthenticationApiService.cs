@@ -88,19 +88,9 @@ namespace ServiceBricks.Security
 
             // Verify password
             var respAuth = await _userManagerService.VerifyPasswordAsync(request.client_id, request.client_secret);
-            if (respAuth.Error)
-            {
-                // Make sure system errors are not exposed.
-                // TODO: This should be the controllers responsibility. Also create a scrubbing function in core.
-                var messages = respAuth.Messages.ToList();
-                if (!_apiOptions.ExposeSystemErrors)
-                    messages = messages.Where(x => x.Severity != ResponseSeverity.ErrorSystemSensitive).ToList();
-                if (messages.Count == 0)
-                    messages.Add(ResponseMessage.CreateError(LocalizationResource.ERROR_SYSTEM));
-                foreach (var msg in messages)
-                    response.AddMessage(msg);
+            response.CopyFrom(respAuth);
+            if (response.Error)
                 return response;
-            }
 
             // Create default claims
             List<Claim> claims = new List<Claim>()
