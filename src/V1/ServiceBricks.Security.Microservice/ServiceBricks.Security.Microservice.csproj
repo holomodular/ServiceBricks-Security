@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.4.0-d</Version>
+		<Version>1.4.0-e</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Microservice</PackageId>
 		<Title>ServiceBricks.Security.Microservice</Title>
@@ -34,13 +34,13 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<!-- <FrameworkReference Include="Microsoft.AspNetCore.App" /> -->
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.4.0-d" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.4.0-e" />
 		<!-- <ProjectReference Include="..\ServiceBricks.Security.Model\ServiceBricks.Security.Model.csproj" /> -->
-		<PackageReference Include="ServiceBricks.Security.Model" Version="1.4.0-d" />
+		<PackageReference Include="ServiceBricks.Security.Model" Version="1.4.0-e" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
@@ -104,10 +104,6 @@
 		<ProjectReference Include="..\ServiceBricks.Security.SqlServer\ServiceBricks.Security.SqlServer.csproj" PrivateAssets="All">
 			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
 			<IncludeAssets>ServiceBricks.Security.SqlServer.dll</IncludeAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\ServiceBricks.Security.Member\ServiceBricks.Security.Member.csproj" PrivateAssets="All">
-			<ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-			<IncludeAssets>ServiceBricks.Security.Member.dll</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
 	<Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">

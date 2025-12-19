@@ -18,9 +18,6 @@ namespace WebApp.Extensions
 
         public static IApplicationBuilder StartCustomWebsite(this IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (!env.IsDevelopment())
-                app.UseHsts();
-
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
@@ -30,6 +27,9 @@ namespace WebApp.Extensions
                     x.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
                 });
             }
+
+            if (!env.IsDevelopment())
+                app.UseHsts();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

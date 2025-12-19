@@ -1,3 +1,7 @@
+# 1.4.0-e
+- Minor fixes
+- New test home page
+
 # 1.4.0-d
 - Unit test fixes (Should dispose/cleanup all objects)
 - Authentication API now supports formatting

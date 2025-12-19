@@ -11,6 +11,7 @@ namespace WebApp.Extensions
         {
             //app.UseMiddleware<CustomLoggerMiddleware>();
             //app.UseMiddleware<WebRequestMessageMiddleware>();
+            //app.UseMiddleware<PropogateExceptionResponseMiddleware>();
             app.UseMiddleware<TrapExceptionResponseMiddleware>();
             return app;
         }
