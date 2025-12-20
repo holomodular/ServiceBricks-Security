@@ -1,4 +1,4 @@
-![ServiceBricks Logo](https://github.com/holomodular/ServiceBricks/blob/main/Logo.png)  
+![ServiceBricks Logo](https://raw.githubusercontent.com/holomodular/ServiceBricks/main/Logo.png)   
 
 [![NuGet version](https://badge.fury.io/nu/ServiceBricks.Security.Microservice.svg)](https://badge.fury.io/nu/ServiceBricks.Security.Microservice)
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/holomodular-support/0f40e020ebb5096a51bc7ccd02a6e06e/raw/servicebrickssecurity-codecoverage.json)
@@ -8,18 +8,17 @@
 
 ## Overview
 
-This repository contains a security microservice built using the ServiceBricks foundation.
+This repository contains the security microservice built using the ServiceBricks foundation.
 The security microservice is responsible for application security and user management built using the Microsoft ASP.NET Core Identity (v3) provider.
-It also stores auditing events for users.
 
-The NuGet package ServiceBricks.Security.Member that allows any ServiceBricks hosted microservice application to become a security member using JWT tokens.
+The NuGet package **ServiceBricks.Security.Member**  allows any ServiceBricks hosted microservice to become a member using JWT tokens, as long as they use the same shared security configuration.
 
 ## Supported Providers
 * Microsoft ASP.NET Core Identity (v3)
 
 ### ServiceBricks.Security.Member
-Install the NuGet package ServiceBricks.Security.Member to your web application and add the ServiceBricks:Security:Token application settings. 
-If the settings match the security microservices application settings, it will be joined as a member of the platform using JWT bearer token membership.
+Install the NuGet package ServiceBricks.Security.Member to your web application and use the same ServiceBricks:Security:Token application settings with all servers. 
+If the security settings match, it will be joined as a member of your infrastructure,  using JWT bearer tokens.
 
 Make sure to add the following line to startup.
 ```csharp
@@ -641,10 +640,19 @@ public class UserResendConfirmationProcess : DomainProcess
 ```
 
 
-## Service Bus
-No Broadcast Messages
+## Service Bus Broadcasts
 
-* This microservice sends CreateApplicationEmailBroadcast messages to the service bus.
+### Consumed
+None
+
+### Published
+
+#### CreateApplicationEmailBroadcast
+Send security emails for verify email and forgot password
+
+#### CreateApplicationSmsBroadcast
+Send security SMS messages for MFA
+
 
 ## Additional
 
@@ -660,7 +668,7 @@ No Broadcast Messages
     // Security Microservice Settings
     "Security": {
 
-      // The callback url of the server if linkgenerator is not available
+      // The callback url of the server to use with emails
       "CallbackUrl": "https://localhost:7000",
 
       // JWT token settings
@@ -672,7 +680,7 @@ No Broadcast Messages
         // Change this key in production!
         "SecretKey": "1111111111111111111111111111111111111111111111111111111111111111"
       }
-    },
+    }
   }
 }
 
