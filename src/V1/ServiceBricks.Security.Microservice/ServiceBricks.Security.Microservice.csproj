@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.4.0-e</Version>
+		<Version>1.4.0</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Microservice</PackageId>
 		<Title>ServiceBricks.Security.Microservice</Title>
@@ -38,9 +38,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Core" Version="1.4.0-e" />
+		<PackageReference Include="ServiceBricks.Core" Version="1.4.0" />
 		<!-- <ProjectReference Include="..\ServiceBricks.Security.Model\ServiceBricks.Security.Model.csproj" /> -->
-		<PackageReference Include="ServiceBricks.Security.Model" Version="1.4.0-e" />
+		<PackageReference Include="ServiceBricks.Security.Model" Version="1.4.0" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">

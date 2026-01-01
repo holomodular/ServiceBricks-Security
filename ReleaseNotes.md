@@ -1,3 +1,6 @@
+# 1.4.0
+- Rollup Release
+
 # 1.4.0-e
 - Minor fixes
 - New test home page

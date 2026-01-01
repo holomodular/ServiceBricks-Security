@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.4.0-e</Version>
+		<Version>1.4.0</Version>
 		<Description>The open source microservices platform. Visit https://ServiceBricks.com to learn more.</Description>
 		<PackageId>ServiceBricks.Security.Model</PackageId>
 		<Title>ServiceBricks.Security.Model</Title>
@@ -33,6 +33,6 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks" Version="1.4.0-e" />
+		<PackageReference Include="ServiceBricks" Version="1.4.0" />
 	</ItemGroup>
 </Project>

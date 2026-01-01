@@ -61,7 +61,7 @@
 
 	
 	<ItemGroup>
-		<PackageReference Include="ServiceBricks.Xunit" Version="1.4.0-e" />
+		<PackageReference Include="ServiceBricks.Xunit" Version="1.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
